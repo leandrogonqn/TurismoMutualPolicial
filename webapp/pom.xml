@@ -195,9 +195,9 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.1-901.jdbc4</version>
+    				<groupId>org.postgresql</groupId>
+    				<artifactId>postgresql</artifactId>
+    				<version>9.4.1212</version>
                 </dependency>
             </dependencies>
         </profile>
