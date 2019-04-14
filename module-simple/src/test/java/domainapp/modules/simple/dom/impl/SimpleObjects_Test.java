@@ -20,6 +20,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import domainapp.modules.simple.dom.impl.SimpleObject;
+import domainapp.modules.simple.dom.impl.SimpleObjects;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

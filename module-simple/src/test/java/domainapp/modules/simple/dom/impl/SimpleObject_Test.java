@@ -19,6 +19,8 @@ package domainapp.modules.simple.dom.impl;
 import org.junit.Before;
 import org.junit.Test;
 
+import domainapp.modules.simple.dom.impl.SimpleObject;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObject_Test {

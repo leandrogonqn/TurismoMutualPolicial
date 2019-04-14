@@ -34,6 +34,7 @@ import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import domainapp.modules.simple.fixture.SimpleObject_persona;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
