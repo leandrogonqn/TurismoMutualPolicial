@@ -17,3 +17,10 @@
  *  under the License.
  */
 
+tr.activo {
+	color: black;
+}
+
+tr.inactivo {
+    color: #cc0000;
+}

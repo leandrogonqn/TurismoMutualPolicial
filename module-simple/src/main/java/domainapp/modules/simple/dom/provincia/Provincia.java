@@ -21,6 +21,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -81,7 +83,7 @@ public class Provincia implements Comparable<Provincia> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo")
+	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
 	private boolean provinciaActivo;
 
 	public boolean getProvinciaActivo() {
@@ -102,6 +104,7 @@ public class Provincia implements Comparable<Provincia> {
 		setProvinciaActivo(false);
 	}
 
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaNombre")
 	public Provincia actualizarNombre(@ParameterLayout(named = "Nombre") final String provinciaNombre) {
 		setProvinciasNombre(provinciaNombre);
 		return this;
@@ -111,6 +114,7 @@ public class Provincia implements Comparable<Provincia> {
 		return getProvinciasNombre();
 	}
 
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaActivo")
 	public Provincia actualizarActivo(@ParameterLayout(named = "Activo") final boolean provinciaActivo) {
 		setProvinciaActivo(provinciaActivo);
 		return this;
@@ -136,18 +140,21 @@ public class Provincia implements Comparable<Provincia> {
 	// endregion
 
 	// acciones
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar todas las Provincias")
 	@MemberOrder(sequence = "2")
 	public List<Provincia> listar() {
 		return provinciasRepository.listar();
 	}
 
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Provincia Activas")
 	@MemberOrder(sequence = "3")
 	public List<Provincia> listarActivos() {
 		return provinciasRepository.listarActivos();
 	}
 
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Provincias Inactivas")
 	@MemberOrder(sequence = "4")
 	public List<Provincia> listarInactivos() {

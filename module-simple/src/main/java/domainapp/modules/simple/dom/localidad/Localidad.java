@@ -21,6 +21,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -43,7 +45,6 @@ import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.localidad.Localidad "
 				+ "WHERE localidadesNombre.toLowerCase().indexOf(:localidadesNombre) >= 0 "),
-
 		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadActivo == true "),
 		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
@@ -83,12 +84,7 @@ public class Localidad implements Comparable<Localidad> {
 	public void setLocalidadesNombre(String localidadesNombre) {
 		this.localidadesNombre = localidadesNombre;
 	}
-
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo")
-	private boolean localidadActivo;
-
+	
 	@javax.jdo.annotations.Column(allowsNull = "false", name = "provinciaId")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Provincia")
@@ -102,7 +98,10 @@ public class Localidad implements Comparable<Localidad> {
 		this.localidadProvincia = localidadProvincia;
 	}
 
-	// endregion
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
+	private boolean localidadActivo;
 
 	public boolean getLocalidadActivo() {
 		return localidadActivo;
@@ -119,9 +118,20 @@ public class Localidad implements Comparable<Localidad> {
 		messageService.informUser(String.format("'%s' deleted", title));
 		setLocalidadActivo(false);
 	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadNombre")
+	public Localidad actualizarNombre(@ParameterLayout(named = "Nombre") final String localidadNombre) {
+		setLocalidadesNombre(localidadNombre);
+		return this;
+	}
 
-	public Localidad actualizarProvincia(@ParameterLayout(named = "Provincia") final Provincia name) {
-		setLocalidadProvincia(name);
+	public String default0ActualizarNombre() {
+		return getLocalidadesNombre();
+	}
+
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "LocalidadProvincia")
+	public Localidad actualizarProvincia(@ParameterLayout(named = "Provincia") final Provincia LocalidadProvincia) {
+		setLocalidadProvincia(LocalidadProvincia);
 		return this;
 	}
 
@@ -133,15 +143,7 @@ public class Localidad implements Comparable<Localidad> {
 		return getLocalidadProvincia();
 	}
 
-	public Localidad actualizarNombre(@ParameterLayout(named = "Nombre") final String localidadNombre) {
-		setLocalidadesNombre(localidadNombre);
-		return this;
-	}
-
-	public String default0ActualizarNombre() {
-		return getLocalidadesNombre();
-	}
-
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadActivo")
 	public Localidad actualizarActivo(@ParameterLayout(named = "Activo") final boolean localidadActivo) {
 		setLocalidadActivo(localidadActivo);
 		return this;

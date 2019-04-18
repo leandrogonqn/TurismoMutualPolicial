@@ -83,6 +83,10 @@ public class Cliente implements Comparable<Cliente> {
 				getClienteNombre() + " " + getClienteApellido() + " Cuit/Cuil: " + getClienteCuitCuil());
 	}
 	// endregion
+	
+	public String cssClass() {
+		return (getClienteActivo() == true) ? "activo" : "inactivo";
+	}
 
 	public String iconName() {
 		return (getClienteSexo() == Sexo.Femenino) ? "Femenino" : "Masculino";
@@ -189,7 +193,7 @@ public class Cliente implements Comparable<Cliente> {
 	 @Property(
 	           editing = Editing.DISABLED
 	 )
-	 @PropertyLayout(named="Cuit/Cuil")
+	 @PropertyLayout(named="Cuit/Cuil", hidden=Where.ALL_TABLES)
 	 private String clienteCuitCuil;
 	 public String getClienteCuitCuil() {
 		return clienteCuitCuil;
@@ -199,7 +203,7 @@ public class Cliente implements Comparable<Cliente> {
 	 }	
 	 
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	@Property(editing = Editing.DISABLED, hidden=Where.ALL_TABLES)
 	@PropertyLayout(named = "Sexo")
 	private Sexo clienteSexo;
 
@@ -215,7 +219,7 @@ public class Cliente implements Comparable<Cliente> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Direccion")
+    @PropertyLayout(named="Direccion", hidden=Where.ALL_TABLES)
     private String clienteDireccion;
 
     public String getClienteDireccion() {
@@ -229,7 +233,7 @@ public class Cliente implements Comparable<Cliente> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Localidad")
+    @PropertyLayout(named="Localidad", hidden=Where.ALL_TABLES)
     private Localidad clienteLocalidad;
 
 	public Localidad getClienteLocalidad() {
@@ -258,7 +262,7 @@ public class Cliente implements Comparable<Cliente> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Mail")
+    @PropertyLayout(named="Mail", hidden=Where.ALL_TABLES)
     private String clienteMail;
 
     public String getClienteMail() {
@@ -282,7 +286,7 @@ public class Cliente implements Comparable<Cliente> {
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	@Property(editing = Editing.DISABLED)
+	@Property(editing = Editing.DISABLED, hidden=Where.ALL_TABLES)
 	@PropertyLayout(named = "CBU")
 	private String clienteCBU;
 
@@ -298,7 +302,7 @@ public class Cliente implements Comparable<Cliente> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Activo")
+    @PropertyLayout(named="Activo", hidden=Where.ALL_TABLES)
     private boolean clienteActivo;
  
     public boolean getClienteActivo() {
@@ -552,18 +556,21 @@ public class Cliente implements Comparable<Cliente> {
 	// endregion
 
 	// accion
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar todos los clientes")
 	@MemberOrder(sequence = "2")
 	public List<Cliente> listarClientes() {
 		return clientesRepository.listar();
 	}
 
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar clientes activos")
 	@MemberOrder(sequence = "2")
 	public List<Cliente> listarClientesActivos() {
 		return clientesRepository.listarActivos();
 	}
 
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar clientes inactivos")
 	@MemberOrder(sequence = "2")
 	public List<Cliente> listarClienteInactivos() {
