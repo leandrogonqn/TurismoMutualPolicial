@@ -25,12 +25,15 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+
+import domainapp.modules.simple.dom.cliente.Cliente;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 
@@ -43,6 +46,13 @@ public class PrestadorMenu {
 	@MemberOrder(sequence = "2")
 	public List<Prestador> listar() {
 		return prestadorRepository.listar();
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Por Codigo")
+	@MemberOrder(sequence = "7")
+	public List<Prestador> buscarPorCodigo(@ParameterLayout(named = "Codigo") final int prestadorCodigo) {
+		return prestadorRepository.buscarPorCodigo(prestadorCodigo);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

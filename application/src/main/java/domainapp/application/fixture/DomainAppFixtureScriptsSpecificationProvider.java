@@ -23,8 +23,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
-
-import domainapp.application.fixture.scenarios.DomainAppDemo;
 import domainapp.application.fixture.scenarios.RecreateProvincia;
 
 /**

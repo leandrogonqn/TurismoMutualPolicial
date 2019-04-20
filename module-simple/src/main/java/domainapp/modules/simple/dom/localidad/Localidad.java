@@ -21,6 +21,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -36,6 +37,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
+import domainapp.modules.simple.dom.prestador.Prestador;
+import domainapp.modules.simple.dom.prestador.PrestadorRepository;
 import domainapp.modules.simple.dom.provincia.Provincia;
 import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 
@@ -188,6 +191,12 @@ public class Localidad implements Comparable<Localidad> {
 	public List<Localidad> listarInactivos() {
 		return localidadesRepository.listarInactivos();
 	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar prestadores en esta Localidad")
+	public List<Prestador> buscarPrestadorPorLocalidad() {
+		return prestadorRepository.buscarPrestadorPorLocalidad(this);
+	}
 	// region > injected dependencies
 
 	@javax.inject.Inject
@@ -204,6 +213,9 @@ public class Localidad implements Comparable<Localidad> {
 
 	@Inject
 	LocalidadRepository localidadesRepository;
+	
+	@Inject
+	PrestadorRepository prestadorRepository;
 
 	// endregion
 }

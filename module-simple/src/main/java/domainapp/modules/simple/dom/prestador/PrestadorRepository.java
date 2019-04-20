@@ -21,6 +21,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
+
+import domainapp.modules.simple.dom.cliente.Cliente;
 import domainapp.modules.simple.dom.localidad.Localidad;
 
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Prestador.class)
@@ -35,6 +37,11 @@ public class PrestadorRepository {
 		return repositoryService.allMatches(new QueryDefault<>(Prestador.class, "buscarPorNombre", "prestadorNombre",
 				prestadorNombre.toLowerCase()));
 
+	}
+	
+	public List<Prestador> buscarPorCodigo(final int prestadorCodigo) {
+		return repositoryService
+				.allMatches(new QueryDefault<>(Prestador.class, "buscarPorCodigo", "prestadorCodigo", prestadorCodigo));
 	}
 
 	public List<Prestador> buscarPrestadorPorLocalidad(final Localidad prestadorLocalidad) {

@@ -43,6 +43,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -61,6 +62,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
+import domainapp.modules.simple.dom.prestador.Prestador;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Clientes")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "clienteId")
@@ -68,6 +70,9 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.cliente.Cliente "
 				+ "WHERE clienteNombre.toLowerCase().indexOf(:clienteNombre) >= 0 "),
+		@javax.jdo.annotations.Query(name = "buscarPorLP", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.cliente.Cliente "
+				+ "WHERE clienteLP.toLowerCase().indexOf(:clienteLP) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorDNI", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.cliente.Cliente " + "WHERE clienteDni == :clienteDni"),
 		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
@@ -576,7 +581,7 @@ public class Cliente implements Comparable<Cliente> {
 	public List<Cliente> listarClienteInactivos() {
 		return clientesRepository.listarInactivos();
 	}
-
+	
 	@ActionLayout(hidden=Where.EVERYWHERE)
     public static boolean isNumeric(String cadena) {
 

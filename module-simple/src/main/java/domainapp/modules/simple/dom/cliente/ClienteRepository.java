@@ -62,6 +62,11 @@ public class ClienteRepository {
 		return repositoryService.allMatches(
 				new QueryDefault<>(Cliente.class, "buscarPorNombre", "clienteNombre", clienteNombre.toLowerCase()));
 	}
+	
+	public List<Cliente> buscarPorLP(final String clienteLP) {
+		return repositoryService.allMatches(
+				new QueryDefault<>(Cliente.class, "buscarPorLP", "clienteLP", clienteLP.toLowerCase()));
+	}
 
 	public List<Cliente> buscarPorDNI(final int clienteDni) {
 		return repositoryService

@@ -50,6 +50,8 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.prestador.Prestador "
 				+ "WHERE prestadorNombre.toLowerCase().indexOf(:prestadorNombre) >= 0 "),
+		@javax.jdo.annotations.Query(name = "buscarPorCodigo", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.prestador.Prestador " + "WHERE prestadorCodigo == :prestadorCodigo"),
 		@javax.jdo.annotations.Query(name = "buscarPrestadorPorLocalidad", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.prestador.Prestador " + "WHERE prestadorLocalidad == :prestadorLocalidad"),
 		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "

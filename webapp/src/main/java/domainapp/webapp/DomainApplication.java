@@ -59,7 +59,7 @@ public class DomainApplication extends IsisWicketApplication {
         super.init();
 
         IBootstrapSettings settings = Bootstrap.getSettings();
-        settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
+        settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Sandstone));
     }
 
     private static final String APP_NAME = "Simple App";

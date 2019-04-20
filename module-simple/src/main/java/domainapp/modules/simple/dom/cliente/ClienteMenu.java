@@ -71,10 +71,25 @@ public class ClienteMenu {
 	public List<Cliente> buscarPorNombre(@ParameterLayout(named = "Nombre") final String clienteNombre) {
 		return clientesRepository.buscarPorNombre(clienteNombre);
 	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Por Nombre")
+	@MemberOrder(sequence = "6")
+	public List<Cliente> buscarPorLP(@ParameterLayout(named = "LP") @Parameter(maxLength=6) final String clienteLP) {
+		return clientesRepository.buscarPorLP(clienteLP);
+	}
+	
+	public String validateBuscarPorLP(final String clienteLP) {
+		if (clienteLP.length()<=5) {
+			return "LP debe contener 6 digitos";
+		}
+		return "";
+	}
+	
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Por DNI")
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "7")
 	public List<Cliente> buscarPorDNI(@ParameterLayout(named = "DNI") final int clienteDni) {
 		return clientesRepository.buscarPorDNI(clienteDni);
 	}
