@@ -1,7 +1,7 @@
-package domainapp.modules.simple.dom.cliente;
+package domainapp.modules.simple.dom.afiliado;
 
 public enum Estado {
-	Activo("Activo"), Retirado("Retirado"), No_Socio("No Socio");
+	Activo("Activo"), Retirado("Retirado");
 
 	private final String nombre;
 

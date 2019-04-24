@@ -34,26 +34,24 @@
 
 package domainapp.application.fixture.scenarios;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import domainapp.application.fixture.ClienteCreate;
-import domainapp.application.fixture.ClienteTearDown;
-import domainapp.modules.simple.dom.cliente.Cliente;
-import domainapp.modules.simple.dom.cliente.Estado;
-import domainapp.modules.simple.dom.cliente.Sexo;
+import domainapp.application.fixture.AfiliadoCreate;
+import domainapp.application.fixture.AfiliadoTearDown;
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 
-public class RecreateCliente extends FixtureScript {
+public class RecreateAfiliado extends FixtureScript {
 
     public final List<String> LP = Collections.unmodifiableList(Arrays.asList(
             "001234"));
@@ -73,8 +71,11 @@ public class RecreateCliente extends FixtureScript {
     public final List<String> direcciones = Collections.unmodifiableList(Arrays.asList(
     		"Salta 123"));
     
-    public final List<String> telefonos = Collections.unmodifiableList(Arrays.asList(
-    		"447-1351"));    
+    public final List<String> telefonoFijo = Collections.unmodifiableList(Arrays.asList(
+    		"2994471351"));  
+    
+    public final List<String> telefonoCelular = Collections.unmodifiableList(Arrays.asList(
+    		"299154769431"));
     
     public final List<String> emails = Collections.unmodifiableList(Arrays.asList(
     		"juan.perez@ejemplo.com"));
@@ -82,7 +83,7 @@ public class RecreateCliente extends FixtureScript {
     public final List<String> CBU = Collections.unmodifiableList(Arrays.asList(
     		"0123456789012345678901"));
 
-    public RecreateCliente() {
+    public RecreateAfiliado() {
         withDiscoverability(Discoverability.DISCOVERABLE);
     }
 
@@ -96,20 +97,20 @@ public class RecreateCliente extends FixtureScript {
         return number;
     }
 
-    public RecreateCliente setNumber(final Integer number) {
+    public RecreateAfiliado setNumber(final Integer number) {
         this.number = number;
         return this;
     }
     //endregion
 
     //region > simpleObjects (output)
-    private final List<Cliente> simpleObjects = Lists.newArrayList();
+    private final List<Afiliado> simpleObjects = Lists.newArrayList();
 
     /**
      * The simpleobjects created by this fixture (output).
      */
     @Programmatic
-    public List<Cliente> getSimpleObjects() {
+    public List<Afiliado> getSimpleObjects() {
         return simpleObjects;
     }
     //endregion
@@ -128,25 +129,21 @@ public class RecreateCliente extends FixtureScript {
         //
         // execute
         //
-        ec.executeChild(this, new ClienteTearDown());
-        
-        GregorianCalendar fechaNacimiento = new GregorianCalendar(1985,6,8);
+        ec.executeChild(this, new AfiliadoTearDown());
         
         for (int i = 0; i < number; i++) {
-            final ClienteCreate fs = new ClienteCreate();
+            final AfiliadoCreate fs = new AfiliadoCreate();
             fs.setEstado(Estado.Activo);
             fs.setLP(LP.get(i));
             fs.setName(NAMES.get(i));
             fs.setApellido(apellidos.get(i));
             fs.setDni(Integer.parseInt(documentos.get(i)));
             fs.setCuitCuil(cuitCuil.get(i));
-            fs.setSexo(Sexo.Masculino);
             fs.setDireccion(direcciones.get(i));
             fs.setLocalidad(localidadesRepository.listarActivos().get(0));
-            fs.setTelefono(telefonos.get(i));
+            fs.setTelefonoFijo(Long.parseLong(telefonoFijo.get(i)));
+            fs.setTelefonoCelular(Long.parseLong(telefonoCelular.get(i))); 
             fs.setEmail(emails.get(i));
-            fs.setFechaNacimiento(fechaNacimiento.getTime());
-            fs.setCbu(CBU.get(i));
             ec.executeChild(this, fs.getName(), fs);
             simpleObjects.add(fs.getSimpleObject());
         }

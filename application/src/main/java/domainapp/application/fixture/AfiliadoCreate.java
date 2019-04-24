@@ -39,13 +39,12 @@ import java.util.Date;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.modules.simple.dom.cliente.Cliente;
-import domainapp.modules.simple.dom.cliente.ClienteMenu;
-import domainapp.modules.simple.dom.cliente.Estado;
-import domainapp.modules.simple.dom.cliente.Sexo;
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.AfiliadoMenu;
+import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.localidad.Localidad;
 
-public class ClienteCreate extends FixtureScript {
+public class AfiliadoCreate extends FixtureScript {
 
     //region > name (input)
 	
@@ -55,7 +54,7 @@ public class ClienteCreate extends FixtureScript {
     	return estado;
     }
     
-    public ClienteCreate setEstado(final Estado estado){
+    public AfiliadoCreate setEstado(final Estado estado){
     	this.estado = estado;
     	return this;
     }
@@ -66,7 +65,7 @@ public class ClienteCreate extends FixtureScript {
     	return LP;
     }
     
-    public ClienteCreate setLP(final String LP){
+    public AfiliadoCreate setLP(final String LP){
     	this.LP = LP;
     	return this;
     }
@@ -77,7 +76,7 @@ public class ClienteCreate extends FixtureScript {
         return name;
     }
 
-    public ClienteCreate setName(final String name) {
+    public AfiliadoCreate setName(final String name) {
         this.name = name;
         return this;
     }
@@ -88,7 +87,7 @@ public class ClienteCreate extends FixtureScript {
     	return apellido;
     }
     
-    public ClienteCreate setApellido(final String apellido){
+    public AfiliadoCreate setApellido(final String apellido){
     	this.apellido = apellido;
     	return this;
     }
@@ -99,7 +98,7 @@ public class ClienteCreate extends FixtureScript {
 		return dni;
 	}
     
-    public ClienteCreate setDni(final int dni){
+    public AfiliadoCreate setDni(final int dni){
     	this.dni = dni;
     	return this;
     }
@@ -110,19 +109,8 @@ public class ClienteCreate extends FixtureScript {
     	return cuitCuil;
     }
     
-    public ClienteCreate setCuitCuil(final String cuitCuil) {
+    public AfiliadoCreate setCuitCuil(final String cuitCuil) {
     	this.cuitCuil = cuitCuil;
-    	return this;
-    }
-    
-    private Sexo sexo;
-    
-    public Sexo getSexo(){
-    	return sexo;
-    }
-    
-    public ClienteCreate setSexo(final Sexo sexo){
-    	this.sexo = sexo;
     	return this;
     }
     
@@ -132,7 +120,7 @@ public class ClienteCreate extends FixtureScript {
    		return direccion;
    	}
 
-   	public ClienteCreate setDireccion(String direccion) {
+   	public AfiliadoCreate setDireccion(String direccion) {
    		this.direccion = direccion;
    		return this;
    	}
@@ -143,18 +131,27 @@ public class ClienteCreate extends FixtureScript {
     	return localidad;
     }
     
-    public ClienteCreate setLocalidad(final Localidad localidad){
+    public AfiliadoCreate setLocalidad(final Localidad localidad){
     	this.localidad = localidad;
     	return this;
     }
     
-   	private String telefono;
-   	public String getTelefono() {
-   		return telefono;
+   	private Long telefonoFijo;
+   	public Long getTelefonoFijo() {
+   		return telefonoFijo;
    	}
 
-   	public void setTelefono(String telefono) {
-   		this.telefono = telefono;
+   	public void setTelefonoFijo(Long telefonoFijo) {
+   		this.telefonoFijo = telefonoFijo;
+   	}
+   	
+   	private Long telefonoCelular;
+   	public Long getTelefonoCelular() {
+   		return telefonoCelular;
+   	}
+
+   	public void setTelefonoCelular(Long telefonoCelular) {
+   		this.telefonoCelular = telefonoCelular;
    	}
    	
    	private String email;
@@ -163,30 +160,8 @@ public class ClienteCreate extends FixtureScript {
    		return email;
    	}
 
-   	public ClienteCreate setEmail(String email) {
+   	public AfiliadoCreate setEmail(String email) {
    		this.email = email;
-   		return this;
-   	}
-   	
-   	private Date fechaNacimiento;
-
-   	public Date getFechaNacimiento() {
-   		return fechaNacimiento;
-   	}
-
-   	public ClienteCreate setFechaNacimiento(Date fechaNacimiento) {
-   		this.fechaNacimiento = fechaNacimiento;
-   		return this;
-   	}
-    
-   	public String cbu;
-   	
-   	public String getCbu() {
-   		return cbu;
-   	}
-   	
-   	public ClienteCreate setCbu(String cbu) {
-   		this.cbu = cbu;
    		return this;
    	}
    	
@@ -194,13 +169,13 @@ public class ClienteCreate extends FixtureScript {
     
 
 	//region > simpleObject (output)
-    private Cliente simpleObject;
+    private Afiliado simpleObject;
 
     /**
      * The created simple object (output).
      * @return
      */
-    public Cliente getSimpleObject() {
+    public Afiliado getSimpleObject() {
         return simpleObject;
     }
     //endregion
@@ -212,13 +187,13 @@ public class ClienteCreate extends FixtureScript {
         String apellido = checkParam("apellido", ec, String.class);
         int dni = checkParam("dni", ec, Integer.class);
 
-        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, name,apellido,dni,cuitCuil,sexo,direccion,localidad,telefono,email,fechaNacimiento,cbu);
+        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefonoFijo, telefonoCelular, email);
 
         // also make available to UI
         ec.addResult(this, simpleObject);
     }
 
     @javax.inject.Inject
-    private ClienteMenu simpleObjectMenu;
+    private AfiliadoMenu simpleObjectMenu;
 
 }

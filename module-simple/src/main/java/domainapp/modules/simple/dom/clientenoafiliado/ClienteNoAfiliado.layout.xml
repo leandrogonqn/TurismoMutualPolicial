@@ -28,42 +28,50 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarPrestador"/>
-                                <c:property id="prestadorCodigo" namedEscaped="true">
-                                <c:action id="actualizarCodigo" position="RIGHT"></c:action>
-                                </c:property>                            
-                                <c:property id="prestadorNombre" namedEscaped="true">
-                                <c:action id="actualizarNombre" position="RIGHT"></c:action>
+                                <c:action id="borrarClienteNoAfiliado"></c:action>
+                                <c:property id="personaNombre" namedEscaped="true">
+                              	<c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="prestadorDireccion" namedEscaped="true">
+                                <c:property id="personaApellido" namedEscaped="true">
+                                <c:action id="actualizarApellido" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="personaDni" namedEscaped="true">
+                                <c:action id="actualizarDni" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="personaCuitCuil" namedEscaped="true">
+                                <c:action id="actualizarCuitCuil" position="RIGHT"></c:action>
+                                </c:property>                                
+								<c:property id="personaDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="prestadorLocalidad" namedEscaped="true">
+                                <c:property id="personaLocalidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="prestadorTelefono" namedEscaped="true">
-                                <c:action id="actualizarTelefono" position="RIGHT"></c:action>
-                                </c:property>           
-                                <c:property id="prestadorEncargado" namedEscaped="true">
-                                <c:action id="actualizarEncargado" position="RIGHT"></c:action>
-                                </c:property>                                                                                                                         
-                                <c:property id="prestadorActivo" namedEscaped="true">
+                                <c:property id="personaTelefonoFijo" namedEscaped="true">
+                                <c:action id="actualizarTelefonos" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="personaTelefonoCelular" namedEscaped="true">
+                                </c:property>                                
+								<c:property id="personaMail" namedEscaped="true">
+								<c:action id="actualizarMail" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="personaActivo" namedEscaped="true">
                                 <c:action id="actualizarActivo" position="RIGHT"></c:action>
                                 </c:property>
-                            </c:fieldSet>
+                           </c:fieldSet>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
                 <bs3:tab name="Metadata">
                     <bs3:row>
-                        <bs3:col span="12">
+                        <bs3:col span="6">
                             <c:fieldSet name="Metadata"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
                 <bs3:tab name="Other">
                     <bs3:row>
-                        <bs3:col span="12">
+                        <bs3:col span="6">
                             <c:fieldSet name="Other" unreferencedProperties="true"/>
                         </bs3:col>
                     </bs3:row>

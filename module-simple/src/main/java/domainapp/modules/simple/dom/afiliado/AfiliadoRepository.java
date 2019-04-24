@@ -31,9 +31,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.modules.simple.dom.cliente;
+package domainapp.modules.simple.dom.afiliado;
 
-import java.util.Date;
 import java.util.List;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -41,52 +40,52 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
+import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
 import domainapp.modules.simple.dom.localidad.Localidad;
 
-@DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Cliente.class)
-public class ClienteRepository {
+@DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Afiliado.class)
+public class AfiliadoRepository {
 
-	public List<Cliente> listar() {
-		return repositoryService.allInstances(Cliente.class);
-	}
-
-	public List<Cliente> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Cliente.class, "listarActivos"));
-	}
-
-	public List<Cliente> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Cliente.class, "listarInactivos"));
-	}
-
-	public List<Cliente> buscarPorNombre(final String clienteNombre) {
+	public List<Afiliado> buscarPorLP(final String afiliadoLP) {
 		return repositoryService.allMatches(
-				new QueryDefault<>(Cliente.class, "buscarPorNombre", "clienteNombre", clienteNombre.toLowerCase()));
-	}
-	
-	public List<Cliente> buscarPorLP(final String clienteLP) {
-		return repositoryService.allMatches(
-				new QueryDefault<>(Cliente.class, "buscarPorLP", "clienteLP", clienteLP.toLowerCase()));
+				new QueryDefault<>(Afiliado.class, "buscarPorLP", "afiliadoLP", afiliadoLP.toLowerCase()));
 	}
 
-	public List<Cliente> buscarPorDNI(final int clienteDni) {
-		return repositoryService
-				.allMatches(new QueryDefault<>(Cliente.class, "buscarPorDNI", "clienteDni", clienteDni));
-	}
-
-	public Cliente crear(final String clienteLP, final String clienteNombre, final String clienteApellido, Sexo clienteSexo,
-			final int clienteDni, final String clienteCuitCuil, final String clienteDireccion, Localidad clienteLocalidad, 
-			 final String clienteTelefono, final String clienteMail, final Date clienteFechaNacimiento,
-			 final Estado clienteEstado, final String clienteCBU) {
-		final Cliente object = new Cliente(clienteLP, clienteNombre, clienteApellido, clienteSexo,
-				clienteDni, clienteCuitCuil, clienteDireccion, clienteLocalidad, clienteTelefono, clienteMail, clienteFechaNacimiento,
-				clienteEstado, clienteCBU);
+	public Afiliado crearCompleto(Estado afiliadoEstado, String afiliadoLP, String afiliadoNombre, String afiliadoApellido,
+			int afiliadoDni, String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad,
+			Long afiliadoTelefonoFijo, Long afiliadoTelefonoCelular, String afiliadoMail) {
+		final Afiliado object = new Afiliado(afiliadoEstado, afiliadoLP, afiliadoDni, afiliadoApellido, afiliadoNombre, 
+				afiliadoCuitCuil, afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, afiliadoMail);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;
+	}
+	
+	public List<Afiliado> listar() {
+		return repositoryService.allInstances(Afiliado.class);
+	}
+
+	public List<Afiliado> listarActivos() {
+		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarActivos"));
+	}
+
+	public List<Afiliado> listarInactivos() {
+		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarInactivos"));
+	}
+
+	public List<Afiliado> buscarPorNombre(final String personaNombre) {
+		return repositoryService.allMatches(
+				new QueryDefault<>(Afiliado.class, "buscarPorNombre", "personaNombre", personaNombre.toLowerCase()));
+	}
+	
+	public List<Afiliado> buscarPorDNI(final int personaDni) {
+		return repositoryService
+				.allMatches(new QueryDefault<>(Afiliado.class, "buscarPorDNI", "personaDni", personaDni));
 	}
 
 	@javax.inject.Inject
 	RepositoryService repositoryService;
 	@javax.inject.Inject
 	ServiceRegistry2 serviceRegistry;
+
 }

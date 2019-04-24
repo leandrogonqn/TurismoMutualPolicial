@@ -37,8 +37,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
-import domainapp.modules.simple.dom.prestador.Prestador;
-import domainapp.modules.simple.dom.prestador.PrestadorRepository;
+import domainapp.modules.simple.dom.proveedor.Proveedor;
+import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 import domainapp.modules.simple.dom.provincia.Provincia;
 import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 
@@ -194,8 +194,8 @@ public class Localidad implements Comparable<Localidad> {
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar prestadores en esta Localidad")
-	public List<Prestador> buscarPrestadorPorLocalidad() {
-		return prestadorRepository.buscarPrestadorPorLocalidad(this);
+	public List<Proveedor> buscarPrestadorPorLocalidad() {
+		return proveedorRepository.buscarProveedorPorLocalidad(this);
 	}
 	// region > injected dependencies
 
@@ -215,7 +215,7 @@ public class Localidad implements Comparable<Localidad> {
 	LocalidadRepository localidadesRepository;
 	
 	@Inject
-	PrestadorRepository prestadorRepository;
+	ProveedorRepository proveedorRepository;
 
 	// endregion
 }

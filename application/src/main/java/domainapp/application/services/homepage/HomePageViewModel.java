@@ -26,8 +26,10 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
-import domainapp.modules.simple.dom.cliente.Cliente;
-import domainapp.modules.simple.dom.cliente.ClienteRepository;
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
+import domainapp.modules.simple.dom.persona.Persona;
+import domainapp.modules.simple.dom.persona.PersonaRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -39,10 +41,10 @@ public class HomePageViewModel {
         return "Mutual Policial de la Policia del Neuquen";
     }
     
-    public List<Cliente> getObjects() {
-        return clienteRepository.listarActivos();
+    public List<Persona> getObjects() {
+        return personaRepository.listarActivos();
     }
 
     @Inject
-    ClienteRepository clienteRepository;
+    PersonaRepository personaRepository;
 }

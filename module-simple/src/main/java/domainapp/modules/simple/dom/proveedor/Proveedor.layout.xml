@@ -28,63 +28,42 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarCliente"></c:action>
-                                <c:property id="clienteEstado" namedEscaped="true">
-                              	<c:action id="actualizarEstado" position="RIGHT"></c:action>
+                                <c:action id="borrarProveedor"/>
+                                <c:property id="proveedorCodigo" namedEscaped="true">
+                                <c:action id="actualizarCodigo" position="RIGHT"></c:action>
+                                </c:property>                            
+                                <c:property id="proveedorNombre" namedEscaped="true">
+                                <c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="clienteLP" namedEscaped="true">
-                              	<c:action id="actualizarLP" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="clienteNombre" namedEscaped="true">
-                              	<c:action id="actualizarNombre" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="clienteApellido" namedEscaped="true">
-                                <c:action id="actualizarApellido" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="clienteDni" namedEscaped="true">
-                                <c:action id="actualizarDni" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="clienteCuitCuil" namedEscaped="true">
-                                <c:action id="actualizarCuitCuil" position="RIGHT"></c:action>
-                                </c:property>                                
-                                <c:property id="clienteSexo" namedEscaped="true">
-                                <c:action id="actualizarSexo" position="RIGHT"></c:action>
-                                </c:property>                                
-								<c:property id="clienteDireccion" namedEscaped="true">
+                                <c:property id="proveedorDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="clienteLocalidad" namedEscaped="true">
+                                <c:property id="proveedorLocalidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="clienteTelefono" namedEscaped="true">
+                                <c:property id="proveedorTelefono" namedEscaped="true">
                                 <c:action id="actualizarTelefono" position="RIGHT"></c:action>
-                                </c:property>
-								<c:property id="clienteMail" namedEscaped="true">
-								<c:action id="actualizarMail" position="RIGHT"></c:action>
-                                </c:property>
-								<c:property id="clienteFechaNacimiento" namedEscaped="true">
-								<c:action id="actualizarFechaNacimiento" position="RIGHT"></c:action>
-                                </c:property>
-								<c:property id="clienteCBU" namedEscaped="true">
-								<c:action id="actualizarCBU" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="clienteActivo" namedEscaped="true">
+                                </c:property>           
+                                <c:property id="proveedorEncargado" namedEscaped="true">
+                                <c:action id="actualizarEncargado" position="RIGHT"></c:action>
+                                </c:property>                                                                                                                         
+                                <c:property id="proveedorActivo" namedEscaped="true">
                                 <c:action id="actualizarActivo" position="RIGHT"></c:action>
                                 </c:property>
-                           </c:fieldSet>
+                            </c:fieldSet>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
                 <bs3:tab name="Metadata">
                     <bs3:row>
-                        <bs3:col span="6">
+                        <bs3:col span="12">
                             <c:fieldSet name="Metadata"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
                 <bs3:tab name="Other">
                     <bs3:row>
-                        <bs3:col span="6">
+                        <bs3:col span="12">
                             <c:fieldSet name="Other" unreferencedProperties="true"/>
                         </bs3:col>
                     </bs3:row>

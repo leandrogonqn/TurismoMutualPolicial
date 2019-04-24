@@ -37,7 +37,7 @@ package domainapp.application.fixture;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
-public class ClienteTearDown extends FixtureScript {
+public class AfiliadoTearDown extends FixtureScript {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
