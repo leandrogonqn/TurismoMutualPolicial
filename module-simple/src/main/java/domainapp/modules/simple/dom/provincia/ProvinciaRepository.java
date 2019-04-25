@@ -44,8 +44,8 @@ public class ProvinciaRepository {
 		return repositoryService.allMatches(new QueryDefault<>(Provincia.class, "listarInactivos"));
 	}
 
-	public Provincia crear(final String localidadNombre) {
-		final Provincia object = new Provincia(localidadNombre);
+	public Provincia crear(final String provinciaNombre) {
+		final Provincia object = new Provincia(provinciaNombre);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

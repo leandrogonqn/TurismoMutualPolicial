@@ -50,11 +50,8 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
-
-import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.persona.Persona;
 import domainapp.modules.simple.dom.persona.PersonaRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Afiliado.class, objectType="simple.AfiliadoMenu")

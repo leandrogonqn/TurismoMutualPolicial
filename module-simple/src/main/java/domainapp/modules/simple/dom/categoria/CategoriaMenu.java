@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Categoria.class, objectType="simple.CategoriaMenu")
-@DomainServiceLayout(named = "Productos", menuOrder = "30")
+@DomainServiceLayout(named = "Productos", menuOrder = "30.1")
 public class CategoriaMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)
