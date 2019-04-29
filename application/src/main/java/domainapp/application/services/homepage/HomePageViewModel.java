@@ -22,7 +22,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
@@ -41,7 +43,9 @@ public class HomePageViewModel {
         return "Mutual Policial de la Policia del Neuquen";
     }
     
-    public List<Persona> getObjects() {
+    @HomePage
+    @CollectionLayout(named="Clientes")
+    public List<Persona> getClientes() {
         return personaRepository.listarActivos();
     }
 

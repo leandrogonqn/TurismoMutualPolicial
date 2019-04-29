@@ -1,7 +1,6 @@
 package domainapp.application.fixture;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public class ProvinciaTearDown extends FixtureScript{
@@ -12,7 +11,8 @@ public class ProvinciaTearDown extends FixtureScript{
     }
 
 
-    @javax.inject.Inject
+    @SuppressWarnings("unused")
+	@javax.inject.Inject
     private IsisJdoSupport isisJdoSupport;
 
 }

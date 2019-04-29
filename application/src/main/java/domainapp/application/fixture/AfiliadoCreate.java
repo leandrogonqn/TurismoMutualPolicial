@@ -34,9 +34,6 @@
 
 package domainapp.application.fixture;
 
-import java.math.BigInteger;
-import java.util.Date;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;

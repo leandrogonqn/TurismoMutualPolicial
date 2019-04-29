@@ -160,6 +160,20 @@
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
         </dependency>
+        
+                <!-- shiro config -->
+		<dependency>
+			<groupId>org.isisaddons.module.security</groupId>
+			<artifactId>isis-module-security-dom</artifactId>
+			<version>1.16.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.3m</version>
+		</dependency>
+		<!-- shiro config -->
 
     </dependencies>
 

@@ -31,13 +31,14 @@
                 </bs3:col>
             </bs3:row>
         </bs3:col>
-        <bs3:col span="12" unreferencedCollections="true">
-            <bs3:row>
-                <bs3:col span="12">
-                    <collection id="objects" defaultView="table"/>
-                </bs3:col>
-            </bs3:row>
-        </bs3:col>
+    		<bs3:col span="12" unreferencedCollections="true">
+    		<bs3:sizeSpan size="XS" span="0" offset="true"/>
+            	<bs3:row>
+                	<bs3:col span="12">
+                    	<collection id="clientes" defaultView="table"/>
+                	</bs3:col>
+            	</bs3:row>
+        	</bs3:col>
     </bs3:row>
     <bs3:row>
 

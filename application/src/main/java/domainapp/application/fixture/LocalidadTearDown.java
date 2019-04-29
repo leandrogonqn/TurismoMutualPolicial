@@ -45,7 +45,8 @@ public class LocalidadTearDown extends FixtureScript {
     }
 
 
-    @javax.inject.Inject
+    @SuppressWarnings("unused")
+	@javax.inject.Inject
     private IsisJdoSupport isisJdoSupport;
 
 }
