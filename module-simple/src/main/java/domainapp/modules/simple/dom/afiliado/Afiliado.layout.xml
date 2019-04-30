@@ -35,13 +35,13 @@
                                 <c:property id="afiliadoLP" namedEscaped="true">
                               	<c:action id="actualizarLP" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaNombre" namedEscaped="true">
+                                <c:property id="personaJuridicaNombre" namedEscaped="true">
                               	<c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaApellido" namedEscaped="true">
+                                <c:property id="personaJuridicaApellido" namedEscaped="true">
                                 <c:action id="actualizarApellido" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaDni" namedEscaped="true">
+                                <c:property id="personaJuridicaDni" namedEscaped="true">
                                 <c:action id="actualizarDni" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="personaCuitCuil" namedEscaped="true">

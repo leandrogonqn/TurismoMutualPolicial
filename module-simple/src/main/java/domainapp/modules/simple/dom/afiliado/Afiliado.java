@@ -64,6 +64,7 @@ import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 import domainapp.modules.simple.dom.persona.Persona;
 import domainapp.modules.simple.dom.persona.PersonaRepository;
+import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Afiliado")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "afiliadoId")
@@ -82,12 +83,12 @@ import domainapp.modules.simple.dom.persona.PersonaRepository;
 				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaActivo == false ") })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
-public class Afiliado extends Persona implements Comparable<Afiliado> {
+public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 
 	// region > title
 	public TranslatableString title() {
 		return TranslatableString.tr(getAfiliadoEstado().getNombre() + ": {afiliadoNombre}", "afiliadoNombre",
-				getPersonaNombre() + " " + getPersonaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
 	}
 	// endregion
 	
@@ -104,7 +105,7 @@ public class Afiliado extends Persona implements Comparable<Afiliado> {
 	}
 
 	public Afiliado(final String afiliadoNombre) {
-		setPersonaNombre(afiliadoNombre);
+		setPersonaJuridicaNombre(afiliadoNombre);
 	}
 
 	public Afiliado(Estado afiliadoEstado, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
@@ -113,9 +114,9 @@ public class Afiliado extends Persona implements Comparable<Afiliado> {
 		super();
 		setAfiliadoEstado(afiliadoEstado);
 		setAfiliadoLP(afiliadoLP);
-		setPersonaDni(afiliadoDni);
-		setPersonaApellido(afiliadoApellido);
-		setPersonaNombre(afiliadoNombre);
+		setPersonaJuridicaDni(afiliadoDni);
+		setPersonaJuridicaApellido(afiliadoApellido);
+		setPersonaJuridicaNombre(afiliadoNombre);
 		setPersonaCuitCuil(afiliadoCuitCuil);
 		setPersonaDireccion(afiliadoDireccion);
 		setPersonaLocalidad(afiliadoLocalidad);
@@ -190,32 +191,32 @@ public class Afiliado extends Persona implements Comparable<Afiliado> {
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoNombre")
 	public Afiliado actualizarNombre(@ParameterLayout(named = "Nombre") final String afiliadoNombre) {
-		setPersonaNombre(afiliadoNombre);
+		setPersonaJuridicaNombre(afiliadoNombre);
 		return this;
 	}
 
 	public String default0ActualizarNombre() {
-		return getPersonaNombre();
+		return getPersonaJuridicaNombre();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoApellido")
 	public Afiliado actualizarApellido(@ParameterLayout(named = "Apellido") final String afiliadoApellido) {
-		setPersonaApellido(afiliadoApellido);
+		setPersonaJuridicaApellido(afiliadoApellido);
 		return this;
 	}
 
 	public String default0ActualizarApellido() {
-		return getPersonaApellido();
+		return getPersonaJuridicaApellido();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoDni")
 	public Afiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") final int afiliadoDni) {
-		setPersonaDni(afiliadoDni);
+		setPersonaJuridicaDni(afiliadoDni);
 		return this;
 	}
 
 	public int default0ActualizarDni() {
-		return getPersonaDni();
+		return getPersonaJuridicaDni();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoCuitCuil")
@@ -336,13 +337,13 @@ public class Afiliado extends Persona implements Comparable<Afiliado> {
 
 	@Override
 	public String toString() {
-		String afiliado = getPersonaNombre() + " " + getPersonaApellido();
+		String afiliado = getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
 		return afiliado;
 	}
 
 	@Override
 	public int compareTo(Afiliado o) {
-		return this.getPersonaApellido().compareTo(o.getPersonaApellido());  
+		return this.getPersonaJuridicaApellido().compareTo(o.getPersonaJuridicaApellido());  
 	}
 
 	// endregion

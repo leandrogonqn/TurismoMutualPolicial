@@ -28,20 +28,14 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarClienteNoAfiliado"></c:action>
-                                <c:property id="personaJuridicaNombre" namedEscaped="true">
-                              	<c:action id="actualizarNombre" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="personaJuridicaApellido" namedEscaped="true">
-                                <c:action id="actualizarApellido" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="personaJuridicaDni" namedEscaped="true">
-                                <c:action id="actualizarDni" position="RIGHT"></c:action>
+                                <c:action id="borrarEmpresa"/>
+                                <c:property id="empresaRazonSocial" namedEscaped="true">
+                              	<c:action id="actualizarRazonSocial" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="personaCuitCuil" namedEscaped="true">
-                                <c:action id="actualizarCuitCuil" position="RIGHT"></c:action>
-                                </c:property>                                
-								<c:property id="personaDireccion" namedEscaped="true">
+                              	<c:action id="actualizarCuitCuil" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="personaDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="personaLocalidad" namedEscaped="true">

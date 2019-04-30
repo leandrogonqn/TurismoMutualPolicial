@@ -39,7 +39,6 @@ import domainapp.modules.simple.dom.localidad.Localidad;
         schema = "simple"
 )
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ", members = { "personaDni", "personaApellido" })
 public abstract class Persona {
 	
     public String cssClass(){
@@ -47,45 +46,6 @@ public abstract class Persona {
     }
 	
 	public static final int NAME_LENGTH = 40;
-
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "DNI")
-	private int personaDni;
-
-	public int getPersonaDni() {
-		return personaDni;
-	}
-
-	public void setPersonaDni(int personaDni) {
-		this.personaDni = personaDni;
-	}
-	
-	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Apellido")
-	private String personaApellido;
-
-	public String getPersonaApellido() {
-		return personaApellido;
-	}
-
-	public void setPersonaApellido(String personaApellido) {
-		this.personaApellido = personaApellido;
-	}
-	
-	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Nombre")
-	private String personaNombre;
-
-	public String getPersonaNombre() {
-		return personaNombre;
-	}
-
-	public void setPersonaNombre(final String personaNombre) {
-		this.personaNombre = personaNombre;
-	}
 
 	 @javax.jdo.annotations.Column(allowsNull = "true")
 	 @Property(

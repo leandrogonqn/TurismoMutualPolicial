@@ -60,6 +60,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 import domainapp.modules.simple.dom.persona.Persona;
+import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
@@ -75,12 +76,12 @@ import domainapp.modules.simple.dom.persona.Persona;
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "clienteNoAfiliadoId")
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
-public class ClienteNoAfiliado extends Persona implements Comparable<ClienteNoAfiliado> {
+public class ClienteNoAfiliado extends PersonaJuridica implements Comparable<ClienteNoAfiliado> {
 
 	// region > title
 	public TranslatableString title() {
 		return TranslatableString.tr("Cliente No Afiliado: {personaNombre}", "personaNombre",
-				getPersonaNombre() + " " + getPersonaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
 	}
 	// endregion
 	
@@ -93,15 +94,15 @@ public class ClienteNoAfiliado extends Persona implements Comparable<ClienteNoAf
 	}
 
 	public ClienteNoAfiliado(final String personaNombre) {
-		setPersonaNombre(personaNombre);
+		setPersonaJuridicaNombre(personaNombre);
 	}
 
 	public ClienteNoAfiliado(int personaDni, String personaApellido, String personaNombre, String personaCuitCuil, 
 			String personaDireccion, Localidad personaLocalidad,  Long personaTelefonoFijo, Long personaTelefonoCelular,
 			String personaMail) {
-		setPersonaDni(personaDni);
-		setPersonaApellido(personaApellido);
-		setPersonaNombre(personaNombre);
+		setPersonaJuridicaDni(personaDni);
+		setPersonaJuridicaApellido(personaApellido);
+		setPersonaJuridicaNombre(personaNombre);
 		setPersonaCuitCuil(personaCuitCuil);
 		setPersonaDireccion(personaDireccion);
 		setPersonaLocalidad(personaLocalidad);
@@ -119,32 +120,32 @@ public class ClienteNoAfiliado extends Persona implements Comparable<ClienteNoAf
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaNombre")
 	public ClienteNoAfiliado actualizarNombre(@ParameterLayout(named = "Nombre") final String personaNombre) {
-		setPersonaNombre(personaNombre);
+		setPersonaJuridicaNombre(personaNombre);
 		return this;
 	}
 
 	public String default0ActualizarNombre() {
-		return getPersonaNombre();
+		return getPersonaJuridicaNombre();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaApellido")
 	public ClienteNoAfiliado actualizarApellido(@ParameterLayout(named = "Apellido") final String personaApellido) {
-		setPersonaApellido(personaApellido);
+		setPersonaJuridicaApellido(personaApellido);
 		return this;
 	}
 
 	public String default0ActualizarApellido() {
-		return getPersonaApellido();
+		return getPersonaJuridicaApellido();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaDni")
 	public ClienteNoAfiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") final int personaDni) {
-		setPersonaDni(personaDni);
+		setPersonaJuridicaDni(personaDni);
 		return this;
 	}
 
 	public int default0ActualizarDni() {
-		return getPersonaDni();
+		return getPersonaJuridicaDni();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaCuitCuil")
@@ -265,13 +266,13 @@ public class ClienteNoAfiliado extends Persona implements Comparable<ClienteNoAf
 
 	@Override
 	public String toString() {
-		String clienteNoAfiliado = getPersonaNombre() + " " + getPersonaApellido();
+		String clienteNoAfiliado = getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
 		return clienteNoAfiliado;
 	}
 
 	@Override
 	public int compareTo(ClienteNoAfiliado o) {
-		return this.getPersonaApellido().compareTo(o.getPersonaApellido());  
+		return this.getPersonaJuridicaApellido().compareTo(o.getPersonaJuridicaApellido());  
 	}
 
 	// endregion
