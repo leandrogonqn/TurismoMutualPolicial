@@ -15,6 +15,7 @@
  ******************************************************************************/
 package domainapp.modules.simple.dom.producto;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -23,6 +24,7 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -43,6 +45,8 @@ import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 
@@ -287,6 +291,55 @@ public class Producto implements Comparable<Producto> {
 	public List<Producto> listarInactivos() {
 		return productoRepository.listarInactivos();
 	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Agregar Precio")
+	public Producto agregarPrecio(@ParameterLayout(named = "Fecha desde") final Date precioHistoricoFechaDesde,
+			@ParameterLayout(named = "Fecha Hasta") final Date precioHistoricoFechaHasta,
+			@ParameterLayout(named = "Precio") final Double precioHistoricoPrecio) {
+		precioHistoricoRepository.crear(this, precioHistoricoFechaDesde, precioHistoricoFechaHasta, precioHistoricoPrecio);
+		return this;
+	}
+	
+	public String validateAgregarPrecio(final Date precioHistoricoFechaDesde, final Date precioHistoricoFechaHasta, 
+			final Double precioHistoricoPrecio) {
+		List<PrecioHistorico> listaPrecioActivo = precioHistoricoRepository.listarActivos();
+		for(int indice = 0;indice<listaPrecioActivo.size();indice++) {
+			if(precioHistoricoFechaDesde.after(precioHistoricoFechaHasta))
+				return "ERROR: la fecha desde no puede ser posterior";
+			if ((precioHistoricoFechaDesde.before(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta()))
+					& (precioHistoricoFechaHasta.after(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())))
+				return "ERROR: la fecha cargada se superpone con otra fecha";
+			
+		}
+		return "";
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por fecha")
+	@MemberOrder(sequence = "1")
+	public Double mostrarPrecioPorFecha(@ParameterLayout(named = "fecha") final Date fecha) {
+		return precioHistoricoRepository.mostrarPrecioPorFecha(this, fecha);
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar precios del producto")
+	@MemberOrder(sequence = "1")
+	public List<PrecioHistorico> listarPreciosPorProducto() {
+		return precioHistoricoRepository.listarPreciosPorProducto(this);
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por fecha")
+	@MemberOrder(sequence = "1")
+	public List<PrecioHistorico> listarPreciosPorRangoDeFecha(@ParameterLayout(named = "Fecha Desde") final Date precioHistoricoFechaDesde,
+			@ParameterLayout(named = "Fecha Hasta") final Date precioHistoricoFechaHasta) {
+		return precioHistoricoRepository.listarPreciosPorRangoDeFecha(this, precioHistoricoFechaDesde, precioHistoricoFechaHasta);
+	}
+	
+	public List<Producto> choices0ListarPreciosPorRangoDeFecha() {
+		return productoRepository.listarActivos();
+	}
 
 	// region > injected dependencies
 
@@ -310,6 +363,9 @@ public class Producto implements Comparable<Producto> {
 	
 	@Inject
 	CategoriaRepository categoriaRepository;
+	
+	@Inject
+	PrecioHistoricoRepository precioHistoricoRepository;
 
 	// endregion
 }
