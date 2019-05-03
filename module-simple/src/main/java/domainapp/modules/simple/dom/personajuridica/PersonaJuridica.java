@@ -22,9 +22,6 @@ import javax.jdo.annotations.InheritanceStrategy;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Where;
-
-import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.persona.Persona;
 
 @javax.jdo.annotations.Queries({

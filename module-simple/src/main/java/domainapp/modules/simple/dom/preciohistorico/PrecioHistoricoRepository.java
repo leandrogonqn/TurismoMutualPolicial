@@ -43,19 +43,12 @@ public class PrecioHistoricoRepository {
 		Iterator<PrecioHistorico> iterar = listaPrecios.iterator();
 		while(iterar.hasNext()) {
 			PrecioHistorico listServicio = iterar.next();
-			if (listServicio.getPrecioHistoricoFechaHasta()!=null) {
-				if (((fecha.compareTo(listServicio.getPrecioHistoricoFechaDesde()))>=0)
-						&&((fecha.compareTo(listServicio.getPrecioHistoricoFechaHasta()))<0)) {
-					a=listServicio.getPrecioHistoricoPrecio(); 
-					break;
-				}
-			}else {
-				if ((fecha.compareTo(listServicio.getPrecioHistoricoFechaDesde()))>=0){
-					a=listServicio.getPrecioHistoricoPrecio();
-					break;
+			if((listServicio.getPrecioHistoricoFechaDesde().before(fecha)||listServicio.getPrecioHistoricoFechaDesde().equals(fecha))
+					&&(listServicio.getPrecioHistoricoFechaHasta().after(fecha)||listServicio.getPrecioHistoricoFechaHasta().equals(fecha))){
+				a=listServicio.getPrecioHistoricoPrecio(); 
+				break;
 				}
 			}
-		}
 		return a;
 	}
 	

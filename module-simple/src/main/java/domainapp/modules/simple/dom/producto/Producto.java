@@ -303,7 +303,7 @@ public class Producto implements Comparable<Producto> {
 	
 	public String validateAgregarPrecio(final Date precioHistoricoFechaDesde, final Date precioHistoricoFechaHasta, 
 			final Double precioHistoricoPrecio) {
-		List<PrecioHistorico> listaPrecioActivo = precioHistoricoRepository.listarActivos();
+		List<PrecioHistorico> listaPrecioActivo = precioHistoricoRepository.listarPreciosPorProducto(this);
 		for(int indice = 0;indice<listaPrecioActivo.size();indice++) {
 			if(precioHistoricoFechaDesde.after(precioHistoricoFechaHasta))
 				return "ERROR: la fecha desde no puede ser posterior";

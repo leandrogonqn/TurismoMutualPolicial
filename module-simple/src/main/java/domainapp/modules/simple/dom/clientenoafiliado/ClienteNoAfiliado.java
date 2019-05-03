@@ -59,7 +59,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.persona.Persona;
 import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 
 @javax.jdo.annotations.Queries({
