@@ -51,9 +51,10 @@ public class AfiliadoRepository {
 
 	public Afiliado crearCompleto(Estado afiliadoEstado, String afiliadoLP, String afiliadoNombre, String afiliadoApellido,
 			int afiliadoDni, String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad,
-			Long afiliadoTelefonoFijo, Long afiliadoTelefonoCelular, String afiliadoMail) {
+			Long afiliadoTelefonoFijo, Long afiliadoTelefonoCelular, String afiliadoMail, String afiliadoCBU) {
 		final Afiliado object = new Afiliado(afiliadoEstado, afiliadoLP, afiliadoDni, afiliadoApellido, afiliadoNombre, 
-				afiliadoCuitCuil, afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, afiliadoMail);
+				afiliadoCuitCuil, afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, 
+				afiliadoMail, afiliadoCBU);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

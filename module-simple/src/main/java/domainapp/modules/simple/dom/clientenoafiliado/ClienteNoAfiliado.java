@@ -73,8 +73,8 @@ import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 			+ "FROM domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado " + "WHERE personaActivo == false ") })
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "ClienteNoAfiliado")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "clienteNoAfiliadoId")
+@javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ", members = { "personaJuridicaDni", "personaJuridicaApellido" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
-@Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
 public class ClienteNoAfiliado extends PersonaJuridica implements Comparable<ClienteNoAfiliado> {
 
 	// region > title

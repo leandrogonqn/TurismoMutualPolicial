@@ -31,6 +31,8 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import domainapp.modules.simple.dom.categoria.Categoria;
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
+import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
 
@@ -51,10 +53,11 @@ public class VoucherMenu {
 	public Voucher crear(@ParameterLayout(named = "Producto") final Producto voucherProducto,
 			@ParameterLayout(named = "Fecha de entrada") final Date voucherFechaEntrada,
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
-			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros) {
-		int voucherCantidadNoches = voucherRepository.calcularCantidadDeNoches(voucherFechaEntrada, voucherFechaSalida);
-		Double voucherPrecioTotal = voucherRepository.calcularPrecioTotal(voucherFechaEntrada, voucherFechaSalida, voucherProducto);
-		return voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadNoches, voucherCantidadPasajeros, voucherPrecioTotal);
+			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
+			@ParameterLayout(named = "Tipo Precio") final TipoPrecio precioHistoricoTipoPrecio,
+			@ParameterLayout(named = "Observaciones", multiLine=6) final String voucherObservaciones,
+			@ParameterLayout(named = "Memo", multiLine=6) final String voucherMemo) {
+		return voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones, voucherMemo);
 	}
 	
 	public List<Producto> choices0Crear(){
@@ -67,6 +70,19 @@ public class VoucherMenu {
 	public List<Voucher> listarActivos() {
 		return voucherRepository.listarActivos();
 	}
+	
+//	@Action(semantics = SemanticsOf.SAFE)
+//	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "traer Ultimo Precio Cargado")
+//	@MemberOrder(sequence = "3")
+//	public Double traerUltimoPrecioCargado(@ParameterLayout(named= "Fecha") final Date fecha, 
+//			@ParameterLayout(named="Tipo Precio")final TipoPrecio precioHistoricoTipoPrecio,
+//			@ParameterLayout(named="producto") final Producto precioHistoricoProducto) {
+//		return voucherRepository.traerUltimoPrecioCargado(fecha, precioHistoricoTipoPrecio, precioHistoricoProducto);
+//	}
+//	
+//	public List<Producto> choices2TraerUltimoPrecioCargado(){
+//		return productoRepository.listarActivos();
+//	}
 
 	@javax.inject.Inject
 	VoucherRepository voucherRepository;

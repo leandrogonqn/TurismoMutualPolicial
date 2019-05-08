@@ -28,16 +28,24 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:property id="precioHistoricoServicioServicio" namedEscaped="true">
+                            	<c:action id="borrarPrecioHistorico"/>
+                                <c:property id="precioHistoricoProducto" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoProducto" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="precioHistoricoServicioFechaDesde" namedEscaped="true">
+                                <c:property id="precioHistoricoFechaDesde" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoFecha" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="precioHistoricoServicioFechaHasta" namedEscaped="true">
+                                <c:property id="precioHistoricoFechaHasta" namedEscaped="true">
                                 </c:property>
-                                <c:property id="precioHistoricoServicioPrecio" namedEscaped="true">
+                                <c:property id="precioHistoricoTipoPrecio" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoTipoPrecio" position="RIGHT"></c:action>
                                 </c:property>                  
-                                <c:property id="precioHistoricoServicioActivo" namedEscaped="true">
-                                </c:property>                                                   
+                                <c:property id="precioHistoricoPrecio" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoPrecio" position="RIGHT"></c:action>
+                                </c:property>   
+                                <c:property id="precioHistoricoActivo" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoActivo" position="RIGHT"></c:action>
+                                </c:property>                                                                   
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

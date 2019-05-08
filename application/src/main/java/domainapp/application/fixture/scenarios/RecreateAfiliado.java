@@ -34,7 +34,6 @@
 
 package domainapp.application.fixture.scenarios;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -144,6 +143,7 @@ public class RecreateAfiliado extends FixtureScript {
             fs.setTelefonoFijo(Long.parseLong(telefonoFijo.get(i)));
             fs.setTelefonoCelular(Long.parseLong(telefonoCelular.get(i))); 
             fs.setEmail(emails.get(i));
+            fs.setCBU(CBU.get(i));
             ec.executeChild(this, fs.getName(), fs);
             simpleObjects.add(fs.getSimpleObject());
         }

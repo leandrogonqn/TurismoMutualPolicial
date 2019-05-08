@@ -71,9 +71,10 @@ public class AfiliadoMenu {
 			@Nullable @ParameterLayout(named = "Localidad") @Parameter(optionality = Optionality.OPTIONAL) final Localidad afiliadoLocalidad,
 			@Nullable @ParameterLayout(named = "Teléfono Fijo") @Parameter(optionality = Optionality.OPTIONAL, maxLength=10) final Long afiliadoTelefonoFijo,
 			@Nullable @ParameterLayout(named = "Teléfono Celular") @Parameter(optionality = Optionality.OPTIONAL, maxLength=12) final Long afiliadoTelefonoCelular,
-			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoMail) {
+			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoMail,
+			@Nullable @ParameterLayout(named = "CBU") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoCBU) {
 		return afiliadoRepository.crearCompleto(afiliadoEstado, afiliadoLP, afiliadoNombre, afiliadoApellido, afiliadoDni, afiliadoCuitCuil, 
-				 afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, afiliadoMail);
+				 afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, afiliadoMail, afiliadoCBU);
 	}
 	
 	public List<Localidad> choices7Crear() {
@@ -83,7 +84,7 @@ public class AfiliadoMenu {
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22
 	public String validateCrear(final Estado afiliadoEstado, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
 			final String afiliadoNombre, final String afiliadoCuitCuil,	final String afiliadoDireccion, final Localidad afiliadoLocalidad,  
-			final Long afiliadoTelefonoFijo, final Long afiliadoTelefonoCelular, final String afiliadoMail) {
+			final Long afiliadoTelefonoFijo, final Long afiliadoTelefonoCelular, final String afiliadoMail, final String afiliadoCBU) {
         if (isNumeric(afiliadoLP) == false) {
             return "Todos los caracteres del LP deben ser numericos";
         }

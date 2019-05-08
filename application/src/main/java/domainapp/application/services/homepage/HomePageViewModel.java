@@ -44,11 +44,11 @@ public class HomePageViewModel {
     }
     
     @HomePage
-    @CollectionLayout(named="Clientes")
-    public List<Persona> getClientes() {
-        return personaRepository.listarActivos();
+    @CollectionLayout(named="Afiliados")
+    public List<Afiliado> getAfiliados() {
+        return afiliadoRepository.listarActivos();
     }
 
     @Inject
-    PersonaRepository personaRepository;
+    AfiliadoRepository afiliadoRepository;
 }

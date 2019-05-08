@@ -162,6 +162,17 @@ public class AfiliadoCreate extends FixtureScript {
    		return this;
    	}
    	
+   	private String CBU;
+
+   	public String getCBU() {
+   		return CBU;
+   	}
+
+   	public AfiliadoCreate setCBU(String CBU) {
+   		this.CBU = CBU;
+   		return this;
+   	}
+   	
     //endregion
     
 
@@ -184,7 +195,7 @@ public class AfiliadoCreate extends FixtureScript {
         String apellido = checkParam("apellido", ec, String.class);
         int dni = checkParam("dni", ec, Integer.class);
 
-        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefonoFijo, telefonoCelular, email);
+        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefonoFijo, telefonoCelular, email, CBU);
 
         // also make available to UI
         ec.addResult(this, simpleObject);

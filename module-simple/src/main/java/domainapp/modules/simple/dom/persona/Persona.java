@@ -38,7 +38,7 @@ import domainapp.modules.simple.dom.localidad.Localidad;
         identityType=IdentityType.DATASTORE,
         schema = "simple"
 )
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
+@Inheritance(strategy=InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class Persona {
 	
     public String cssClass(){

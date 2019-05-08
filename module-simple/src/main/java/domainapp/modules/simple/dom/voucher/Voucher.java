@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -65,13 +66,15 @@ public class Voucher implements Comparable<Voucher> {
 
 	// Constructor
 	public Voucher(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadNochesfinal,
-			int voucherCantidadPasajeros, Double voucherPrecioTotal) {
+			int voucherCantidadPasajeros, Double voucherPrecioTotal, String voucherObservaciones, String voucherMemo) {
 		setVoucherProducto(voucherProducto);
 		setVoucherFechaEntrada(voucherFechaEntrada);
 		setVoucherFechaSalida(voucherFechaSalida);
 		setVoucherCantidadNoches(voucherCantidadNochesfinal);
 		setVoucherCantidadPasajeros(voucherCantidadPasajeros);
 		setVoucherPrecioTotal(voucherPrecioTotal);
+		setVoucherObservaciones(voucherObservaciones);
+		setVoucherMemo(voucherMemo);
 		this.voucherActivo = true;
 	}
 
@@ -152,6 +155,32 @@ public class Voucher implements Comparable<Voucher> {
 	public void setVoucherPrecioTotal(Double voucherPrecioTotal) {
 		this.voucherPrecioTotal = voucherPrecioTotal;
 	}	
+	
+	@Column(allowsNull = "true")
+	@Property(editing=Editing.DISABLED)
+	@PropertyLayout(named="Observaciones", hidden=Where.ALL_TABLES)
+	private String voucherObservaciones;
+	
+	public String getVoucherObservaciones() {
+		return voucherObservaciones;
+	}
+	
+	public void setVoucherObservaciones(String voucherObservaciones) {
+		this.voucherObservaciones=voucherObservaciones;
+	}
+	
+	@Column(allowsNull = "true")
+	@Property(editing=Editing.DISABLED)
+	@PropertyLayout(named="Memo", hidden=Where.ALL_TABLES)
+	private String voucherMemo;
+	
+	public String getVoucherMemo() {
+		return voucherMemo;
+	}
+	
+	public void setVoucherMemo(String voucherMemo) {
+		this.voucherMemo = voucherMemo;
+	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -206,6 +235,35 @@ public class Voucher implements Comparable<Voucher> {
 		return getVoucherCantidadPasajeros();
 	}
 
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherPrecioTotal")
+	public Voucher actualizarPrecioTotal(@ParameterLayout(named = "Precio Total") final Double voucherPrecioTotal) {
+		setVoucherPrecioTotal(voucherPrecioTotal);
+		return this;
+	}
+
+	public Double default0ActualizarPrecioTotal() {
+		return getVoucherPrecioTotal();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherObservaciones")
+	public Voucher actualizarObservaciones(@ParameterLayout(named = "Observaciones", multiLine=6) final String voucherObservaciones) {
+		setVoucherObservaciones(voucherObservaciones);
+		return this;
+	}
+
+	public String default0ActualizarObservaciones() {
+		return getVoucherObservaciones();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherMemo")
+	public Voucher actualizarMemo(@ParameterLayout(named = "Memo", multiLine=6) final String voucherMemo) {
+		setVoucherMemo(voucherMemo);
+		return this;
+	}
+
+	public String default0ActualizarMemo() {
+		return getVoucherMemo();
+	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherActivo")
 	public Voucher actualizarActivo(@ParameterLayout(named = "Activo") final boolean voucherActivo) {

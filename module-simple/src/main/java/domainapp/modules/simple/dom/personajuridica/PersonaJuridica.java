@@ -36,8 +36,7 @@ import domainapp.modules.simple.dom.persona.Persona;
         identityType=IdentityType.DATASTORE,
         schema = "simple"
 )
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ", members = { "personaJuridicaDni", "personaJuridicaApellido" })
+@Inheritance(strategy=InheritanceStrategy.SUBCLASS_TABLE)
 public abstract class PersonaJuridica extends Persona{
 	
     public String cssClass(){

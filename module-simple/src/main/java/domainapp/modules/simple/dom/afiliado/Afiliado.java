@@ -81,8 +81,8 @@ import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaActivo == true "),
 		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaActivo == false ") })
+@javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ1", members = { "personaJuridicaDni", "personaJuridicaApellido" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
-@Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
 public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 
 	// region > title
@@ -110,7 +110,7 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 
 	public Afiliado(Estado afiliadoEstado, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
 			String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad, Long afiliadoTelefonoFijo, 
-			Long afiliadoTelefonoCelular, String afiliadoMail) {
+			Long afiliadoTelefonoCelular, String afiliadoMail, String afiliadoCBU) {
 		super();
 		setAfiliadoEstado(afiliadoEstado);
 		setAfiliadoLP(afiliadoLP);
@@ -124,6 +124,7 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 		setPersonaTelefonoFijo(afiliadoTelefonoFijo);
 		setPersonaTelefonoCelular(afiliadoTelefonoCelular);
 		setPersonaMail(afiliadoMail);
+		setAfiliadoCBU(afiliadoCBU);
 		setPersonaActivo(true);
 	}
 	// endregion
@@ -155,6 +156,19 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 
 	public void setAfiliadoLP(String afiliadoLP) {
 		this.afiliadoLP = afiliadoLP;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
+	@PropertyLayout(named = "CBU")
+	private String afiliadoCBU;
+
+	public String getAfiliadoCBU() {
+		return afiliadoCBU;
+	}
+
+	public void setAfiliadoCBU(String afiliadoCBU) {
+		this.afiliadoCBU = afiliadoCBU;
 	}
 	
 	// endregion
@@ -315,7 +329,6 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 		return "";
 	}
 
-	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoActivo")
 	public Afiliado actualizarActivo(@ParameterLayout(named = "Activo") final boolean afiliadoActivo) {
 		setPersonaActivo(afiliadoActivo);
@@ -352,22 +365,22 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar todos los afiliados")
 	@MemberOrder(sequence = "2")
-	public List<Persona> listarAfiliado() {
-		return personaRepository.listar();
+	public List<Afiliado> listarAfiliado() {
+		return afiliadoRepository.listar();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar afiliados activos")
 	@MemberOrder(sequence = "2")
-	public List<Persona> listarAfiliadoActivos() {
-		return personaRepository.listarActivos();
+	public List<Afiliado> listarAfiliadoActivos() {
+		return afiliadoRepository.listarActivos();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar afiliados inactivos")
 	@MemberOrder(sequence = "2")
-	public List<Persona> listarAfiliadoInactivos() {
-		return personaRepository.listarInactivos();
+	public List<Afiliado> listarAfiliadoInactivos() {
+		return afiliadoRepository.listarInactivos();
 	}
 	
 	@ActionLayout(hidden=Where.EVERYWHERE)
@@ -402,9 +415,6 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 
 	@Inject
 	AfiliadoRepository afiliadoRepository;
-
-	@Inject
-	PersonaRepository personaRepository;
 	
 	// endregion
 

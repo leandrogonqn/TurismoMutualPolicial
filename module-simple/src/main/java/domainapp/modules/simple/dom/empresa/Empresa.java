@@ -75,7 +75,6 @@ import domainapp.modules.simple.dom.persona.Persona;
 		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaActivo == false ") })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
-@Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
 public class Empresa extends Persona implements Comparable<Empresa> {
 
 	// region > title

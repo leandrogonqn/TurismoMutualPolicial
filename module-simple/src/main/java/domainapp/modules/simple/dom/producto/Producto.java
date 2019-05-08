@@ -41,12 +41,15 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+
+import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
+import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 
@@ -296,51 +299,44 @@ public class Producto implements Comparable<Producto> {
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Agregar Precio")
 	public Producto agregarPrecio(@ParameterLayout(named = "Fecha desde") final Date precioHistoricoFechaDesde,
 			@ParameterLayout(named = "Fecha Hasta") final Date precioHistoricoFechaHasta,
+			@ParameterLayout(named = "Tipo de Precio") final TipoPrecio precioHistoricoTipoPrecio,
 			@ParameterLayout(named = "Precio") final Double precioHistoricoPrecio) {
-		precioHistoricoRepository.crear(this, precioHistoricoFechaDesde, precioHistoricoFechaHasta, precioHistoricoPrecio);
+		precioHistoricoRepository.crear(this, precioHistoricoFechaDesde, precioHistoricoFechaHasta, precioHistoricoTipoPrecio, precioHistoricoPrecio);
 		return this;
 	}
 	
 	public String validateAgregarPrecio(final Date precioHistoricoFechaDesde, final Date precioHistoricoFechaHasta, 
-			final Double precioHistoricoPrecio) {
-		List<PrecioHistorico> listaPrecioActivo = precioHistoricoRepository.listarPreciosPorProducto(this);
-		for(int indice = 0;indice<listaPrecioActivo.size();indice++) {
-			if(precioHistoricoFechaDesde.after(precioHistoricoFechaHasta))
-				return "ERROR: la fecha desde no puede ser posterior";
-			if ((precioHistoricoFechaDesde.before(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta()))
-					& (precioHistoricoFechaHasta.after(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())))
-				return "ERROR: la fecha cargada se superpone con otra fecha";
-			
-		}
+			final TipoPrecio precioHistoricoTipoPrecio, final Double precioHistoricoPrecio) {
+		if(precioHistoricoFechaDesde.after(precioHistoricoFechaHasta))
+			return "ERROR: la fecha desde no puede ser posterior";
+		if (precioHistoricoRepository.verificarCrearPrecio(this, precioHistoricoTipoPrecio, precioHistoricoFechaDesde, precioHistoricoFechaHasta)==false)
+			return "ERROR: la fecha cargada se superpone con otra fecha";
 		return "";
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por fecha")
 	@MemberOrder(sequence = "1")
-	public Double mostrarPrecioPorFecha(@ParameterLayout(named = "fecha") final Date fecha) {
-		return precioHistoricoRepository.mostrarPrecioPorFecha(this, fecha);
+	public Double mostrarPrecioPorFecha(@ParameterLayout(named = "fecha") final Date fecha,
+			@ParameterLayout(named = "Tipo Precio") final TipoPrecio precioHistoricoTipoPrecio) {
+		return precioHistoricoRepository.mostrarPrecioPorFecha(this, fecha, precioHistoricoTipoPrecio);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar precios del producto")
 	@MemberOrder(sequence = "1")
 	public List<PrecioHistorico> listarPreciosPorProducto() {
-		return precioHistoricoRepository.listarPreciosPorProducto(this);
+		return precioHistoricoRepository.listarPreciosPorProducto(this, true);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por fecha")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por rango de fecha")
 	@MemberOrder(sequence = "1")
 	public List<PrecioHistorico> listarPreciosPorRangoDeFecha(@ParameterLayout(named = "Fecha Desde") final Date precioHistoricoFechaDesde,
 			@ParameterLayout(named = "Fecha Hasta") final Date precioHistoricoFechaHasta) {
 		return precioHistoricoRepository.listarPreciosPorRangoDeFecha(this, precioHistoricoFechaDesde, precioHistoricoFechaHasta);
 	}
 	
-	public List<Producto> choices0ListarPreciosPorRangoDeFecha() {
-		return productoRepository.listarActivos();
-	}
-
 	// region > injected dependencies
 
 	@javax.inject.Inject
