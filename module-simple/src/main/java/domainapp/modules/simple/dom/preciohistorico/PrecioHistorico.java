@@ -48,6 +48,16 @@ public class PrecioHistorico implements Comparable<PrecioHistorico>{
 		return TranslatableString.tr("{name}", "name",getPrecioHistoricoProducto().toString() + " Precio: " + getPrecioHistoricoPrecio().toString() + " Desde: " + 
 		sdf.format(getPrecioHistoricoFechaDesde()+ " Hasta: "+sdf.format(getPrecioHistoricoFechaHasta())));
 	}
+	
+	public String cssClass() {
+		String a;
+		if (getPrecioHistoricoActivo() == true) {
+			a = getPrecioHistoricoTipoPrecio().getNombre();
+		}else {
+			a = "inactivo";
+		}
+		return a;
+	}
 
 	public PrecioHistorico(Producto precioHistoricoProducto, Date precioHistoricoFechaDesde, Date precioHistoricoFechaHasta,
 			TipoPrecio precioHistoricoTipoPrecio, Double precioHistoricoPrecio) {

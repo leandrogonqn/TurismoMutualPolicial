@@ -66,7 +66,7 @@ public class PrecioHistoricoMenu {
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios No Afiliados")
 	@MemberOrder(sequence = "2")
 	public List<PrecioHistorico> listarActivoNoAfiliado() {
-		return precioHistoricoRepository.listarActivosAfiliados(TipoPrecio.NoAfiliado, true);
+		return precioHistoricoRepository.listarActivosAfiliados(TipoPrecio.No_Afiliado, true);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

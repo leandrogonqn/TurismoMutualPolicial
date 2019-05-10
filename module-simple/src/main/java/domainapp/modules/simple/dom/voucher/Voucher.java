@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2017 SiGeSe
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.  You may obtain a copy
- * of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations under
- * the License.
- ******************************************************************************/
 package domainapp.modules.simple.dom.voucher;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +25,8 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
 import domainapp.modules.simple.dom.producto.Producto;
+import domainapp.modules.simple.dom.reserva.Reserva;
+import domainapp.modules.simple.dom.reserva.ReservaRepository;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Voucher")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "voucherId")
@@ -47,7 +34,9 @@ import domainapp.modules.simple.dom.producto.Producto;
 		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == true "),
 		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == false ") })
+				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == false "),
+		@javax.jdo.annotations.Query(name = "listarVoucherPorProducto", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == :voucherActivo && voucherProducto == :voucherProducto ")})
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Voucher implements Comparable<Voucher> {
 	// region > title
@@ -65,12 +54,12 @@ public class Voucher implements Comparable<Voucher> {
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public Voucher(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadNochesfinal,
-			int voucherCantidadPasajeros, Double voucherPrecioTotal, String voucherObservaciones, String voucherMemo) {
+	public Voucher(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadNoches,
+			final int voucherCantidadPasajeros, final Double voucherPrecioTotal, final String voucherObservaciones, final String voucherMemo) {
 		setVoucherProducto(voucherProducto);
 		setVoucherFechaEntrada(voucherFechaEntrada);
 		setVoucherFechaSalida(voucherFechaSalida);
-		setVoucherCantidadNoches(voucherCantidadNochesfinal);
+		setVoucherCantidadNoches(voucherCantidadNoches);
 		setVoucherCantidadPasajeros(voucherCantidadPasajeros);
 		setVoucherPrecioTotal(voucherPrecioTotal);
 		setVoucherObservaciones(voucherObservaciones);
@@ -80,7 +69,7 @@ public class Voucher implements Comparable<Voucher> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Producto")
+	@PropertyLayout(named = "Producto", cssClass="largo")
 	private Producto voucherProducto;
 
 	public Producto getVoucherProducto() {
@@ -119,7 +108,7 @@ public class Voucher implements Comparable<Voucher> {
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Cantidad de noches")
+	@PropertyLayout(named = "Noches")
 	private int voucherCantidadNoches;
 
 	public int getVoucherCantidadNoches() {
@@ -132,7 +121,7 @@ public class Voucher implements Comparable<Voucher> {
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Cantidad de Pasajeros")
+	@PropertyLayout(named = "Pasajeros")
 	private int voucherCantidadPasajeros;
 
 	public int getVoucherCantidadPasajeros() {
@@ -312,6 +301,13 @@ public class Voucher implements Comparable<Voucher> {
 	public List<Voucher> listarInactivos() {
 		return voucherRepository.listarInactivos();
 	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(named = "Volver a la reserva")
+	@MemberOrder(sequence = "5")
+	public Reserva volverAReserva() {
+		return reservaRepository.buscarReservaPorVoucher(this);
+	}
 
 	// region > injected dependencies
 
@@ -326,6 +322,9 @@ public class Voucher implements Comparable<Voucher> {
 
 	@Inject
 	VoucherRepository voucherRepository;
+	
+	@Inject
+	ReservaRepository reservaRepository;
 
 	// endregion
 }
