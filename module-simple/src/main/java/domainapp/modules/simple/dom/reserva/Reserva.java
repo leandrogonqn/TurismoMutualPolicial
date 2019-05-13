@@ -67,13 +67,12 @@ public class Reserva implements Comparable<Reserva> {
 
 	// Constructor
 	public Reserva(int reservaCodigo, Date reservaFecha, Persona reservaCliente, final List<Voucher> reservaListaVoucher,
-			CanalDePago reservaCanalDePago, String reservaObservaciones, String reservaMemo) {
+			CanalDePago reservaCanalDePago, String reservaMemo) {
 		setReservaCodigo(reservaCodigo);
 		setReservaFecha(reservaFecha);
 		setReservaCliente(reservaCliente);
 		setReservaListaVoucher(reservaListaVoucher);
 		setReservaCanalDePago(reservaCanalDePago);
-		setReservaObservaciones(reservaObservaciones);
 		setReservaMemo(reservaMemo);
 		setReservaListaVoucher(reservaListaVoucher);
 		this.reservaActivo = true;
@@ -156,19 +155,6 @@ public class Reserva implements Comparable<Reserva> {
 	
 	@Column(allowsNull = "true")
 	@Property(editing=Editing.DISABLED)
-	@PropertyLayout(named="Observaciones", hidden=Where.ALL_TABLES)
-	private String reservaObservaciones;
-	
-	public String getReservaObservaciones() {
-		return reservaObservaciones;
-	}
-	
-	public void setReservaObservaciones(String reservaObservaciones) {
-		this.reservaObservaciones=reservaObservaciones;
-	}
-	
-	@Column(allowsNull = "true")
-	@Property(editing=Editing.DISABLED)
 	@PropertyLayout(named="Memo", hidden=Where.ALL_TABLES)
 	private String reservaMemo;
 	
@@ -243,16 +229,6 @@ public class Reserva implements Comparable<Reserva> {
 		return getReservaCanalDePago();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaObservaciones")
-	public Reserva actualizarReservaObservaciones(@ParameterLayout(named = "Observaciones") final String reservaObservaciones) {
-		setReservaObservaciones(reservaObservaciones);
-		return this;
-	}
-
-	public String default0ActualizarReservaObservaciones() {
-		return getReservaObservaciones();
-	}
-
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaMemo")
 	public Reserva actualizarReservaMemo(@ParameterLayout(named = "Memo") final String reservaMemo) {
 		setReservaMemo(reservaMemo);
@@ -324,14 +300,13 @@ public class Reserva implements Comparable<Reserva> {
 			@ParameterLayout(named = "Fecha de entrada") final Date voucherFechaEntrada,
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
-			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones,
-			@Nullable @ParameterLayout(named = "Memo", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherMemo) {
+			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
 		TipoPrecio precioHistoricoTipoPrecio;
 		if(this.getReservaCliente().getClass()==Afiliado.class)
 			precioHistoricoTipoPrecio = TipoPrecio.Afiliado;
 		else
 			precioHistoricoTipoPrecio = TipoPrecio.No_Afiliado;
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones, voucherMemo);
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones);
 		this.getReservaListaVoucher().add(v);
 		this.setReservaListaVoucher(this.getReservaListaVoucher());
 		return this;
@@ -342,8 +317,7 @@ public class Reserva implements Comparable<Reserva> {
 	}
 	
 	public String validateCrearVoucher(final Producto voucherProducto, final Date voucherFechaEntrada,
-			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
-			final String voucherMemo) {
+			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones) {
 			List<Voucher> listaVoucher = voucherRepository.listarVoucherPorProducto(voucherProducto, true);
 			if (voucherFechaEntrada.after(voucherFechaSalida))
 				return "La fecha de salida no puede ser anterior a la de entrada";

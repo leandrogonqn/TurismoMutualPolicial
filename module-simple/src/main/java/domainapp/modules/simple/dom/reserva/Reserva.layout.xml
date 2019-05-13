@@ -28,9 +28,6 @@
                                 <c:property id="reservaCanalDePago" namedEscaped="true">
                                 <c:action id="actualizarReservaCanalDePago" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="reservaObservaciones" namedEscaped="true">
-                                <c:action id="actualizarReservaObservaciones" position="RIGHT"></c:action>
-                                </c:property>
                                 <c:property id="reservaMemo" namedEscaped="true">
                                 <c:action id="actualizarReservaMemo" position="RIGHT"></c:action>
                                 </c:property>

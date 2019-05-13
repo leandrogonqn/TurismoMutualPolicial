@@ -178,13 +178,19 @@ public class Afiliado extends PersonaJuridica implements Comparable<Afiliado> {
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoDni")
-	public Afiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") final int afiliadoDni) {
+	public Afiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") @Parameter(maxLength=8) final int afiliadoDni) {
 		setPersonaJuridicaDni(afiliadoDni);
 		return this;
 	}
 
 	public int default0ActualizarDni() {
 		return getPersonaJuridicaDni();
+	}
+	
+	public String validateActualizarDni(final int afiliadoDni) {
+		if (Integer.toString(afiliadoDni).length()<6)
+			return "Largo del dni incorrecto";
+		return "";
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoCuitCuil")

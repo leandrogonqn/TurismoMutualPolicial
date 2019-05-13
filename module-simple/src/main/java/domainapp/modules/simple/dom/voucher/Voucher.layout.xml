@@ -48,9 +48,6 @@
                                 <c:property id="voucherObservaciones" namedEscaped="true" multiLine="6">
                                 <c:action id="actualizarObservaciones" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="voucherMemo" namedEscaped="true" multiLine="6">
-                                <c:action id="actualizarMemo" position="RIGHT"></c:action>
-                                </c:property>                                                                                                                                                                                                                               
                                 <c:property id="voucherActivo" namedEscaped="true">
                                 <c:action id="actualizarActivo" position="RIGHT"></c:action>
                                 </c:property>

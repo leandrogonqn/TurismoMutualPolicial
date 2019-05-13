@@ -34,7 +34,11 @@ public class ProductoMenu {
 			@Nullable @ParameterLayout(named = "Proveedor") @Parameter(optionality=Optionality.OPTIONAL) final Proveedor productoProveedor,
 			@ParameterLayout(named = "Categoria") final Categoria productoCategoria,
 			@ParameterLayout(named = "Localidad") final Localidad productoLocalidad) {
-		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad);
+		String productoPoliticas = "";
+		if (productoAlojamientoPropio==true) {
+			productoPoliticas = "Politicas Propias";
+		}
+		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad, productoPoliticas);
 	}
 
 	public List<Proveedor> choices2Crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,

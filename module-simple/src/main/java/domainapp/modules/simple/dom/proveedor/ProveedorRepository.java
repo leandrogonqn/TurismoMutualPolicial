@@ -15,10 +15,10 @@ public class ProveedorRepository {
 		return repositoryService.allInstances(Proveedor.class);
 	}
 
-	public List<Proveedor> buscarPorNombre(final String proveedorNombre) {
+	public List<Proveedor> buscarPorRazonSocial(final String proveedorRazonSocial) {
 
-		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "buscarPorNombre", "proveedorNombre",
-				proveedorNombre.toLowerCase()));
+		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "buscarPorRazonSocial", "proveedorRazonSocial",
+				proveedorRazonSocial.toLowerCase()));
 
 	}
 	
@@ -40,10 +40,11 @@ public class ProveedorRepository {
 		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarInactivos"));
 	}
 
-	public Proveedor crear(final int proveedorCodigo, final String proveedorNombre, final String proveedorDireccion,
-			final Localidad proveedorLocalidad, final String proveedorTelefono, final String proveedorEncargado) {
-		final Proveedor object = new Proveedor(proveedorCodigo, proveedorNombre, proveedorDireccion, proveedorLocalidad,
-				proveedorTelefono, proveedorEncargado);
+	public Proveedor crear(final int proveedorCodigo, final String proveedorCuit, final String proveedorRazonSocial, 
+			final String proveedorNombreComercial, final String proveedorDireccion, final Localidad proveedorLocalidad, 
+			final String proveedorTelefono, final String proveedorMail, String proveedorWeb, final String proveedorContacto) {
+		final Proveedor object = new Proveedor(proveedorCodigo, proveedorCuit, proveedorRazonSocial, proveedorNombreComercial, 
+				proveedorDireccion, proveedorLocalidad, proveedorTelefono, proveedorMail, proveedorWeb, proveedorContacto);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

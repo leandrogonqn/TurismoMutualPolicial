@@ -32,7 +32,7 @@ public class ClienteNoAfiliadoMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Cliente No Afiliado")
 	@MemberOrder(sequence = "1")
-	public ClienteNoAfiliado crear(@ParameterLayout(named = "DNI") final int personaDni,
+	public ClienteNoAfiliado crear(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni,
 			@ParameterLayout(named = "Apellido") final String personaApellido,
 			@ParameterLayout(named = "Nombre") final String personaNombre,
 			@Nullable @ParameterLayout(named = "Cuit/Cuil") @Parameter(optionality = Optionality.OPTIONAL) final String personaCuitCuil,
@@ -53,6 +53,9 @@ public class ClienteNoAfiliadoMenu {
 	public String validateCrear(final int personaDni, final String personaApellido, final String personaNombre, final String personaCuitCuil,
 			final String personaDireccion, final Localidad personaLocalidad,  final Long personaTelefonoFijo, final Long personaTelefonoCelular,
 			final String personaMail) {
+		
+		if (Integer.toString(personaDni).length()<6)
+			return "Largo del dni incorrecto";
 		
 		if (personaTelefonoFijo == null & personaTelefonoCelular == null) {
 			return "Se tiene que cargar un numero de telefono, no puede quedar telefono fijo y telefono celular vacio";
@@ -96,8 +99,14 @@ public class ClienteNoAfiliadoMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar no afiliado Por DNI")
 	@MemberOrder(sequence = "3")
-	public List<ClienteNoAfiliado> buscarPorDni(@ParameterLayout(named = "DNI") final int personaDni) {
+	public List<ClienteNoAfiliado> buscarPorDni(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni) {
 		return clienteNoAfiliadoRepository.buscarPorDNI(personaDni);
+	}
+	
+	public String validateBuscarPorDni(final int personaDni) {
+		if (Integer.toString(personaDni).length()<6)
+			return "Largo del dni incorrecto";
+		return "";
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

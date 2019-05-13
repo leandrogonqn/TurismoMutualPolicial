@@ -30,7 +30,7 @@ public class AfiliadoMenu {
 	@MemberOrder(sequence = "1")
 	public Afiliado crear(@ParameterLayout(named = "Estado") final Estado afiliadoEstado,
 			@Nullable @ParameterLayout(named = "LP", typicalLength=6) @Parameter(optionality = Optionality.OPTIONAL, maxLength = 6) final String afiliadoLP,
-			@ParameterLayout(named = "DNI") final int afiliadoDni,
+			@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int afiliadoDni,
 			@ParameterLayout(named = "Apellido") final String afiliadoApellido,
 			@ParameterLayout(named = "Nombre") final String afiliadoNombre,
 			@Nullable @ParameterLayout(named = "Cuit/Cuil") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoCuitCuil,
@@ -59,6 +59,9 @@ public class AfiliadoMenu {
 		if (afiliadoLP.length()<=5) {
 			return "LP debe contener 6 digitos";
 		}
+		
+		if (Integer.toString(afiliadoDni).length()<6)
+			return "Largo del dni incorrecto";
 		
 		if (afiliadoTelefonoFijo == null & afiliadoTelefonoCelular == null) {
 			return "Se tiene que cargar un numero de telefono, no puede quedar telefono fijo y telefono celular vacio";
@@ -130,8 +133,14 @@ public class AfiliadoMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar afiliado Por DNI")
 	@MemberOrder(sequence = "3.2")
-	public List<Afiliado> buscarPorDni(@ParameterLayout(named = "DNI") final int personaDni) {
+	public List<Afiliado> buscarPorDni(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni) {
 		return afiliadoRepository.buscarPorDNI(personaDni);
+	}
+	
+	public String validateBuscarPorDni(final int personaDni) {
+		if (Integer.toString(personaDni).length()<6)
+			return "Largo del dni incorrecto";
+		return "";
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

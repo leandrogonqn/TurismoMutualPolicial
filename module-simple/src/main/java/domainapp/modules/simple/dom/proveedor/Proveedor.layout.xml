@@ -16,10 +16,15 @@
                                 <c:action id="borrarProveedor"/>
                                 <c:property id="proveedorCodigo" namedEscaped="true">
                                 <c:action id="actualizarCodigo" position="RIGHT"></c:action>
-                                </c:property>                            
-                                <c:property id="proveedorNombre" namedEscaped="true">
-                                <c:action id="actualizarNombre" position="RIGHT"></c:action>
+                                </c:property>    
+                                <c:property id="proveedorCuit" namedEscaped="true">
+                                </c:property>                                                           
+                                <c:property id="proveedorRazonSocial" namedEscaped="true">
+                                <c:action id="actualizarRazonSocial" position="RIGHT"></c:action>
                                 </c:property>
+                                <c:property id="proveedorNombreComercial" namedEscaped="true">
+                                <c:action id="actualizarNombreComercial" position="RIGHT"></c:action>
+                                </c:property>                                
                                 <c:property id="proveedorDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
@@ -29,8 +34,12 @@
                                 <c:property id="proveedorTelefono" namedEscaped="true">
                                 <c:action id="actualizarTelefono" position="RIGHT"></c:action>
                                 </c:property>           
-                                <c:property id="proveedorEncargado" namedEscaped="true">
-                                <c:action id="actualizarEncargado" position="RIGHT"></c:action>
+                                <c:property id="proveedorMail" namedEscaped="true">
+                                </c:property>      
+                                <c:property id="proveedorWeb" namedEscaped="true">
+                                </c:property>                                                                      
+                                <c:property id="proveedorContacto" namedEscaped="true">
+                                <c:action id="actualizarContacto" position="RIGHT"></c:action>
                                 </c:property>                                                                                                                         
                                 <c:property id="proveedorActivo" namedEscaped="true">
                                 <c:action id="actualizarActivo" position="RIGHT"></c:action>

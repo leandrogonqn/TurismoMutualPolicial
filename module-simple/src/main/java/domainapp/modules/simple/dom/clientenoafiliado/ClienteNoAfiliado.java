@@ -105,13 +105,19 @@ public class ClienteNoAfiliado extends PersonaJuridica implements Comparable<Cli
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaDni")
-	public ClienteNoAfiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") final int personaDni) {
+	public ClienteNoAfiliado actualizarDni(@ParameterLayout(named = "Numero de Documento") @Parameter(maxLength=8) final int personaDni) {
 		setPersonaJuridicaDni(personaDni);
 		return this;
 	}
 
 	public int default0ActualizarDni() {
 		return getPersonaJuridicaDni();
+	}
+	
+	public String validateActualizarDni(final int personaDni) {
+		if (Integer.toString(personaDni).length()<6)
+			return "Largo del dni incorrecto";
+		return "";
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaCuitCuil")

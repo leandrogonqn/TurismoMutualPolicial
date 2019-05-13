@@ -52,9 +52,7 @@ public class ReservaMenu {
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones del voucher", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones,
-			@Nullable @ParameterLayout(named = "Memo del voucher", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherMemo,
 			@ParameterLayout(named = "Canal de pago") final CanalDePago reservaCanalDePago,
-			@Nullable @ParameterLayout(named = "Observaciones de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaObservaciones,
 			@Nullable @ParameterLayout(named = "Memo de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaMemo) {
 		TipoPrecio precioHistoricoTipoPrecio;
 		if(reservaTipoCliente==TipoCliente.Afiliado)
@@ -63,14 +61,13 @@ public class ReservaMenu {
 			precioHistoricoTipoPrecio = TipoPrecio.No_Afiliado;
 
 		return reservaRepository.crear(reservaCodigo, reservaFecha, reservaCliente, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
-				precioHistoricoTipoPrecio, voucherObservaciones, voucherMemo, reservaCanalDePago, reservaObservaciones, reservaMemo);
+				precioHistoricoTipoPrecio, voucherObservaciones, reservaCanalDePago, reservaMemo);
 	}
 	
 	public List<Persona> choices3Crear(final int reservaCodigo, final Date reservaFecha, final TipoCliente reservaTipoCliente,
 			final Persona reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
-			final String voucherMemo, final CanalDePago reservaCanalDePago, final String reservaObservaciones,
-			final String reservaMemo) {
+			final CanalDePago reservaCanalDePago, final String reservaMemo) {
 		List lista = new ArrayList<>();
 		if (reservaTipoCliente==TipoCliente.Afiliado) {
 			lista = afiliadoRepository.listarActivos();
@@ -86,11 +83,10 @@ public class ReservaMenu {
 		return productoRepository.listarActivos();
 	}
 	
-	public List<CanalDePago> choices10Crear(final int reservaCodigo, final Date reservaFecha, final TipoCliente reservaTipoCliente,
+	public List<CanalDePago> choices9Crear(final int reservaCodigo, final Date reservaFecha, final TipoCliente reservaTipoCliente,
 			final Persona reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
-			final String voucherMemo, final CanalDePago reservaCanalDePago, final String reservaObservaciones,
-			final String reservaMemo) {
+			final CanalDePago reservaCanalDePago, final String reservaMemo) {
 		List<CanalDePago> lista = new ArrayList<>();
 		if (reservaTipoCliente!=TipoCliente.Afiliado) {
 			lista.add(CanalDePago.Efectivo);
@@ -105,8 +101,7 @@ public class ReservaMenu {
 	public String validateCrear(final int reservaCodigo, final Date reservaFecha, final TipoCliente reservaTipoCliente,
 			final Persona reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
-			final String voucherMemo, final CanalDePago reservaCanalDePago, final String reservaObservaciones,
-			final String reservaMemo) {
+			final CanalDePago reservaCanalDePago, final String reservaMemo) {
 			List<Voucher> listaVoucher = voucherRepository.listarVoucherPorProducto(voucherProducto, true);
 			if (voucherFechaEntrada.after(voucherFechaSalida))
 				return "La fecha de salida no puede ser anterior a la de entrada";
@@ -150,8 +145,10 @@ public class ReservaMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Vouchers Por Productos")
 	@MemberOrder(sequence = "3")
-	public List<Voucher> listarVoucherPorProducto(@ParameterLayout(named="Producto") final Producto voucherProducto){
-		return voucherRepository.listarVoucherPorProducto(voucherProducto, true);
+	public List<Voucher> listarVoucherPorProducto(@ParameterLayout(named="Producto") final Producto voucherProducto,
+			@ParameterLayout(named="Desde") final Date fechaDesde,
+			@ParameterLayout(named="Hasta") final Date fechaHasta){
+		return voucherRepository.listarVoucherPorProducto(voucherProducto, true, fechaDesde, fechaHasta);
 	}
 	
 	public List<Producto> choices0ListarVoucherPorProducto(){
@@ -159,18 +156,20 @@ public class ReservaMenu {
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Vouchers Por Productos y Por Localidad")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Vouchers Por Localidad")
 	@MemberOrder(sequence = "3")
-	public List<Voucher> listarVoucherPorProductoPorLocalidad(@ParameterLayout(named="Localidad") final Localidad productoLocalidad){
+	public List<Voucher> listarVoucherPorLocalidad(@ParameterLayout(named="Localidad") final Localidad productoLocalidad,
+			@ParameterLayout(named="Desde") final Date fechaDesde,
+			@ParameterLayout(named="Hasta") final Date fechaHasta){
 		List<Producto> listaProducto = productoRepository.buscarProductoPorLocalidad(productoLocalidad);
 		List<Voucher> listaVoucher = new ArrayList<>();
 		for(int indice = 0;indice<listaProducto.size();indice++) {
-			listaVoucher.addAll(voucherRepository.listarVoucherPorProducto(listaProducto.get(indice), true));
+			listaVoucher.addAll(voucherRepository.listarVoucherPorProducto(listaProducto.get(indice), true, fechaDesde, fechaHasta));
 		}
 		return listaVoucher;
 	}
 	
-	public List<Localidad> choices0ListarVoucherPorProductoPorLocalidad(){
+	public List<Localidad> choices0ListarVoucherPorLocalidad(){
 		return localidadRepository.listarActivos();
 	}
 	

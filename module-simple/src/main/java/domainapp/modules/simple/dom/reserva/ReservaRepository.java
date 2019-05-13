@@ -32,11 +32,11 @@ public class ReservaRepository {
 
 	public Reserva crear(final int reservaCodigo, final Date reservaFecha, final Persona reservaCliente,  final Producto voucherProducto,
 			final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadPasajeros, TipoPrecio precioHistoricoTipoPrecio,
-			final String voucherObservaciones, final String voucherMemo, final CanalDePago reservaCanalDePago, final String reservaObservaciones, final String reservaMemo) {
+			final String voucherObservaciones, final CanalDePago reservaCanalDePago, final String reservaMemo) {
 		List<Voucher> reservaListaVoucher = new ArrayList<>();
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones, voucherMemo);
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones);
 		reservaListaVoucher.add(v);
-		final Reserva object = new Reserva(reservaCodigo, reservaFecha, reservaCliente, reservaListaVoucher, reservaCanalDePago, reservaObservaciones, reservaMemo);
+		final Reserva object = new Reserva(reservaCodigo, reservaFecha, reservaCliente, reservaListaVoucher, reservaCanalDePago, reservaMemo);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

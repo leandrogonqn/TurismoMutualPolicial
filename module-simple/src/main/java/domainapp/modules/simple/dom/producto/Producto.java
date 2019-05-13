@@ -75,12 +75,13 @@ public class Producto implements Comparable<Producto> {
 
 	// Constructor
 	public Producto(int productoCodigo, boolean productoAlojamientoPropio, Proveedor productoProveedor, Categoria productoCategoria,
-			Localidad productoLocalidad) {
+			Localidad productoLocalidad, String productoPoliticas) {
 		setProductoCodigo(productoCodigo);
 		setProductoAlojamientoPropio(productoAlojamientoPropio);
 		setProductoProveedor(productoProveedor);
 		setProductoCategoria(productoCategoria);
 		setProductoLocalidad(productoLocalidad);
+		setProductoPoliticas(productoPoliticas);
 		this.productoActivo = true;
 	}
 
@@ -147,6 +148,19 @@ public class Producto implements Comparable<Producto> {
 
 	public void setProductoLocalidad(Localidad productoLocalidad) {
 		this.productoLocalidad = productoLocalidad;
+	}	
+	
+	@javax.jdo.annotations.Column(allowsNull = "true")
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Politicas")
+	private String productoPoliticas;
+
+	public String getProductoPoliticas() {
+		return productoPoliticas;
+	}
+
+	public void setProductoPoliticas(String productoPoliticas) {
+		this.productoPoliticas = productoPoliticas;
 	}	
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -227,6 +241,16 @@ public class Producto implements Comparable<Producto> {
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
 		return localidadRepository.listarActivos();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoPoliticas")
+	public Producto actualizarPoliticas(@ParameterLayout(named = "Politicas") final String productoPoliticas) {
+		setProductoPoliticas(productoPoliticas);
+		return this;
+	}
+
+	public String default0ActualizarPoliticas() {
+		return getProductoPoliticas();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoActivo")

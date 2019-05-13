@@ -55,7 +55,7 @@ public class Voucher implements Comparable<Voucher> {
 
 	// Constructor
 	public Voucher(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadNoches,
-			final int voucherCantidadPasajeros, final Double voucherPrecioTotal, final String voucherObservaciones, final String voucherMemo) {
+			final int voucherCantidadPasajeros, final Double voucherPrecioTotal, final String voucherObservaciones) {
 		setVoucherProducto(voucherProducto);
 		setVoucherFechaEntrada(voucherFechaEntrada);
 		setVoucherFechaSalida(voucherFechaSalida);
@@ -63,7 +63,6 @@ public class Voucher implements Comparable<Voucher> {
 		setVoucherCantidadPasajeros(voucherCantidadPasajeros);
 		setVoucherPrecioTotal(voucherPrecioTotal);
 		setVoucherObservaciones(voucherObservaciones);
-		setVoucherMemo(voucherMemo);
 		this.voucherActivo = true;
 	}
 
@@ -158,19 +157,6 @@ public class Voucher implements Comparable<Voucher> {
 		this.voucherObservaciones=voucherObservaciones;
 	}
 	
-	@Column(allowsNull = "true")
-	@Property(editing=Editing.DISABLED)
-	@PropertyLayout(named="Memo", hidden=Where.ALL_TABLES)
-	private String voucherMemo;
-	
-	public String getVoucherMemo() {
-		return voucherMemo;
-	}
-	
-	public void setVoucherMemo(String voucherMemo) {
-		this.voucherMemo = voucherMemo;
-	}
-
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
@@ -244,16 +230,6 @@ public class Voucher implements Comparable<Voucher> {
 		return getVoucherObservaciones();
 	}
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherMemo")
-	public Voucher actualizarMemo(@ParameterLayout(named = "Memo", multiLine=6) final String voucherMemo) {
-		setVoucherMemo(voucherMemo);
-		return this;
-	}
-
-	public String default0ActualizarMemo() {
-		return getVoucherMemo();
-	}
-
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherActivo")
 	public Voucher actualizarActivo(@ParameterLayout(named = "Activo") final boolean voucherActivo) {
 		setVoucherActivo(voucherActivo);

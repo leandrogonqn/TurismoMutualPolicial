@@ -15,8 +15,9 @@ import domainapp.modules.simple.dom.proveedor.Proveedor;
 public class ProductoRepository {
 	
 	public Producto crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
-			final Categoria productoCategoria, final Localidad productoLocalidad) {
-		final Producto object = new Producto(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad);
+			final Categoria productoCategoria, final Localidad productoLocalidad, String productoPoliticas) {
+		final Producto object = new Producto(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, 
+				productoLocalidad, productoPoliticas);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

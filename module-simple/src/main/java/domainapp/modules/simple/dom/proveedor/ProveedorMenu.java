@@ -49,10 +49,10 @@ public class ProveedorMenu {
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar Proveedor Por Nombre")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar Proveedor Por Razon Social")
 	@MemberOrder(sequence = "5")
-	public List<Proveedor> buscarPorNombre(@ParameterLayout(named = "Nombre") final String proveedorNombre) {
-		return proveedorRepository.buscarPorNombre(proveedorNombre);
+	public List<Proveedor> buscarPorRazonSocial(@ParameterLayout(named = "Razon Social") final String proveedorRazonSocial) {
+		return proveedorRepository.buscarPorRazonSocial(proveedorRazonSocial);
 
 	}
 
@@ -60,15 +60,20 @@ public class ProveedorMenu {
 	@ActionLayout(named = "Crear Proveedor")
 	@MemberOrder(sequence = "1.2")
 	public Proveedor crear(@ParameterLayout(named="Codigo") final int proveedorCodigo,
-			@ParameterLayout(named = "Nombre") final String proveedorNombre,
+			@ParameterLayout(named="CUIT") final String proveedorCuit,
+			@ParameterLayout(named = "Razon Social") final String proveedorRazonSocial,
+			@ParameterLayout(named = "Nombre Comercial") final String proveedorNombreComercial,
 			@Nullable @ParameterLayout(named="Direccion") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorDireccion,
 			@Nullable @ParameterLayout(named="Localidad") @Parameter(optionality=Optionality.OPTIONAL) final Localidad proveedorLocalidad,
 			@Nullable @ParameterLayout(named="Telefono") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorTelefono,
-			@Nullable @ParameterLayout(named="Nombre del Encargado") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorEncargado) {
-		return proveedorRepository.crear(proveedorCodigo, proveedorNombre, proveedorDireccion, proveedorLocalidad, proveedorTelefono, proveedorEncargado);
+			@Nullable @ParameterLayout(named="Mail") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorMail,
+			@Nullable @ParameterLayout(named="Web") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorWeb,
+			@Nullable @ParameterLayout(named="Contacto") @Parameter(optionality=Optionality.OPTIONAL) final String proveedorContacto) {
+		return proveedorRepository.crear(proveedorCodigo, proveedorCuit, proveedorRazonSocial, proveedorNombreComercial, proveedorDireccion, 
+				proveedorLocalidad, proveedorTelefono, proveedorMail, proveedorWeb, proveedorContacto);
 	}
 	
-	public List<Localidad> choices3Crear() {
+	public List<Localidad> choices5Crear() {
 		return localidadRepository.listarActivos();
 	}
 

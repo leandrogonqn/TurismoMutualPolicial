@@ -3,6 +3,7 @@ package domainapp.modules.simple.dom.voucher;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -38,11 +39,11 @@ public class VoucherRepository {
 	}
 
 	public Voucher crear(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, 
-			final int voucherCantidadPasajeros, final TipoPrecio precioHistoricoTipoPrecio, final String voucherObservaciones, final String voucherMemo) {
+			final int voucherCantidadPasajeros, final TipoPrecio precioHistoricoTipoPrecio, final String voucherObservaciones) {
 		int voucherCantidadNoches = calcularCantidadDeNoches(voucherFechaEntrada, voucherFechaSalida);
 		Double voucherPrecioTotal = calcularPrecioTotal(voucherFechaEntrada, voucherFechaSalida, voucherProducto, precioHistoricoTipoPrecio);
 		final Voucher object = new Voucher(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadNoches, 
-				voucherCantidadPasajeros, voucherPrecioTotal, voucherObservaciones, voucherMemo);
+				voucherCantidadPasajeros, voucherPrecioTotal, voucherObservaciones);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;
@@ -99,6 +100,22 @@ public class VoucherRepository {
 	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final boolean voucherActivo) {
 		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherActivo", 
 				voucherActivo, "voucherProducto", voucherProducto));
+	}
+	
+	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final boolean voucherActivo, 
+			final Date fechaDesde, final Date fechaHasta) {
+		List<Voucher> lista = repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherActivo", 
+				voucherActivo, "voucherProducto", voucherProducto));
+		Iterator<Voucher> it = lista.iterator();
+		while (it.hasNext()) {
+			Voucher item = it.next();
+			if (fechaDesde.after(item.getVoucherFechaSalida()))
+				it.remove();
+			if (fechaHasta.before(item.getVoucherFechaEntrada()))
+				it.remove();
+		}
+		Collections.sort(lista);
+		return lista;
 	}
 	
 	@javax.inject.Inject

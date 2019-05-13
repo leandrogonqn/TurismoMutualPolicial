@@ -32,9 +32,9 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Proveedor")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "proveedorId")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
+		@javax.jdo.annotations.Query(name = "buscarPorRazonSocial", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor "
-				+ "WHERE proveedorNombre.toLowerCase().indexOf(:proveedorNombre) >= 0 "),
+				+ "WHERE proveedorRazonSocial.toLowerCase().indexOf(:proveedorRazonSocial) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorCodigo", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorCodigo == :proveedorCodigo"),
 		@javax.jdo.annotations.Query(name = "buscarProveedorPorLocalidad", language = "JDOQL", value = "SELECT "
@@ -48,7 +48,7 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 public class Proveedor implements Comparable<Proveedor> {
 	// region > title
 	public TranslatableString title() {
-		return TranslatableString.tr("{name}", "name", "Codigo: " + getProveedorCodigo() + " - " + getProveedorNombre());
+		return TranslatableString.tr("{name}", "name", "Codigo: " + getProveedorCodigo() + " - " + getProveedorRazonSocial());
 	}
 	// endregion
 
@@ -59,14 +59,18 @@ public class Proveedor implements Comparable<Proveedor> {
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public Proveedor(int proveedorCodigo, String proveedorNombre, String proveedorDireccion, Localidad proveedorLocalidad, 
-			String proveedorTelefono, String proveedorEncargado) {
+	public Proveedor(int proveedorCodigo, String proveedorCuit, String proveedorRazonSocial, String proveedorNombreComercial, String proveedorDireccion, 
+			Localidad proveedorLocalidad, String proveedorTelefono, String proveedorMail, String proveedorWeb, String proveedorContacto) {
 		setProveedorCodigo(proveedorCodigo);
-		setProveedorNombre(proveedorNombre);
+		setProveedorCuit(proveedorCuit);
+		setProveedorRazonSocial(proveedorRazonSocial);
+		setProveedorNombreComercial(proveedorNombreComercial);
 		setProveedorDireccion(proveedorDireccion);
 		setProveedorLocalidad(proveedorLocalidad);
 		setProveedorTelefono(proveedorTelefono);
-		setProveedorEncargado(proveedorEncargado);
+		setProveedorMail(proveedorMail);
+		setProveedorWeb(proveedorWeb);
+		setProveedorContacto(proveedorContacto);
 		this.proveedorActivo = true;
 	}
 	
@@ -82,18 +86,44 @@ public class Proveedor implements Comparable<Proveedor> {
 	public void setProveedorCodigo(int proveedorCodigo) {
 		this.proveedorCodigo = proveedorCodigo;
 	}
+	
+	 @javax.jdo.annotations.Column(allowsNull = "true")
+	 @Property(
+	           editing = Editing.DISABLED
+	 )
+	 @PropertyLayout(named="Cuit", hidden=Where.ALL_TABLES)
+	 private String proveedorCuit;
+	 public String getProveedorCuit() {
+		return proveedorCuit;
+	 }
+	 public void setProveedorCuit(String proveedorCuit) {
+		this.proveedorCuit = proveedorCuit;
+	 }	
 
 	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Nombre")
-	private String proveedorNombre;
+	@PropertyLayout(named = "Razon Social")
+	private String proveedorRazonSocial;
 
-	public String getProveedorNombre() {
-		return proveedorNombre;
+	public String getProveedorRazonSocial() {
+		return proveedorRazonSocial;
 	}
 
-	public void setProveedorNombre(String proveedorNombre) {
-		this.proveedorNombre = proveedorNombre;
+	public void setProveedorRazonSocial(String proveedorRazonSocial) {
+		this.proveedorRazonSocial = proveedorRazonSocial;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Nombre Comercial")
+	private String proveedorNombreComercial;
+
+	public String getProveedorNombreComercial() {
+		return proveedorNombreComercial;
+	}
+
+	public void setProveedorNombreComercial(String proveedorNombreComercial) {
+		this.proveedorNombreComercial = proveedorNombreComercial;
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
@@ -143,14 +173,42 @@ public class Proveedor implements Comparable<Proveedor> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Nombre del Encargado")
-    private String proveedorEncargado;
+    @PropertyLayout(named="Mail", hidden=Where.ALL_TABLES)
+    private String proveedorMail;
 
-    public String getProveedorEncargado() {
-		return proveedorEncargado;
+    public String getProveedorMail() {
+		return proveedorMail;
 	}
-	public void setProveedorEncargado(String proveedorEncargado) {
-		this.proveedorEncargado = proveedorEncargado;
+	public void setProveedorMail(String proveedorMail) {
+		this.proveedorMail = proveedorMail;
+	}	
+	
+    @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(named="Web", hidden=Where.ALL_TABLES)
+    private String proveedorWeb;
+
+    public String getProveedorWeb() {
+		return proveedorWeb;
+	}
+	public void setProveedorWeb(String proveedorWeb) {
+		this.proveedorWeb = proveedorWeb;
+	}	
+	
+    @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(named="Contacto")
+    private String proveedorContacto;
+
+    public String getProveedorContacto() {
+		return proveedorContacto;
+	}
+	public void setProveedorContacto(String proveedorContacto) {
+		this.proveedorContacto = proveedorContacto;
 	}	
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -186,14 +244,24 @@ public class Proveedor implements Comparable<Proveedor> {
 		return getProveedorCodigo();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorNombre")
-	public Proveedor actualizarNombre(@ParameterLayout(named = "Nombre") final String proveedorNombre) {
-		setProveedorNombre(proveedorNombre);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorRazonSocial")
+	public Proveedor actualizarRazonSocial(@ParameterLayout(named = "Razon Social") final String proveedorRazonSocial) {
+		setProveedorRazonSocial(proveedorRazonSocial);
 		return this;
 	}
 
-	public String default0ActualizarNombre() {
-		return getProveedorNombre();
+	public String default0ActualizarRazonSocial() {
+		return getProveedorRazonSocial();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorNombreComercial")
+	public Proveedor actualizarNombreComercial(@ParameterLayout(named = "Nombre Comercial") final String proveedorNombreComercial) {
+		setProveedorNombreComercial(proveedorNombreComercial);
+		return this;
+	}
+
+	public String default0ActualizarNombreComercial() {
+		return getProveedorNombreComercial();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorDireccion")
@@ -231,13 +299,13 @@ public class Proveedor implements Comparable<Proveedor> {
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorEncargado")
-	public Proveedor actualizarEncargado(@Nullable @ParameterLayout(named = "Nombre del Encargado") final String proveedorEncargado) {
-		setProveedorEncargado(proveedorEncargado);
+	public Proveedor actualizarContacto(@Nullable @ParameterLayout(named = "Contacto") final String proveedorContacto) {
+		setProveedorContacto(proveedorContacto);
 		return this;
 	}
 
-	public String default0ActualizarEncargado() {
-		return getProveedorEncargado();
+	public String default0ActualizarContacto() {
+		return getProveedorContacto();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorActivo")
@@ -255,12 +323,12 @@ public class Proveedor implements Comparable<Proveedor> {
 	// region > toString, compareTo
 	@Override
 	public String toString() {
-		return getProveedorNombre();
+		return getProveedorRazonSocial();
 	}
 
 	@Override
 	public int compareTo(final Proveedor proveedor) {
-		return this.proveedorNombre.compareTo(proveedor.proveedorNombre);
+		return this.proveedorRazonSocial.compareTo(proveedor.proveedorRazonSocial);
 	}
 
 	// endregion
