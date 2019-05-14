@@ -115,10 +115,12 @@ public class ReservaMenu {
 				return "ERROR: el tipo de cliente elegido no puede seleccionar el canal de pago seleccionado";
 			if (reservaCanalDePago==CanalDePago.Debito_Automatico && reservaCliente.getAfiliadoCBU()==null) 
 				return "ERROR: CBU no cargado, elija otro canal de pago";
-			for(int indice = 0;indice<listaVoucher.size();indice++) {
-				if (voucherFechaEntrada.before(listaVoucher.get(indice).getVoucherFechaSalida())
-						& voucherFechaSalida.after(listaVoucher.get(indice).getVoucherFechaEntrada()))
-					return "El producto ya se encuentra reservado en las fechas seleccionadas"; 
+			if (voucherProducto.getProductoAlojamientoPropio()==true) {
+				for(int indice = 0;indice<listaVoucher.size();indice++) {
+					if (voucherFechaEntrada.before(listaVoucher.get(indice).getVoucherFechaSalida())
+							& voucherFechaSalida.after(listaVoucher.get(indice).getVoucherFechaEntrada()))
+						return "El producto ya se encuentra reservado en las fechas seleccionadas"; 
+				}
 			}
 		return "";
 	}
