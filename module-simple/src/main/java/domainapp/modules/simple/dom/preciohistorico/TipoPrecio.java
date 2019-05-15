@@ -1,7 +1,7 @@
 package domainapp.modules.simple.dom.preciohistorico;
 
 public enum TipoPrecio {
-	Afiliado("Afiliado"), No_Afiliado("NoAfiliado");
+	Activo("Activo"), Retirado("Retirado"), No_Afiliado("NoAfiliado");
 
 	private final String nombre;
 

@@ -56,10 +56,17 @@ public class PrecioHistoricoMenu {
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios Afiliados")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios Afiliados Activos")
 	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listarActivoAfiliado() {
-		return precioHistoricoRepository.listarActivosAfiliados(TipoPrecio.Afiliado, true);
+	public List<PrecioHistorico> listarActivoAfiliadoActivos() {
+		return precioHistoricoRepository.listarActivosAfiliados(TipoPrecio.Activo, true);
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios Afiliados Retirados")
+	@MemberOrder(sequence = "2")
+	public List<PrecioHistorico> listarActivoAfiliadoRetirados() {
+		return precioHistoricoRepository.listarActivosAfiliados(TipoPrecio.Retirado, true);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

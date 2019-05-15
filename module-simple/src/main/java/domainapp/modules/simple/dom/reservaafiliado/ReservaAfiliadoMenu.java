@@ -16,6 +16,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
+import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -39,8 +40,14 @@ public class ReservaAfiliadoMenu {
 			@Nullable @ParameterLayout(named = "Observaciones del voucher", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones,
 			@ParameterLayout(named = "Canal de pago") final CanalDePago reservaCanalDePago,
 			@Nullable @ParameterLayout(named = "Memo de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaMemo) {
+		TipoPrecio t;
+		if(reservaCliente.getAfiliadoEstado()==Estado.Activo) {
+			t = TipoPrecio.Activo;
+		} else {
+			t = TipoPrecio.Retirado;
+		}
 		return reservaRepository.crear(reservaCodigo, reservaFecha, reservaCliente, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
-				TipoPrecio.Afiliado, voucherObservaciones, reservaCanalDePago, reservaMemo);
+				t, voucherObservaciones, reservaCanalDePago, reservaMemo);
 	}
 	
 	public List<Afiliado> choices2Crear() {

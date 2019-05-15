@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -220,7 +221,13 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, TipoPrecio.Afiliado, voucherObservaciones);
+		TipoPrecio t;
+		if(getReservaCliente().getAfiliadoEstado()==Estado.Activo) {
+			t = TipoPrecio.Activo;
+		} else {
+			t = TipoPrecio.Retirado;
+		}
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, t, voucherObservaciones);
 		this.getReservaListaVoucher().add(v);
 		this.setReservaListaVoucher(this.getReservaListaVoucher());
 		return this;
