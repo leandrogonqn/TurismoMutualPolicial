@@ -1,11 +1,10 @@
-package domainapp.modules.simple.dom.reservaafiliado;
+package domainapp.modules.simple.dom.reservaempresa;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
@@ -23,12 +22,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.empresa.Empresa;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -36,14 +34,14 @@ import domainapp.modules.simple.dom.reserva.Reserva;
 import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "ReservaAfiliado")
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "ReservaEmpresa")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
 @javax.jdo.annotations.Queries({
 		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.reservaafiliado.ReservaAfiliado " + "WHERE reservaActivo == :reservaActivo ")})
+				+ "FROM domainapp.modules.simple.dom.reservaempresa.ReservaEmpresa " + "WHERE reservaActivo == :reservaActivo ")})
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
+public class ReservaEmpresa extends Reserva implements Comparable<Reserva>{
 
 	// region > title
 	public TranslatableString title() {
@@ -60,13 +58,12 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public ReservaAfiliado(int reservaCodigo, Date reservaFecha, Afiliado reservaCliente, final List<Voucher> reservaListaVoucher,
-			CanalDePago reservaCanalDePago, String reservaMemo) {
+	public ReservaEmpresa(int reservaCodigo, Date reservaFecha, Empresa reservaCliente, final List<Voucher> reservaListaVoucher,
+			String reservaMemo) {
 		setReservaCodigo(reservaCodigo);
 		setReservaFecha(reservaFecha);
 		setReservaCliente(reservaCliente);
 		setReservaListaVoucher(reservaListaVoucher);
-		setReservaCanalDePago(reservaCanalDePago);
 		setReservaMemo(reservaMemo);
 		setReservaListaVoucher(reservaListaVoucher);
 		setReservaActivo(true);
@@ -75,27 +72,14 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Cliente")
-	private Afiliado reservaCliente;
+	private Empresa reservaCliente;
 
-	public Afiliado getReservaCliente() {
+	public Empresa getReservaCliente() {
 		return reservaCliente;
 	}
 
-	public void setReservaCliente(Afiliado reservaCliente) {
+	public void setReservaCliente(Empresa reservaCliente) {
 		this.reservaCliente = reservaCliente;
-	}
-	
-	@Column(allowsNull = "true")
-	@Property(editing=Editing.DISABLED)
-	@PropertyLayout(named="Canal de Pago", hidden=Where.ALL_TABLES)
-	private CanalDePago reservaCanalDePago;
-	
-	public CanalDePago getReservaCanalDePago() {
-		return reservaCanalDePago;
-	}
-	
-	public void setReservaCanalDePago(CanalDePago reservaCanalDePago) {
-		this.reservaCanalDePago=reservaCanalDePago;
 	}
 	
 	// endregion
@@ -109,7 +93,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCodigo")
-	public ReservaAfiliado actualizarReservaCodigo(@ParameterLayout(named = "Codigo") final int reservaCodigo) {
+	public ReservaEmpresa actualizarReservaCodigo(@ParameterLayout(named = "Codigo") final int reservaCodigo) {
 		setReservaCodigo(reservaCodigo);
 		return this;
 	}
@@ -119,7 +103,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaFecha")
-	public ReservaAfiliado actualizarReservaFecha(@ParameterLayout(named = "Fecha") final Date reservaFecha) {
+	public ReservaEmpresa actualizarReservaFecha(@ParameterLayout(named = "Fecha") final Date reservaFecha) {
 		setReservaFecha(reservaFecha);
 		return this;
 	}
@@ -129,27 +113,17 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCliente")
-	public ReservaAfiliado actualizarReservaCliente(@ParameterLayout(named = "Cliente") final Afiliado reservaCliente) {
+	public ReservaEmpresa actualizarReservaCliente(@ParameterLayout(named = "Cliente") final Empresa reservaCliente) {
 		setReservaCliente(reservaCliente);
 		return this;
 	}
 
-	public Afiliado default0ActualizarReservaCliente() {
+	public Empresa default0ActualizarReservaCliente() {
 		return getReservaCliente();
 	}
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCanalDePago")
-	public ReservaAfiliado actualizarReservaCanalDePago(@ParameterLayout(named = "Canal De Pago") final CanalDePago reservaCanalDePago) {
-		setReservaCanalDePago(reservaCanalDePago);
-		return this;
-	}
-
-	public CanalDePago default0ActualizarReservaCanalDePago() {
-		return getReservaCanalDePago();
-	}
-
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaMemo")
-	public ReservaAfiliado actualizarReservaMemo(@ParameterLayout(named = "Memo") final String reservaMemo) {
+	public ReservaEmpresa actualizarReservaMemo(@ParameterLayout(named = "Memo") final String reservaMemo) {
 		setReservaMemo(reservaMemo);
 		return this;
 	}
@@ -159,7 +133,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaActivo")
-	public ReservaAfiliado actualizarActivo(@ParameterLayout(named = "Activo") final boolean reservaActivo) {
+	public ReservaEmpresa actualizarActivo(@ParameterLayout(named = "Activo") final boolean reservaActivo) {
 		setReservaActivo(reservaActivo);
 		return this;
 	}
@@ -215,12 +189,12 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Voucher", cssClass="crear")
 	@MemberOrder(sequence = "1")
-	public ReservaAfiliado crearVoucher(@ParameterLayout(named = "Producto") final Producto voucherProducto,
+	public ReservaEmpresa crearVoucher(@ParameterLayout(named = "Producto") final Producto voucherProducto,
 			@ParameterLayout(named = "Fecha de entrada") final Date voucherFechaEntrada,
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, TipoPrecio.Afiliado, voucherObservaciones);
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, TipoPrecio.No_Afiliado, voucherObservaciones);
 		this.getReservaListaVoucher().add(v);
 		this.setReservaListaVoucher(this.getReservaListaVoucher());
 		return this;
@@ -255,7 +229,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	MessageService messageService;
 
 	@Inject
-	ReservaAfiliadoRepository reservaRepository;
+	ReservaEmpresaRepository reservaEmpresaRepository;
 
 	@Inject
 	VoucherRepository voucherRepository;

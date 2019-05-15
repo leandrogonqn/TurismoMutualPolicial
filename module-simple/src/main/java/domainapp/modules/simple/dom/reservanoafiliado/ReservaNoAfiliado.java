@@ -1,23 +1,16 @@
 package domainapp.modules.simple.dom.reservanoafiliado;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.Join;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -29,15 +22,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-
-import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
-import domainapp.modules.simple.dom.empresa.Empresa;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;

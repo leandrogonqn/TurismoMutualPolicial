@@ -1,27 +1,22 @@
 package domainapp.modules.simple.dom.voucher;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
-
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
-import domainapp.modules.simple.dom.reserva.Reserva;
 
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Voucher.class)
 public class VoucherRepository {

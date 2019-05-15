@@ -26,8 +26,6 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
-
-import domainapp.modules.simple.dom.afiliado.Estado;
 import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;

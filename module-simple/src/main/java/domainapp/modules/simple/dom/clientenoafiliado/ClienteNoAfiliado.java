@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
