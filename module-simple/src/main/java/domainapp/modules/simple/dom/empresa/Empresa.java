@@ -23,13 +23,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.persona.Persona;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Empresa")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "empresaId")
@@ -42,7 +42,7 @@ import domainapp.modules.simple.dom.persona.Persona;
 		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaActivo == false ") })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
-public class Empresa extends Persona implements Comparable<Empresa> {
+public class Empresa implements Comparable<Empresa> {
 
 	// region > title
 	public TranslatableString title() {
@@ -87,6 +87,104 @@ public class Empresa extends Persona implements Comparable<Empresa> {
 	public void setEmpresaRazonSocial(final String empresaRazonSocial) {
 		this.empresaRazonSocial = empresaRazonSocial;
 	}
+	
+	 @javax.jdo.annotations.Column(allowsNull = "true")
+	 @Property(
+	           editing = Editing.DISABLED
+	 )
+	 @PropertyLayout(named="Cuit/Cuil", hidden=Where.ALL_TABLES)
+	 private String personaCuitCuil;
+	 public String getPersonaCuitCuil() {
+		return personaCuitCuil;
+	 }
+	 public void setPersonaCuitCuil(String personaCuitCuil) {
+		this.personaCuitCuil = personaCuitCuil;
+	 }	
+	 
+	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Direccion", hidden=Where.ALL_TABLES)
+   private String personaDireccion;
+
+   public String getPersonaDireccion() {
+		return personaDireccion;
+	}
+	public void setPersonaDireccion(String personaDireccion) {
+		this.personaDireccion = personaDireccion;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "true", name="localidadId")
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Localidad", hidden=Where.ALL_TABLES)
+   private Localidad personaLocalidad;
+
+	public Localidad getPersonaLocalidad() {
+		return personaLocalidad;
+	}
+
+	public void setPersonaLocalidad(Localidad personaLocalidad) {
+		this.personaLocalidad = personaLocalidad;
+	}
+
+   @javax.jdo.annotations.Column(allowsNull = "true")
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Telefono Fijo")
+   private Long personaTelefonoFijo;
+
+   public Long getPersonaTelefonoFijo() {
+		return personaTelefonoFijo;
+	}
+	public void setPersonaTelefonoFijo(Long personaTelefonoFijo) {
+		this.personaTelefonoFijo = personaTelefonoFijo;
+	}	
+	
+   @javax.jdo.annotations.Column(allowsNull = "true")
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Telefono Celular")
+   private Long personaTelefonoCelular;
+
+   public Long getPersonaTelefonoCelular() {
+		return personaTelefonoCelular;
+	}
+	public void setPersonaTelefonoCelular(Long personaTelefonoCelular) {
+		this.personaTelefonoCelular = personaTelefonoCelular;
+	}	
+
+   @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Mail", hidden=Where.ALL_TABLES)
+   private String personaMail;
+
+   public String getPersonaMail() {
+		return personaMail;
+	}
+	public void setPersonaMail(String personaMail) {
+		this.personaMail = personaMail;
+	}	
+	
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    @Property(
+            editing = Editing.DISABLED
+    )
+    @PropertyLayout(named="Activo", hidden=Where.ALL_TABLES)
+    private boolean personaActivo;
+ 
+    public boolean getPersonaActivo() {
+		return personaActivo;
+	}
+	public void setPersonaActivo(boolean personaActivo) {
+		this.personaActivo = personaActivo;
+	}	
 
 	// endregion
 

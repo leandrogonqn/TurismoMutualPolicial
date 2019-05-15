@@ -19,7 +19,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.persona.PersonaRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Afiliado.class, objectType="simple.AfiliadoMenu")
 @DomainServiceLayout(named = "Clientes", menuOrder = "10.1")
@@ -158,8 +157,5 @@ public class AfiliadoMenu {
 
 	@Inject
 	MessageService messageService;
-	
-	@Inject
-	PersonaRepository personaRepository;
 	
 }

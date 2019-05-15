@@ -30,8 +30,6 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
-import domainapp.modules.simple.dom.persona.Persona;
-import domainapp.modules.simple.dom.persona.PersonaRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,

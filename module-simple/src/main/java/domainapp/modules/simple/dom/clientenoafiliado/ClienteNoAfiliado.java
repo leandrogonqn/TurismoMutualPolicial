@@ -13,10 +13,13 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -26,7 +29,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
@@ -42,7 +44,7 @@ import domainapp.modules.simple.dom.personajuridica.PersonaJuridica;
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "clienteNoAfiliadoId")
 @javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ", members = { "personaJuridicaDni", "personaJuridicaApellido" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
-public class ClienteNoAfiliado extends PersonaJuridica implements Comparable<ClienteNoAfiliado> {
+public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 
 	// region > title
 	public TranslatableString title() {
@@ -82,7 +84,142 @@ public class ClienteNoAfiliado extends PersonaJuridica implements Comparable<Cli
 	// region > name (read-only property)
 	public static final int NAME_LENGTH = 40;
 	
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "DNI")
+	private int personaJuridicaDni;
+
+	public int getPersonaJuridicaDni() {
+		return personaJuridicaDni;
+	}
+
+	public void setPersonaJuridicaDni(int personaJuridicaDni) {
+		this.personaJuridicaDni = personaJuridicaDni;
+	}
 	
+	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Apellido")
+	private String personaJuridicaApellido;
+
+	public String getPersonaJuridicaApellido() {
+		return personaJuridicaApellido;
+	}
+
+	public void setPersonaJuridicaApellido(String personaJuridicaApellido) {
+		this.personaJuridicaApellido = personaJuridicaApellido;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Nombre")
+	private String personaJuridicaNombre;
+
+	public String getPersonaJuridicaNombre() {
+		return personaJuridicaNombre;
+	}
+
+	public void setPersonaJuridicaNombre(final String personaJuridicaNombre) {
+		this.personaJuridicaNombre = personaJuridicaNombre;
+	}
+	
+	 @javax.jdo.annotations.Column(allowsNull = "true")
+	 @Property(
+	           editing = Editing.DISABLED
+	 )
+	 @PropertyLayout(named="Cuit/Cuil", hidden=Where.ALL_TABLES)
+	 private String personaCuitCuil;
+	 public String getPersonaCuitCuil() {
+		return personaCuitCuil;
+	 }
+	 public void setPersonaCuitCuil(String personaCuitCuil) {
+		this.personaCuitCuil = personaCuitCuil;
+	 }	
+	 
+	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+  @Property(
+          editing = Editing.DISABLED
+  )
+  @PropertyLayout(named="Direccion", hidden=Where.ALL_TABLES)
+  private String personaDireccion;
+
+  public String getPersonaDireccion() {
+		return personaDireccion;
+	}
+	public void setPersonaDireccion(String personaDireccion) {
+		this.personaDireccion = personaDireccion;
+	}
+	
+	@javax.jdo.annotations.Column(allowsNull = "true", name="localidadId")
+  @Property(
+          editing = Editing.DISABLED
+  )
+  @PropertyLayout(named="Localidad", hidden=Where.ALL_TABLES)
+  private Localidad personaLocalidad;
+
+	public Localidad getPersonaLocalidad() {
+		return personaLocalidad;
+	}
+
+	public void setPersonaLocalidad(Localidad personaLocalidad) {
+		this.personaLocalidad = personaLocalidad;
+	}
+
+  @javax.jdo.annotations.Column(allowsNull = "true")
+  @Property(
+          editing = Editing.DISABLED
+  )
+  @PropertyLayout(named="Telefono Fijo")
+  private Long personaTelefonoFijo;
+
+  public Long getPersonaTelefonoFijo() {
+		return personaTelefonoFijo;
+	}
+	public void setPersonaTelefonoFijo(Long personaTelefonoFijo) {
+		this.personaTelefonoFijo = personaTelefonoFijo;
+	}	
+	
+  @javax.jdo.annotations.Column(allowsNull = "true")
+  @Property(
+          editing = Editing.DISABLED
+  )
+  @PropertyLayout(named="Telefono Celular")
+  private Long personaTelefonoCelular;
+
+  public Long getPersonaTelefonoCelular() {
+		return personaTelefonoCelular;
+	}
+	public void setPersonaTelefonoCelular(Long personaTelefonoCelular) {
+		this.personaTelefonoCelular = personaTelefonoCelular;
+	}	
+
+  @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+  @Property(
+          editing = Editing.DISABLED
+  )
+  @PropertyLayout(named="Mail", hidden=Where.ALL_TABLES)
+  private String personaMail;
+
+  public String getPersonaMail() {
+		return personaMail;
+	}
+	public void setPersonaMail(String personaMail) {
+		this.personaMail = personaMail;
+	}	
+	
+   @javax.jdo.annotations.Column(allowsNull = "false")
+   @Property(
+           editing = Editing.DISABLED
+   )
+   @PropertyLayout(named="Activo", hidden=Where.ALL_TABLES)
+   private boolean personaActivo;
+
+   public boolean getPersonaActivo() {
+		return personaActivo;
+	}
+	public void setPersonaActivo(boolean personaActivo) {
+		this.personaActivo = personaActivo;
+	}	
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaNombre")
 	public ClienteNoAfiliado actualizarNombre(@ParameterLayout(named = "Nombre") final String personaNombre) {
