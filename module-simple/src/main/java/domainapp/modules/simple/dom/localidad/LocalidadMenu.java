@@ -34,7 +34,7 @@ public class LocalidadMenu {
 	}
 
 	public List<Provincia> choices1Crear() {
-		return provinciasRepository.listarActivos();
+		return provinciasRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)

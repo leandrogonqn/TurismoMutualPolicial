@@ -28,10 +28,10 @@ import org.apache.isis.applib.services.title.TitleService;
 				+ "FROM domainapp.modules.simple.dom.provincia.Provincia "
 				+ "WHERE provinciasNombre.toLowerCase().indexOf(:provinciasNombre) >= 0 "),
 
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaHabilitado == false ") })
 @javax.jdo.annotations.Unique(name = "Provincias_provinciasNombre_UNQ", members = { "provinciasNombre" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Provincia implements Comparable<Provincia> {
@@ -42,7 +42,7 @@ public class Provincia implements Comparable<Provincia> {
 	// endregion
 
 	public String cssClass() {
-		return (getProvinciaActivo() == true) ? "activo" : "inactivo";
+		return (getProvinciaHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 
 	public static final int NAME_LENGTH = 200;
@@ -50,7 +50,7 @@ public class Provincia implements Comparable<Provincia> {
 	// Constructor
 	public Provincia(String provinciaNombre) {
 		setProvinciasNombre(provinciaNombre);
-		this.provinciaActivo = true;
+		this.provinciaHabilitado = true;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
@@ -68,15 +68,15 @@ public class Provincia implements Comparable<Provincia> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean provinciaActivo;
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
+	private boolean provinciaHabilitado;
 
-	public boolean getProvinciaActivo() {
-		return provinciaActivo;
+	public boolean getProvinciaHabilitado() {
+		return provinciaHabilitado;
 	}
 
-	public void setProvinciaActivo(boolean provinciaActivo) {
-		this.provinciaActivo = provinciaActivo;
+	public void setProvinciaHabilitado(boolean provinciaHabilitado) {
+		this.provinciaHabilitado = provinciaHabilitado;
 	}
 
 	// endregion
@@ -86,7 +86,7 @@ public class Provincia implements Comparable<Provincia> {
 	public void borrarProvincia() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setProvinciaActivo(false);
+		setProvinciaHabilitado(false);
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaNombre")
@@ -99,14 +99,14 @@ public class Provincia implements Comparable<Provincia> {
 		return getProvinciasNombre();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaActivo")
-	public Provincia actualizarActivo(@ParameterLayout(named = "Activo") final boolean provinciaActivo) {
-		setProvinciaActivo(provinciaActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaHabilitado")
+	public Provincia actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean provinciaHabilitado) {
+		setProvinciaHabilitado(provinciaHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getProvinciaActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getProvinciaHabilitado();
 	}
 
 	// endregion
@@ -135,15 +135,15 @@ public class Provincia implements Comparable<Provincia> {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Provincia Activas")
 	@MemberOrder(sequence = "3")
-	public List<Provincia> listarActivos() {
-		return provinciasRepository.listarActivos();
+	public List<Provincia> listarHabilitados() {
+		return provinciasRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Provincias Inactivas")
 	@MemberOrder(sequence = "4")
-	public List<Provincia> listarInactivos() {
-		return provinciasRepository.listarInactivos();
+	public List<Provincia> listarInhabilitados() {
+		return provinciasRepository.listarInhabilitados();
 	}
 
 	// region > injected dependencies

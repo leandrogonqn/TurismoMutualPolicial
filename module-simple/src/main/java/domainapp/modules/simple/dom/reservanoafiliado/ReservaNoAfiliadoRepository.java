@@ -23,10 +23,6 @@ public class ReservaNoAfiliadoRepository {
 		return repositoryService.allInstances(ReservaNoAfiliado.class);
 	}
 
-	public List<ReservaNoAfiliado> listarActivos(final boolean reservaActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(ReservaNoAfiliado.class, "listarActivos", "reservaActivo", reservaActivo));
-	}
-
 	public ReservaNoAfiliado crear(final int reservaCodigo, final Date reservaFecha, final ClienteNoAfiliado reservaCliente,  final Producto voucherProducto,
 			final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadPasajeros, TipoPrecio precioHistoricoTipoPrecio,
 			final String voucherObservaciones, final String reservaMemo) {

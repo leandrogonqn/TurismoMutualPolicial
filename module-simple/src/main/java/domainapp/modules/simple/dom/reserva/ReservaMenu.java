@@ -51,7 +51,7 @@ public class ReservaMenu {
 	}
 	
 	public List<Localidad> choices0ListarVoucherPorLocalidad(){
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
@@ -67,7 +67,7 @@ public class ReservaMenu {
 	}
 	
 	public List<Producto> choices0ListarVoucherPorProducto(){
-		return productoRepository.listarActivos();
+		return productoRepository.listarHabilitados();
 	}
 	
 	@javax.inject.Inject

@@ -32,12 +32,12 @@ public class ProveedorRepository {
 				.allMatches(new QueryDefault<>(Proveedor.class, "buscarProveedorPorLocalidad", "proveedorLocalidad", proveedorLocalidad));
 	}
 	
-	public List<Proveedor> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarActivos"));
+	public List<Proveedor> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarHabilitados"));
 	}
 
-	public List<Proveedor> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarInactivos"));
+	public List<Proveedor> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarInhabilitados"));
 	}
 
 	public Proveedor crear(final int proveedorCodigo, final String proveedorCuit, final String proveedorRazonSocial, 

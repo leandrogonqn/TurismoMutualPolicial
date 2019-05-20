@@ -22,32 +22,32 @@ public class PrecioHistoricoRepository {
 		return repositoryService.allInstances(PrecioHistorico.class);
 	}
 
-	public List<PrecioHistorico> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarActivos"));
+	public List<PrecioHistorico> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarHabilitados"));
 	}
 
-	public List<PrecioHistorico> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarInactivos"));
+	public List<PrecioHistorico> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarInhabilitados"));
 	}
 	
-	public List<PrecioHistorico> listarActivosAfiliados(final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarActivosAfiliados", "precioHistoricoTipoPrecio", 
-				precioHistoricoTipoPrecio, "precioHistoricoActivo", precioHistoricoActivo));
+	public List<PrecioHistorico> listarHabilitadosAfiliados(final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoHabilitado) {
+		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarHabilitadosAfiliados", "precioHistoricoTipoPrecio", 
+				precioHistoricoTipoPrecio, "precioHistoricoHabilitado", precioHistoricoHabilitado));
 	}
-	public List<PrecioHistorico> listarPreciosPorProductoPorTipoDeAfiliadoActivo(final Producto precioHistoricoProducto, 
-			final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarPreciosPorProductoPorTipoDeAfiliadoActivo", 
-				"precioHistoricoProducto", precioHistoricoProducto, "precioHistoricoTipoPrecio", precioHistoricoTipoPrecio, "precioHistoricoActivo", precioHistoricoActivo));
+	public List<PrecioHistorico> listarPreciosPorProductoPorTipoDeAfiliado(final Producto precioHistoricoProducto, 
+			final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoHabilitado) {
+		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarPreciosPorProductoPorTipoDeAfiliado", 
+				"precioHistoricoProducto", precioHistoricoProducto, "precioHistoricoTipoPrecio", precioHistoricoTipoPrecio, "precioHistoricoHabilitado", precioHistoricoHabilitado));
 	}
 
-	public List<PrecioHistorico> listarPreciosPorProducto (final Producto precioHistoricoProducto, final boolean precioHistoricoActivo) {
+	public List<PrecioHistorico> listarPreciosPorProducto (final Producto precioHistoricoProducto, final boolean precioHistoricoHabilitado) {
 		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarPreciosPorProducto", 
-						"precioHistoricoProducto", precioHistoricoProducto, "precioHistoricoActivo", precioHistoricoActivo));
+						"precioHistoricoProducto", precioHistoricoProducto, "precioHistoricoHabilitado", precioHistoricoHabilitado));
 	}
 	
 	public Double mostrarPrecioPorFecha (final Producto precioHistoricoProducto, final Date fecha, final TipoPrecio precioHistoricoTipoPrecio) {
 		Double a = 0.0;
-		List<PrecioHistorico> listaPrecios = listarPreciosPorProductoPorTipoDeAfiliadoActivo(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
+		List<PrecioHistorico> listaPrecios = listarPreciosPorProductoPorTipoDeAfiliado(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
 		Iterator<PrecioHistorico> iterar = listaPrecios.iterator();
 		while(iterar.hasNext()) {
 			PrecioHistorico listServicio = iterar.next();
@@ -84,10 +84,10 @@ public class PrecioHistoricoRepository {
 	}
 	
 	public boolean verificarCrearPrecio(final Producto precioHistoricoProducto, final TipoPrecio precioHistoricoTipoPrecio, final Date precioHistoricoFechaDesde, final Date precioHistoricoFechaHasta) {
-		List<PrecioHistorico> listaPrecioActivo = listarPreciosPorProductoPorTipoDeAfiliadoActivo(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
-		for(int indice = 0;indice<listaPrecioActivo.size();indice++) {
-			if ((precioHistoricoFechaDesde.before(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta()))
-					& (precioHistoricoFechaHasta.after(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())))
+		List<PrecioHistorico> listaPrecioHabilitado = listarPreciosPorProductoPorTipoDeAfiliado(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
+		for(int indice = 0;indice<listaPrecioHabilitado.size();indice++) {
+			if ((precioHistoricoFechaDesde.before(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaHasta()))
+					& (precioHistoricoFechaHasta.after(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaDesde())))
 				return false; 
 		}
 		return true;
@@ -95,16 +95,16 @@ public class PrecioHistoricoRepository {
 	
 	public boolean verificarActualizarPrecio(PrecioHistorico precioHistorico, Producto precioHistoricoProducto,
 			TipoPrecio precioHistoricoTipoPrecio, Date precioHistoricoFechaDesde, Date precioHistoricoFechaHasta) {
-		List<PrecioHistorico> listaPrecioActivo = listarPreciosPorProductoPorTipoDeAfiliadoActivo(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
-		Iterator<PrecioHistorico> it = listaPrecioActivo.iterator();
+		List<PrecioHistorico> listaPrecioHabilitado = listarPreciosPorProductoPorTipoDeAfiliado(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
+		Iterator<PrecioHistorico> it = listaPrecioHabilitado.iterator();
 		while (it.hasNext()) {
 			PrecioHistorico item = it.next();
 			if (item == precioHistorico)
 				it.remove();
 		}
-		for(int indice = 0;indice<listaPrecioActivo.size();indice++) {
-			if ((precioHistoricoFechaDesde.before(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaHasta()))
-					& (precioHistoricoFechaHasta.after(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioActivo.get(indice).getPrecioHistoricoFechaDesde())))
+		for(int indice = 0;indice<listaPrecioHabilitado.size();indice++) {
+			if ((precioHistoricoFechaDesde.before(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaHasta())||precioHistoricoFechaDesde.equals(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaHasta()))
+					& (precioHistoricoFechaHasta.after(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaDesde())||precioHistoricoFechaHasta.equals(listaPrecioHabilitado.get(indice).getPrecioHistoricoFechaDesde())))
 				return false; 
 		}
 		return true;

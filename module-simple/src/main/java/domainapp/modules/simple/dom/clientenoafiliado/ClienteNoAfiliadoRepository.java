@@ -27,12 +27,12 @@ public class ClienteNoAfiliadoRepository {
 		return repositoryService.allInstances(ClienteNoAfiliado.class);
 	}
 
-	public List<ClienteNoAfiliado> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "listarActivos"));
+	public List<ClienteNoAfiliado> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "listarHabilitados"));
 	}
 
-	public List<ClienteNoAfiliado> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "listarInactivos"));
+	public List<ClienteNoAfiliado> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "listarInhabilitados"));
 	}
 
 	public List<ClienteNoAfiliado> buscarPorNombre(final String personaNombre) {

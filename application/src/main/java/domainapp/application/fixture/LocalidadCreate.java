@@ -51,7 +51,7 @@ public class LocalidadCreate extends FixtureScript {
 
         String name = checkParam("name", ec, String.class);
         
-        this.simpleObject = wrap(simpleObjectMenu).crear(name, provinciasRepository.listarActivos().get(0));
+        this.simpleObject = wrap(simpleObjectMenu).crear(name, provinciasRepository.listarHabilitados().get(0));
 
         // also make available to UI
         ec.addResult(this, simpleObject);

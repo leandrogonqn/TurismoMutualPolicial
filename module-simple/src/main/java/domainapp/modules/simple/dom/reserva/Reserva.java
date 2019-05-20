@@ -30,8 +30,8 @@ import domainapp.modules.simple.dom.voucher.VoucherRepository;
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Reserva")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.reserva.Reserva " + "WHERE reservaActivo == :reservaActivo ")})
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.reserva.Reserva " + "WHERE reservaHabilitado == :reservaHabilitado ")})
 @javax.jdo.annotations.Unique(name = "Reserva_reservaCodigo_UNQ", members = { "reservaCodigo" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)

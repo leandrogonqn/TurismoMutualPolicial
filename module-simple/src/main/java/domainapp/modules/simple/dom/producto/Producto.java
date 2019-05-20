@@ -47,10 +47,10 @@ import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoCategoria == :productoCategoria"),
 		@javax.jdo.annotations.Query(name = "buscarProductoPorProveedor", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoProveedor == :productoProveedor"),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoHabilitado == false ") })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Producto implements Comparable<Producto> {
 	// region > title
@@ -66,7 +66,7 @@ public class Producto implements Comparable<Producto> {
 	// endregion
 
 	public String cssClass() {
-		return (getProductoActivo() == true) ? "activo" : "inactivo";
+		return (getProductoHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 
 	public static final int NAME_LENGTH = 200;
@@ -80,7 +80,7 @@ public class Producto implements Comparable<Producto> {
 		setProductoCategoria(productoCategoria);
 		setProductoLocalidad(productoLocalidad);
 		setProductoPoliticas(productoPoliticas);
-		this.productoActivo = true;
+		this.productoHabilitado = true;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -176,15 +176,15 @@ public class Producto implements Comparable<Producto> {
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean productoActivo;
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
+	private boolean productoHabilitado;
 
-	public boolean getProductoActivo() {
-		return productoActivo;
+	public boolean getProductoHabilitado() {
+		return productoHabilitado;
 	}
 
-	public void setProductoActivo(boolean productoActivo) {
-		this.productoActivo = productoActivo;
+	public void setProductoHabilitado(boolean productoHabilitado) {
+		this.productoHabilitado = productoHabilitado;
 	}
 
 	// endregion
@@ -194,7 +194,7 @@ public class Producto implements Comparable<Producto> {
 	public void borrarProducto() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setProductoActivo(false);
+		setProductoHabilitado(false);
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoCodigo")
@@ -217,7 +217,7 @@ public class Producto implements Comparable<Producto> {
 	public List<Proveedor> choices1ActualizarProveedor(final boolean productoAlojamientoPropio, final Proveedor productoProveedor) {
 		if (productoAlojamientoPropio==true)
 			return null;
-		return proveedorRepository.listarActivos();
+		return proveedorRepository.listarHabilitados();
 	} 
 	
 	public String validateActualizarProveedor(final boolean productoAlojamientoPropio, final Proveedor productoProveedor) {
@@ -237,7 +237,7 @@ public class Producto implements Comparable<Producto> {
 	}
 	
 	public List<Categoria> choices0ActualizarCategoria() {
-		return categoriaRepository.listarActivos();
+		return categoriaRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoLocalidad")
@@ -251,7 +251,7 @@ public class Producto implements Comparable<Producto> {
 	}
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoAutorizacion")
@@ -274,14 +274,14 @@ public class Producto implements Comparable<Producto> {
 		return getProductoPoliticas();
 	}
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoActivo")
-	public Producto actualizarActivo(@ParameterLayout(named = "Activo") final boolean productoActivo) {
-		setProductoActivo(productoActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoHabilitado")
+	public Producto actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean productoHabilitado) {
+		setProductoHabilitado(productoHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getProductoActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getProductoHabilitado();
 	}
 
 	// endregion
@@ -322,15 +322,15 @@ public class Producto implements Comparable<Producto> {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Productos Activas")
 	@MemberOrder(sequence = "3")
-	public List<Producto> listarActivos() {
-		return productoRepository.listarActivos();
+	public List<Producto> listarHabilitados() {
+		return productoRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Listar Productos Inactivas")
 	@MemberOrder(sequence = "4")
-	public List<Producto> listarInactivos() {
-		return productoRepository.listarInactivos();
+	public List<Producto> listarInhabilitados() {
+		return productoRepository.listarInhabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

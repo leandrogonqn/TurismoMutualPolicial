@@ -105,7 +105,7 @@ public class RecreateAfiliado extends FixtureScript {
             fs.setDni(Integer.parseInt(documentos.get(i)));
             fs.setCuitCuil(cuitCuil.get(i));
             fs.setDireccion(direcciones.get(i));
-            fs.setLocalidad(localidadesRepository.listarActivos().get(0));
+            fs.setLocalidad(localidadesRepository.listarHabilitados().get(0));
             fs.setTelefonoFijo(Long.parseLong(telefonoFijo.get(i)));
             fs.setTelefonoCelular(Long.parseLong(telefonoCelular.get(i))); 
             fs.setEmail(emails.get(i));

@@ -37,10 +37,10 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorRazonSocial", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.empresa.Empresa "
 				+ "WHERE empresaRazonSocial.toLowerCase().indexOf(:empresaRazonSocial) >= 0 "),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.empresa.Empresa " + "WHERE personaHabilitado == false ") })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Empresa implements Comparable<Empresa> {
 
@@ -68,7 +68,7 @@ public class Empresa implements Comparable<Empresa> {
 		setPersonaTelefonoFijo(personaTelefonoFijo);
 		setPersonaTelefonoCelular(personaTelefonoCelular);
 		setPersonaMail(personaMail);
-		setPersonaActivo(true);
+		setPersonaHabilitado(true);
 	}
 	// endregion
 
@@ -176,14 +176,14 @@ public class Empresa implements Comparable<Empresa> {
     @Property(
             editing = Editing.DISABLED
     )
-    @PropertyLayout(named="Activo", hidden=Where.ALL_TABLES)
-    private boolean personaActivo;
+    @PropertyLayout(named="Habilitado", hidden=Where.ALL_TABLES)
+    private boolean personaHabilitado;
  
-    public boolean getPersonaActivo() {
-		return personaActivo;
+    public boolean getPersonaHabilitado() {
+		return personaHabilitado;
 	}
-	public void setPersonaActivo(boolean personaActivo) {
-		this.personaActivo = personaActivo;
+	public void setPersonaHabilitado(boolean personaHabilitado) {
+		this.personaHabilitado = personaHabilitado;
 	}	
 
 	// endregion
@@ -195,7 +195,7 @@ public class Empresa implements Comparable<Empresa> {
 	}
 
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 
 	public Localidad default0ActualizarLocalidad() {
@@ -294,14 +294,14 @@ public class Empresa implements Comparable<Empresa> {
 		return "";
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoActivo")
-	public Empresa actualizarActivo(@ParameterLayout(named = "Activo") final boolean afiliadoActivo) {
-		setPersonaActivo(afiliadoActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoHabilitado")
+	public Empresa actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean afiliadoHabilitado) {
+		setPersonaHabilitado(afiliadoHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getPersonaActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getPersonaHabilitado();
 	}
 
 	// region > delete (action)
@@ -309,7 +309,7 @@ public class Empresa implements Comparable<Empresa> {
 	public void borrarEmpresa() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setPersonaActivo(false);
+		setPersonaHabilitado(false);
 	}
 
 	// endregion
@@ -331,16 +331,16 @@ public class Empresa implements Comparable<Empresa> {
 		return empresaRepository.listar();
 	}
 
-	@ActionLayout(named = "Listar Clientes Activos")
+	@ActionLayout(named = "Listar Clientes Habilitados")
 	@MemberOrder(sequence = "3")
-	public List<Empresa> listarEmpresaActivos() {
-		return empresaRepository.listarActivos();
+	public List<Empresa> listarEmpresaHabilitados() {
+		return empresaRepository.listarHabilitados();
 	}
 
-	@ActionLayout(named = "Listar Clientes Inactivos")
+	@ActionLayout(named = "Listar Clientes Inhabilitados")
 	@MemberOrder(sequence = "4")
-	public List<Empresa> listarEmpresaInactivos() {
-		return empresaRepository.listarInactivos();
+	public List<Empresa> listarEmpresaInhabilitados() {
+		return empresaRepository.listarInhabilitados();
 	}
 
 	// region > injected dependencies

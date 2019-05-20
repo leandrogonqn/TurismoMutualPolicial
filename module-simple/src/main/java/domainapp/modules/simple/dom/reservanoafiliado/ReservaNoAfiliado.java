@@ -38,9 +38,6 @@ import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "ReservaNoAfiliado")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
-@javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.reservanoafiliado.ReservaNoAfiliado " + "WHERE reservaActivo == :reservaActivo ")})
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class ReservaNoAfiliado extends Reserva implements Comparable<Reserva>{
@@ -52,10 +49,6 @@ public class ReservaNoAfiliado extends Reserva implements Comparable<Reserva>{
 				+ ""+sdf.format(getReservaListaVoucher().get(0).getVoucherFechaEntrada())+"Salida: "+sdf.format(getReservaListaVoucher().get(0).getVoucherFechaSalida()));
 	}
 	// endregion
-
-//	public String cssClass() {
-//		return (getReservaActivo() == true) ? "activo" : "inactivo";
-//	}
 
 	public static final int NAME_LENGTH = 200;
 
@@ -149,26 +142,6 @@ public class ReservaNoAfiliado extends Reserva implements Comparable<Reserva>{
 	// endregion
 
 	// acciones
-//	@Action(semantics = SemanticsOf.SAFE)
-//	@ActionLayout(named = "Listar todas las Reservas")
-//	@MemberOrder(sequence = "2")
-//	public List<Reserva> listar() {
-//		return reservaRepository.listar();
-//	}
-//
-//	@Action(semantics = SemanticsOf.SAFE)
-//	@ActionLayout(named = "Listar Reservas Activas")
-//	@MemberOrder(sequence = "3")
-//	public List<Reserva> listarActivos() {
-//		return reservaRepository.listarActivos();
-//	}
-//
-//	@Action(semantics = SemanticsOf.SAFE)
-//	@ActionLayout(named = "Listar Reservas Inactivas")
-//	@MemberOrder(sequence = "4")
-//	public List<Reserva> listarInactivos() {
-//		return reservaRepository.listarInactivos();
-//	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Voucher", cssClass="crear")
@@ -194,7 +167,7 @@ public class ReservaNoAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 	
 	public List<Producto> choices0CrearVoucher(){
-		return productoRepository.listarActivos();
+		return productoRepository.listarHabilitados();
 	}
 	
 	public String validateCrearVoucher(final Producto voucherProducto, final Date voucherFechaEntrada,

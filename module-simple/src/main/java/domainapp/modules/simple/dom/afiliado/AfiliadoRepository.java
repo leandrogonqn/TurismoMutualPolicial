@@ -31,12 +31,12 @@ public class AfiliadoRepository {
 		return repositoryService.allInstances(Afiliado.class);
 	}
 
-	public List<Afiliado> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarActivos"));
+	public List<Afiliado> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarHabilitados"));
 	}
 
-	public List<Afiliado> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarInactivos"));
+	public List<Afiliado> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Afiliado.class, "listarInhabilitados"));
 	}
 
 	public List<Afiliado> buscarPorNombre(final String personaNombre) {

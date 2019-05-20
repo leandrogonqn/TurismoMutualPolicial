@@ -43,11 +43,11 @@ public class ReservaEmpresaMenu {
 	}
 	
 	public List<Empresa> choices2Crear() {
-		return empresaRepository.listarActivos();
+		return empresaRepository.listarHabilitados();
 	}
 	
 	public List<Producto> choices3Crear(){
-		return productoRepository.listarActivos();
+		return productoRepository.listarHabilitados();
 	}
 	
 	public String validateCrear(final int reservaCodigo, final Date reservaFecha,

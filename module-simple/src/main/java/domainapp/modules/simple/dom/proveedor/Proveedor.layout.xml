@@ -41,8 +41,8 @@
                                 <c:property id="proveedorContacto" namedEscaped="true">
                                 <c:action id="actualizarContacto" position="RIGHT"></c:action>
                                 </c:property>                                                                                                                         
-                                <c:property id="proveedorActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                <c:property id="proveedorHabilitado" namedEscaped="true">
+                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                             </c:fieldSet>
                         </bs3:col>

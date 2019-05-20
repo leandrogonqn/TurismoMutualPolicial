@@ -23,12 +23,12 @@ public class LocalidadRepository {
 
 	}
 
-	public List<Localidad> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Localidad.class, "listarActivos"));
+	public List<Localidad> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Localidad.class, "listarHabilitados"));
 	}
 
-	public List<Localidad> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Localidad.class, "listarInactivos"));
+	public List<Localidad> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Localidad.class, "listarInhabilitados"));
 	}
 
 	public Localidad crear(final String localidadNombre, Provincia localidadProvincia) {

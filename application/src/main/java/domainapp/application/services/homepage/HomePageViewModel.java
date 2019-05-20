@@ -44,7 +44,7 @@ public class HomePageViewModel {
     @HomePage
     @CollectionLayout(named="Afiliados")
     public List<Afiliado> getAfiliados() {
-        return afiliadoRepository.listarActivos();
+        return afiliadoRepository.listarHabilitados();
     }
 
     @Inject

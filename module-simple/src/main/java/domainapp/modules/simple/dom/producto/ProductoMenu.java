@@ -45,15 +45,15 @@ public class ProductoMenu {
 			final Categoria productoCategoria, final Localidad productoLocalidad) {
 		if (productoAlojamientoPropio==true)
 			return null;
-		return proveedorRepository.listarActivos();
+		return proveedorRepository.listarHabilitados();
 	}
 	
 	public List<Categoria> choices3Crear(){
-		return categoriaRepository.listarActivos();
+		return categoriaRepository.listarHabilitados();
 	}
 	
 	public List<Localidad> choices4Crear(){
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 	
 	public String validateCrear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
@@ -85,7 +85,7 @@ public class ProductoMenu {
 	}
 	
 	public List<Localidad> choices0BuscarProductoPorLocalidad(){
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
@@ -96,7 +96,7 @@ public class ProductoMenu {
 	}
 	
 	public List<Categoria> choices0BuscarProductoPorCategoria(){
-		return categoriaRepository.listarActivos();
+		return categoriaRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
@@ -107,7 +107,7 @@ public class ProductoMenu {
 	}
 	
 	public List<Proveedor> choices0BuscarProductoPorProveedor(){
-		return proveedorRepository.listarActivos();
+		return proveedorRepository.listarHabilitados();
 	}
 
 	@javax.inject.Inject

@@ -20,8 +20,8 @@
                                 <c:property id="categoriaNombre" namedEscaped="true">
                                 <c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="categoriaActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                <c:property id="categoriaHabilitado" namedEscaped="true">
+                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                             </c:fieldSet>
                         </bs3:col>

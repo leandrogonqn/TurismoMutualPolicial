@@ -43,11 +43,11 @@ public class ReservaNoAfiliadoMenu {
 	}
 	
 	public List<ClienteNoAfiliado> choices2Crear() {
-		return clienteNoAfiliadoRepository.listarActivos();
+		return clienteNoAfiliadoRepository.listarHabilitados();
 	}
 	
 	public List<Producto> choices3Crear(){
-		return productoRepository.listarActivos();
+		return productoRepository.listarHabilitados();
 	}
 	
 	public String validateCrear(final int reservaCodigo, final Date reservaFecha,

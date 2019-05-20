@@ -16,12 +16,12 @@ public class EmpresaRepository {
 		return repositoryService.allInstances(Empresa.class);
 	}
 
-	public List<Empresa> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Empresa.class, "listarActivos"));
+	public List<Empresa> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Empresa.class, "listarHabilitados"));
 	}
 
-	public List<Empresa> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Empresa.class, "listarInactivos"));
+	public List<Empresa> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Empresa.class, "listarInhabilitados"));
 	}
 
 	public List<Empresa> buscarPorRazonSocial(final String empresaRazonSocial) {

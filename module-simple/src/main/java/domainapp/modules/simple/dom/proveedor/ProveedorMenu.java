@@ -45,7 +45,7 @@ public class ProveedorMenu {
 	}
 	
 	public List<Localidad> choices0BuscarProveedorPorLocalidad() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
@@ -74,7 +74,7 @@ public class ProveedorMenu {
 	}
 	
 	public List<Localidad> choices5Crear() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 
 	@javax.inject.Inject

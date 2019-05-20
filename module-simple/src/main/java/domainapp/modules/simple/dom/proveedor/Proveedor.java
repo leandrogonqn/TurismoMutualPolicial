@@ -39,10 +39,10 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorCodigo == :proveedorCodigo"),
 		@javax.jdo.annotations.Query(name = "buscarProveedorPorLocalidad", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorLocalidad == :proveedorLocalidad"),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.proveedor.Proveedor " + "WHERE proveedorHabilitado == false ") })
 @javax.jdo.annotations.Unique(name = "Proveedor_proveedorCodigo_UNQ", members = { "proveedorCodigo" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Proveedor implements Comparable<Proveedor> {
@@ -53,7 +53,7 @@ public class Proveedor implements Comparable<Proveedor> {
 	// endregion
 
 	public String cssClass() {
-		return (getProveedorActivo() == true) ? "activo" : "inactivo";
+		return (getProveedorHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 
 	public static final int NAME_LENGTH = 200;
@@ -71,7 +71,7 @@ public class Proveedor implements Comparable<Proveedor> {
 		setProveedorMail(proveedorMail);
 		setProveedorWeb(proveedorWeb);
 		setProveedorContacto(proveedorContacto);
-		this.proveedorActivo = true;
+		this.proveedorHabilitado = true;
 	}
 	
 	@Column(allowsNull = "false")
@@ -213,15 +213,15 @@ public class Proveedor implements Comparable<Proveedor> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean proveedorActivo;
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
+	private boolean proveedorHabilitado;
 
-	public boolean getProveedorActivo() {
-		return proveedorActivo;
+	public boolean getProveedorHabilitado() {
+		return proveedorHabilitado;
 	}
 
-	public void setProveedorActivo(boolean proveedorActivo) {
-		this.proveedorActivo = proveedorActivo;
+	public void setProveedorHabilitado(boolean proveedorHabilitado) {
+		this.proveedorHabilitado = proveedorHabilitado;
 	}
 
 	// endregion
@@ -231,7 +231,7 @@ public class Proveedor implements Comparable<Proveedor> {
 	public void borrarProveedor() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setProveedorActivo(false);
+		setProveedorHabilitado(false);
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorCodigo")
@@ -285,7 +285,7 @@ public class Proveedor implements Comparable<Proveedor> {
 	}
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorTelefono")
@@ -308,14 +308,14 @@ public class Proveedor implements Comparable<Proveedor> {
 		return getProveedorContacto();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorActivo")
-	public Proveedor actualizarActivo(@ParameterLayout(named = "Activo") final boolean proveedorActivo) {
-		setProveedorActivo(proveedorActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "proveedorHabilitado")
+	public Proveedor actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean proveedorHabilitado) {
+		setProveedorHabilitado(proveedorHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getProveedorActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getProveedorHabilitado();
 	}
 
 	// endregion
@@ -342,14 +342,14 @@ public class Proveedor implements Comparable<Proveedor> {
 
 	@ActionLayout(named = "Listar Proveedores Activas")
 	@MemberOrder(sequence = "3")
-	public List<Proveedor> listarActivos() {
-		return proveedorRepository.listarActivos();
+	public List<Proveedor> listarHabilitados() {
+		return proveedorRepository.listarHabilitados();
 	}
 
 	@ActionLayout(named = "Listar Proveedores Inactivas")
 	@MemberOrder(sequence = "4")
-	public List<Proveedor> listarInactivos() {
-		return proveedorRepository.listarInactivos();
+	public List<Proveedor> listarInhabilitados() {
+		return proveedorRepository.listarInhabilitados();
 	}
 
 	// region > injected dependencies

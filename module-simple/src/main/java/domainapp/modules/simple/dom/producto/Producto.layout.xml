@@ -27,9 +27,15 @@
                                 </c:property>
                                 <c:property id="productoLocalidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
-                                </c:property>                                                                
-                                <c:property id="productoActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                </c:property>   
+                                <c:property id="productoAutorizacion" namedEscaped="true">
+                                <c:action id="actualizarAutorizacion" position="RIGHT"></c:action>
+                                </c:property>
+                                <c:property id="productoPoliticas" namedEscaped="true">
+                                <c:action id="actualizarPoliticas" position="RIGHT"></c:action>
+                                </c:property>                                                                                                                             
+                                <c:property id="productoHabilitado" namedEscaped="true">
+                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                             </c:fieldSet>
                         </bs3:col>

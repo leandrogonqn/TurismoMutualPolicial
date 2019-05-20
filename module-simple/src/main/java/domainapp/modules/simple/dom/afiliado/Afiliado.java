@@ -39,10 +39,10 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 				+ "WHERE personaNombre.toLowerCase().indexOf(:personaNombre) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorDNI", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaDni == :personaDni"),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaHabilitado == false ") })
 @javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ1", members = { "personaJuridicaDni", "personaJuridicaApellido" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Afiliado implements Comparable<Afiliado> {
@@ -55,7 +55,7 @@ public class Afiliado implements Comparable<Afiliado> {
 	// endregion
 	
 	public String cssClass() {
-		return (getPersonaActivo() == true) ? "activo" : "inactivo";
+		return (getPersonaHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 	
 	public String iconName() {
@@ -87,7 +87,7 @@ public class Afiliado implements Comparable<Afiliado> {
 		setPersonaTelefonoCelular(afiliadoTelefonoCelular);
 		setPersonaMail(afiliadoMail);
 		setAfiliadoCBU(afiliadoCBU);
-		setPersonaActivo(true);
+		setPersonaHabilitado(true);
 	}
 	// endregion
 
@@ -260,14 +260,14 @@ public class Afiliado implements Comparable<Afiliado> {
    @Property(
            editing = Editing.DISABLED
    )
-   @PropertyLayout(named="Activo", hidden=Where.ALL_TABLES)
-   private boolean personaActivo;
+   @PropertyLayout(named="Habilitado", hidden=Where.ALL_TABLES)
+   private boolean personaHabilitado;
 
-   public boolean getPersonaActivo() {
-		return personaActivo;
+   public boolean getPersonaHabilitado() {
+		return personaHabilitado;
 	}
-	public void setPersonaActivo(boolean personaActivo) {
-		this.personaActivo = personaActivo;
+	public void setPersonaHabilitado(boolean personaHabilitado) {
+		this.personaHabilitado = personaHabilitado;
 	}	
 	
 	// endregion
@@ -365,7 +365,7 @@ public class Afiliado implements Comparable<Afiliado> {
 	}
 
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarActivos();
+		return localidadRepository.listarHabilitados();
 	}
 
 	public Localidad default0ActualizarLocalidad() {
@@ -434,14 +434,14 @@ public class Afiliado implements Comparable<Afiliado> {
 		return "";
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoActivo")
-	public Afiliado actualizarActivo(@ParameterLayout(named = "Activo") final boolean afiliadoActivo) {
-		setPersonaActivo(afiliadoActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoHabilitado")
+	public Afiliado actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean afiliadoHabilitado) {
+		setPersonaHabilitado(afiliadoHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getPersonaActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getPersonaHabilitado();
 	}
 
 	// region > delete (action)
@@ -449,7 +449,7 @@ public class Afiliado implements Comparable<Afiliado> {
 	public void borrarAfiliado() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setPersonaActivo(false);
+		setPersonaHabilitado(false);
 	}
 	// endregion
 
@@ -475,17 +475,17 @@ public class Afiliado implements Comparable<Afiliado> {
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar afiliados activos")
+	@ActionLayout(named = "Listar afiliados habilitados")
 	@MemberOrder(sequence = "2")
-	public List<Afiliado> listarAfiliadoActivos() {
-		return afiliadoRepository.listarActivos();
+	public List<Afiliado> listarAfiliadoHabilitados() {
+		return afiliadoRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar afiliados inactivos")
+	@ActionLayout(named = "Listar afiliados inhabilitados")
 	@MemberOrder(sequence = "2")
-	public List<Afiliado> listarAfiliadoInactivos() {
-		return afiliadoRepository.listarInactivos();
+	public List<Afiliado> listarAfiliadoInhabilitados() {
+		return afiliadoRepository.listarInhabilitados();
 	}
 	
 	@ActionLayout(hidden=Where.EVERYWHERE)

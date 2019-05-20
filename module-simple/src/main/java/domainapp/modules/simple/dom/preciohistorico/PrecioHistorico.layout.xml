@@ -28,8 +28,8 @@
                                 <c:property id="precioHistoricoPrecio" namedEscaped="true">
                                 <c:action id="actualizarPrecioHistoricoPrecio" position="RIGHT"></c:action>
                                 </c:property>   
-                                <c:property id="precioHistoricoActivo" namedEscaped="true">
-                                <c:action id="actualizarPrecioHistoricoActivo" position="RIGHT"></c:action>
+                                <c:property id="precioHistoricoHabilitado" namedEscaped="true">
+                                <c:action id="actualizarPrecioHistoricoHabilitado" position="RIGHT"></c:action>
                                 </c:property>                                                                   
                             </c:fieldSet>
                         </bs3:col>

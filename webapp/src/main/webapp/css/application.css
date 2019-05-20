@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-tr.activo {
+tr.habilitado {
 	color: black;
 }
 
-tr.inactivo {
+tr.inhabilitado {
     color: #cc0000;
 }
 

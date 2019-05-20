@@ -52,7 +52,7 @@ public class EmpresaMenu {
 	}
 	
 	public List<Localidad> choices3Crear() {
-		return localidadesRepository.listarActivos();
+		return localidadesRepository.listarHabilitados();
 	}
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22

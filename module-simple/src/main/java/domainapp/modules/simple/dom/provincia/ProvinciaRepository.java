@@ -21,12 +21,12 @@ public class ProvinciaRepository {
 
 	}
 
-	public List<Provincia> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Provincia.class, "listarActivos"));
+	public List<Provincia> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Provincia.class, "listarHabilitados"));
 	}
 
-	public List<Provincia> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Provincia.class, "listarInactivos"));
+	public List<Provincia> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Provincia.class, "listarInhabilitados"));
 	}
 
 	public Provincia crear(final String provinciaNombre) {

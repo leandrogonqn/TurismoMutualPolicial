@@ -78,7 +78,7 @@ public class VoucherRepository {
 		myCal.set(Calendar.DAY_OF_MONTH, 01);
 		Date fechaAux = myCal.getTime();
 		Double precioTotal = 0.0;
-		List<PrecioHistorico> lista = precioHistoricoRepository.listarPreciosPorProductoPorTipoDeAfiliadoActivo(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
+		List<PrecioHistorico> lista = precioHistoricoRepository.listarPreciosPorProductoPorTipoDeAfiliado(precioHistoricoProducto, precioHistoricoTipoPrecio, true);
 		Iterator<PrecioHistorico> iterar = lista.iterator();
 		while(iterar.hasNext()) {
 			PrecioHistorico list = iterar.next();
@@ -89,11 +89,6 @@ public class VoucherRepository {
 			}
 		return precioTotal; 
 	}
-	
-//	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final EstadoVoucher voucherEstado) {
-//		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherEstado", 
-//				voucherEstado, "voucherProducto", voucherProducto));
-//	}
 	
 	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final EstadoVoucher voucherEstado, 
 			final Date fechaEntrada, final Date fechaSalida) {
@@ -135,10 +130,15 @@ public class VoucherRepository {
 		if(voucherProducto.getProductoAlojamientoPropio()==true) {
 			List<Voucher> listaVoucher = new ArrayList<>();
 			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.prereserva, fechaEntrada, fechaSalida);
+			Iterator<Voucher> it = listaVoucher.iterator();
+			while (it.hasNext()) {
+				Voucher item = it.next();
+				if (item == voucher)
+					it.remove();
+			}
 			if (!listaVoucher.isEmpty())
 				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
 			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida);
-			Iterator<Voucher> it = listaVoucher.iterator();
 			while (it.hasNext()) {
 				Voucher item = it.next();
 				if (item == voucher)

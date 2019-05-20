@@ -19,8 +19,8 @@ public class ReservaRepository {
 		return repositoryService.allInstances(Reserva.class);
 	}
 
-	public List<Reserva> listarActivos(final boolean reservaActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(Reserva.class, "listarActivos", "reservaActivo", reservaActivo));
+	public List<Reserva> listarHabilitados(final boolean reservaHabilitado) {
+		return repositoryService.allMatches(new QueryDefault<>(Reserva.class, "listarHabilitados", "reservaHabilitado", reservaHabilitado));
 	}
 	
 	@javax.inject.Inject

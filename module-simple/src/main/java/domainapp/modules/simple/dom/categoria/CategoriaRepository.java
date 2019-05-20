@@ -21,12 +21,12 @@ public class CategoriaRepository {
 
 	}
 
-	public List<Categoria> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Categoria.class, "listarActivos"));
+	public List<Categoria> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Categoria.class, "listarHabilitados"));
 	}
 
-	public List<Categoria> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Categoria.class, "listarInactivos"));
+	public List<Categoria> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Categoria.class, "listarInhabilitados"));
 	}
 	
 	public List<Categoria> buscarPorCodigo(final int categoriaCodigo) {

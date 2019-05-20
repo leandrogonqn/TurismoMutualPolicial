@@ -17,8 +17,8 @@
                                 <c:property id="provinciasNombre" namedEscaped="true">
                                 <c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="provinciaActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                <c:property id="provinciaHabilitado" namedEscaped="true">
+                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                             </c:fieldSet>
                         </bs3:col>

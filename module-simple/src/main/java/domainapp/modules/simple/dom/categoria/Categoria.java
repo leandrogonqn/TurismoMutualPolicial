@@ -29,10 +29,10 @@ import org.apache.isis.applib.services.title.TitleService;
 				+ "WHERE categoriaNombre.toLowerCase().indexOf(:categoriaNombre) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorCodigo", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.categoria.Categoria " + "WHERE categoriaCodigo == :categoriaCodigo"),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.categoria.Categoria " + "WHERE categoriaActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.categoria.Categoria " + "WHERE categoriaActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.categoria.Categoria " + "WHERE categoriaHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.categoria.Categoria " + "WHERE categoriaHabilitado == false ") })
 @javax.jdo.annotations.Unique(name = "Categoria_categoriaNombre_UNQ", members = { "categoriaNombre" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Categoria implements Comparable<Categoria> {
@@ -43,7 +43,7 @@ public class Categoria implements Comparable<Categoria> {
 	// endregion
 
 	public String cssClass() {
-		return (getCategoriaActivo() == true) ? "activo" : "inactivo";
+		return (getCategoriaHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 
 	public static final int NAME_LENGTH = 200;
@@ -52,7 +52,7 @@ public class Categoria implements Comparable<Categoria> {
 	public Categoria(int categoriaCodigo, String categoriaNombre) {
 		setCategoriaCodigo(categoriaCodigo);
 		setCategoriaNombre(categoriaNombre);
-		this.categoriaActivo = true;
+		this.categoriaHabilitado = true;
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -83,15 +83,15 @@ public class Categoria implements Comparable<Categoria> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean categoriaActivo;
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
+	private boolean categoriaHabilitado;
 
-	public boolean getCategoriaActivo() {
-		return categoriaActivo;
+	public boolean getCategoriaHabilitado() {
+		return categoriaHabilitado;
 	}
 
-	public void setCategoriaActivo(boolean categoriaActivo) {
-		this.categoriaActivo = categoriaActivo;
+	public void setCategoriaHabilitado(boolean categoriaHabilitado) {
+		this.categoriaHabilitado = categoriaHabilitado;
 	}
 
 	// endregion
@@ -101,7 +101,7 @@ public class Categoria implements Comparable<Categoria> {
 	public void borrarCategoria() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setCategoriaActivo(false);
+		setCategoriaHabilitado(false);
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "categoriaCodigo")
@@ -125,14 +125,14 @@ public class Categoria implements Comparable<Categoria> {
 		return getCategoriaNombre();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "categoriaActivo")
-	public Categoria actualizarActivo(@ParameterLayout(named = "Activo") final boolean categoriaActivo) {
-		setCategoriaActivo(categoriaActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "categoriaHabilitado")
+	public Categoria actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean categoriaHabilitado) {
+		setCategoriaHabilitado(categoriaHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getCategoriaActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getCategoriaHabilitado();
 	}
 
 	// endregion
@@ -159,17 +159,17 @@ public class Categoria implements Comparable<Categoria> {
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Categorias Activas")
+	@ActionLayout(named = "Listar Categorias Habilitadas")
 	@MemberOrder(sequence = "3")
-	public List<Categoria> listarActivos() {
-		return categoriaRepository.listarActivos();
+	public List<Categoria> listarHabilitados() {
+		return categoriaRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Categorias Inactivas")
+	@ActionLayout(named = "Listar Categorias Inhabilitadas")
 	@MemberOrder(sequence = "4")
-	public List<Categoria> listarInactivos() {
-		return categoriaRepository.listarInactivos();
+	public List<Categoria> listarInhabilitados() {
+		return categoriaRepository.listarInhabilitados();
 	}
 
 	// region > injected dependencies

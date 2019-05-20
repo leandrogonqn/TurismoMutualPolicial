@@ -31,9 +31,6 @@
                                 <c:property id="reservaMemo" namedEscaped="true">
                                 <c:action id="actualizarReservaMemo" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="reservaActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
-                                </c:property>
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

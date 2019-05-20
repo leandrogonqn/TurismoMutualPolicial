@@ -40,8 +40,8 @@
 								<c:property id="personaMail" namedEscaped="true">
 								<c:action id="actualizarMail" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                <c:property id="personaHabilitado" namedEscaped="true">
+                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                            </c:fieldSet>
                         </bs3:col>

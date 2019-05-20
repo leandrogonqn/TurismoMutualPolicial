@@ -23,10 +23,6 @@ public class ReservaEmpresaRepository {
 		return repositoryService.allInstances(ReservaEmpresa.class);
 	}
 
-	public List<ReservaEmpresa> listarActivos(final boolean reservaActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(ReservaEmpresa.class, "listarActivos", "reservaActivo", reservaActivo));
-	}
-
 	public ReservaEmpresa crear(final int reservaCodigo, final Date reservaFecha, final Empresa reservaCliente,  final Producto voucherProducto,
 			final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadPasajeros, TipoPrecio precioHistoricoTipoPrecio,
 			final String voucherObservaciones, final String reservaMemo) {

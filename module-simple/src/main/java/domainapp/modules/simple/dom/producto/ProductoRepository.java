@@ -47,12 +47,12 @@ public class ProductoRepository {
 		return repositoryService.allInstances(Producto.class);
 	}
 
-	public List<Producto> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Producto.class, "listarActivos"));
+	public List<Producto> listarHabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Producto.class, "listarHabilitados"));
 	}
 
-	public List<Producto> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Producto.class, "listarInactivos"));
+	public List<Producto> listarInhabilitados() {
+		return repositoryService.allMatches(new QueryDefault<>(Producto.class, "listarInhabilitados"));
 	}
 
 	@javax.inject.Inject

@@ -33,10 +33,10 @@ import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.localidad.Localidad "
 				+ "WHERE localidadesNombre.toLowerCase().indexOf(:localidadesNombre) >= 0 "),
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadActivo == false ") })
+		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadHabilitado == true "),
+		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadHabilitado == false ") })
 @javax.jdo.annotations.Unique(name = "Localidades_localidadesNombre_UNQ", members = { "localidadesNombre" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Localidad implements Comparable<Localidad> {
@@ -48,7 +48,7 @@ public class Localidad implements Comparable<Localidad> {
 	// endregion
 
 	public String cssClass() {
-		return (getLocalidadActivo() == true) ? "activo" : "inactivo";
+		return (getLocalidadHabilitado() == true) ? "habilitado" : "inhabilitado";
 	}
 
 	public static final int NAME_LENGTH = 200;
@@ -57,7 +57,7 @@ public class Localidad implements Comparable<Localidad> {
 	public Localidad(String localidadNombre, Provincia localidadProvincia) {
 		setLocalidadesNombre(localidadNombre);
 		setLocalidadProvincia(localidadProvincia);
-		this.localidadActivo = true;
+		this.localidadHabilitado = true;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
@@ -88,15 +88,15 @@ public class Localidad implements Comparable<Localidad> {
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean localidadActivo;
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
+	private boolean localidadHabilitado;
 
-	public boolean getLocalidadActivo() {
-		return localidadActivo;
+	public boolean getLocalidadHabilitado() {
+		return localidadHabilitado;
 	}
 
-	public void setLocalidadActivo(boolean localidadActivo) {
-		this.localidadActivo = localidadActivo;
+	public void setLocalidadHabilitado(boolean localidadHabilitado) {
+		this.localidadHabilitado = localidadHabilitado;
 	}
 
 	// region > delete (action)
@@ -104,7 +104,7 @@ public class Localidad implements Comparable<Localidad> {
 	public void borrarLocalidad() {
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
-		setLocalidadActivo(false);
+		setLocalidadHabilitado(false);
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadNombre")
@@ -124,21 +124,21 @@ public class Localidad implements Comparable<Localidad> {
 	}
 
 	public List<Provincia> choices0ActualizarProvincia() {
-		return provinciaRepository.listarActivos();
+		return provinciaRepository.listarHabilitados();
 	}
 
 	public Provincia default0ActualizarProvincia() {
 		return getLocalidadProvincia();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadActivo")
-	public Localidad actualizarActivo(@ParameterLayout(named = "Activo") final boolean localidadActivo) {
-		setLocalidadActivo(localidadActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadHabilitado")
+	public Localidad actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean localidadHabilitado) {
+		setLocalidadHabilitado(localidadHabilitado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getLocalidadActivo();
+	public boolean default0ActualizarHabilitado() {
+		return getLocalidadHabilitado();
 	}
 
 	// endregion
@@ -164,17 +164,17 @@ public class Localidad implements Comparable<Localidad> {
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar las Localidades Activas")
+	@ActionLayout(named = "Listar las Localidades Habilitadas")
 	@MemberOrder(sequence = "3")
-	public List<Localidad> listarActivos() {
-		return localidadesRepository.listarActivos();
+	public List<Localidad> listarHabilitados() {
+		return localidadesRepository.listarHabilitados();
 	}
 
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar las Localidades Inactivas")
+	@ActionLayout(named = "Listar las Localidades Inhabilitadas")
 	@MemberOrder(sequence = "4")
-	public List<Localidad> listarInactivos() {
-		return localidadesRepository.listarInactivos();
+	public List<Localidad> listarInhabilitados() {
+		return localidadesRepository.listarInhabilitados();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
