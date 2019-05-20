@@ -27,7 +27,7 @@ public class AfiliadoMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Afiliado")
 	@MemberOrder(sequence = "1")
-	public Afiliado crear(@ParameterLayout(named = "Estado") final Estado afiliadoEstado,
+	public Afiliado crear(@ParameterLayout(named = "Estado") final TipoAfiliado afiliadoEstado,
 			@Nullable @ParameterLayout(named = "LP", typicalLength=6) @Parameter(optionality = Optionality.OPTIONAL, maxLength = 6) final String afiliadoLP,
 			@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int afiliadoDni,
 			@ParameterLayout(named = "Apellido") final String afiliadoApellido,
@@ -48,7 +48,7 @@ public class AfiliadoMenu {
 	}
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22
-	public String validateCrear(final Estado afiliadoEstado, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
+	public String validateCrear(final TipoAfiliado afiliadoEstado, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
 			final String afiliadoNombre, final String afiliadoCuitCuil,	final String afiliadoDireccion, final Localidad afiliadoLocalidad,  
 			final Long afiliadoTelefonoFijo, final Long afiliadoTelefonoCelular, final String afiliadoMail, final String afiliadoCBU) {
         if (isNumeric(afiliadoLP) == false) {

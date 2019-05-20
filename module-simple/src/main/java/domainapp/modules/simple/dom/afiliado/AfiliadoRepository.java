@@ -16,7 +16,7 @@ public class AfiliadoRepository {
 				new QueryDefault<>(Afiliado.class, "buscarPorLP", "afiliadoLP", afiliadoLP.toLowerCase()));
 	}
 
-	public Afiliado crearCompleto(Estado afiliadoEstado, String afiliadoLP, String afiliadoNombre, String afiliadoApellido,
+	public Afiliado crearCompleto(TipoAfiliado afiliadoEstado, String afiliadoLP, String afiliadoNombre, String afiliadoApellido,
 			int afiliadoDni, String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad,
 			Long afiliadoTelefonoFijo, Long afiliadoTelefonoCelular, String afiliadoMail, String afiliadoCBU) {
 		final Afiliado object = new Afiliado(afiliadoEstado, afiliadoLP, afiliadoDni, afiliadoApellido, afiliadoNombre, 

@@ -1,7 +1,9 @@
 package domainapp.modules.simple.dom.voucher;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
@@ -12,6 +14,7 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -24,19 +27,25 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
+import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.reserva.Reserva;
 import domainapp.modules.simple.dom.reserva.ReservaRepository;
+import domainapp.modules.simple.dom.reservaafiliado.CanalDePago;
+import domainapp.modules.simple.dom.reservaafiliado.ReservaAfiliado;
+import domainapp.modules.simple.dom.reservaempresa.ReservaEmpresa;
+import domainapp.modules.simple.dom.reservanoafiliado.ReservaNoAfiliado;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Voucher")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "voucherId")
 @javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "listarActivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == true "),
-		@javax.jdo.annotations.Query(name = "listarInactivos", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == false "),
+		@javax.jdo.annotations.Query(name = "listarVoucherPorEstado", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherEstado == :voucherEstado "),
 		@javax.jdo.annotations.Query(name = "listarVoucherPorProducto", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherActivo == :voucherActivo && voucherProducto == :voucherProducto ")})
+				+ "FROM domainapp.modules.simple.dom.voucher.Voucher " + "WHERE voucherEstado == :voucherEstado && voucherProducto == :voucherProducto ")})
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Voucher implements Comparable<Voucher> {
 	// region > title
@@ -46,10 +55,6 @@ public class Voucher implements Comparable<Voucher> {
 				". Fecha de salida: "+sdf.format(getVoucherFechaSalida()));
 	}
 	// endregion
-
-	public String cssClass() {
-		return (getVoucherActivo() == true) ? "activo" : "inactivo";
-	}
 
 	public static final int NAME_LENGTH = 200;
 
@@ -63,7 +68,7 @@ public class Voucher implements Comparable<Voucher> {
 		setVoucherCantidadPasajeros(voucherCantidadPasajeros);
 		setVoucherPrecioTotal(voucherPrecioTotal);
 		setVoucherObservaciones(voucherObservaciones);
-		this.voucherActivo = true;
+		setVoucherEstado(EstadoVoucher.presupuestado);
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -157,48 +162,71 @@ public class Voucher implements Comparable<Voucher> {
 		this.voucherObservaciones=voucherObservaciones;
 	}
 	
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean voucherActivo;
-
-	public boolean getVoucherActivo() {
-		return voucherActivo;
-	}
-
-	public void setVoucherActivo(boolean voucherActivo) {
-		this.voucherActivo = voucherActivo;
-	}
-
-	// endregion
-
-	// region > delete (action)
-	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-	public void borrarVoucher() {
-		final String title = titleService.titleOf(this);
-		messageService.informUser(String.format("'%s' deleted", title));
-		setVoucherActivo(false);
+	@Column(allowsNull = "true")
+	@Property(editing=Editing.DISABLED)
+	@PropertyLayout(named="Estado")
+	private EstadoVoucher voucherEstado;
+	
+	public EstadoVoucher getVoucherEstado() {
+		return voucherEstado;
 	}
 	
+	public void setVoucherEstado(EstadoVoucher voucherEstado) {
+		this.voucherEstado = voucherEstado;
+	}
+	
+	@Column(name="reservaId", allowsNull="true")
+	@Property(editing=Editing.DISABLED)
+	@PropertyLayout(named="Reserva", hidden=Where.ALL_TABLES)
+	private Reserva voucherReserva;
+	
+	public Reserva getVoucherReserva() {
+		return voucherReserva;
+	}
+	
+	public void setVoucherReserva(Reserva voucherReserva) {
+		this.voucherReserva = voucherReserva;
+	}
+	
+	// endregion
+
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherFechaEntrada")
-	public Voucher actualizarFechaEntrada(@ParameterLayout(named = "Fecha de Entrada") final Date voucherFechaEntrada) {
+	public Voucher actualizarFecha(@ParameterLayout(named = "Fecha de Entrada") final Date voucherFechaEntrada,
+			@ParameterLayout(named = "Fecha de Salida") final Date voucherFechaSalida) {
 		setVoucherFechaEntrada(voucherFechaEntrada);
+		setVoucherFechaSalida(voucherFechaSalida);
+		TipoPrecio p;
+		if (getVoucherReserva().getClass()==ReservaAfiliado.class) {
+			ReservaAfiliado ra = (ReservaAfiliado) getVoucherReserva();
+			if (ra.getReservaCliente().getAfiliadoEstado()==TipoAfiliado.Activo) {
+				p = TipoPrecio.Activo;
+			} else {
+				p = TipoPrecio.Retirado;
+			}
+		} else {
+			p = TipoPrecio.No_Afiliado;
+		}
+		setVoucherPrecioTotal(voucherRepository.calcularPrecioTotal(voucherFechaEntrada, voucherFechaSalida, this.getVoucherProducto(), p));
+		setVoucherCantidadNoches(voucherRepository.calcularCantidadDeNoches(voucherFechaEntrada, voucherFechaSalida));
 		return this;
 	}
 
-	public Date default0ActualizarFechaEntrada() {
+	public Date default0ActualizarFecha() {
 		return getVoucherFechaEntrada();
 	}
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherFechaSalida")
-	public Voucher actualizarFechaSalida(@ParameterLayout(named = "Fecha de Salida") final Date voucherFechaSalida) {
-		setVoucherFechaSalida(voucherFechaSalida);
-		return this;
-	}
-
-	public Date default0ActualizarFechaSalida() {
+	public Date default1ActualizarFecha() {
 		return getVoucherFechaSalida();
 	} 
+	
+	public String validateActualizarFecha(final Date voucherFechaEntrada, final Date voucherFechaSalida) {
+			if (voucherFechaEntrada.after(voucherFechaSalida))
+				return "La fecha de salida no puede ser anterior a la de entrada";
+			if (voucherRepository.corroborarDisponibilidadActualizar(this.getVoucherProducto(), voucherFechaEntrada, 
+					voucherFechaSalida, this)==false)
+				return "El producto ya se encuentra reservado en las fechas seleccionadas";
+		return "";
+	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherCantidadPasajeros")
 	public Voucher actualizarCantidadPasajeros(@ParameterLayout(named = "CantidadPasajeros") final int voucherCantidadPasajeros) {
@@ -230,16 +258,16 @@ public class Voucher implements Comparable<Voucher> {
 		return getVoucherObservaciones();
 	}
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherActivo")
-	public Voucher actualizarActivo(@ParameterLayout(named = "Activo") final boolean voucherActivo) {
-		setVoucherActivo(voucherActivo);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherEstado")
+	public Voucher actualizarEstado(@ParameterLayout(named = "Estado", multiLine=6) final EstadoVoucher voucherEstado) {
+		setVoucherEstado(voucherEstado);
 		return this;
 	}
 
-	public boolean default0ActualizarActivo() {
-		return getVoucherActivo();
+	public EstadoVoucher default0ActualizarEstado() {
+		return getVoucherEstado();
 	}
-
+	
 	// endregion
 
 	// region > toString, compareTo
@@ -257,32 +285,16 @@ public class Voucher implements Comparable<Voucher> {
 	// endregion
 
 	// acciones
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todas las Vouchers")
-	@MemberOrder(sequence = "2")
-	public List<Voucher> listar() {
-		return voucherRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Voucher Activas")
-	@MemberOrder(sequence = "3")
-	public List<Voucher> listarActivos() {
-		return voucherRepository.listarActivos();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Vouchers Inactivas")
-	@MemberOrder(sequence = "4")
-	public List<Voucher> listarInactivos() {
-		return voucherRepository.listarInactivos();
+	@Action(publishing=Publishing.ENABLED, invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+	public Voucher autorizarVoucher() {
+		voucherEstado.autorizar(this);
+		return this;
 	}
 	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Volver a la reserva")
-	@MemberOrder(sequence = "5")
-	public Reserva volverAReserva() {
-		return reservaRepository.buscarReservaPorVoucher(this);
+	@Action(publishing=Publishing.ENABLED, invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+	public Voucher desautorizarVoucher() {
+		this.getVoucherEstado().desautorizar(this);
+		return this;
 	}
 
 	// region > injected dependencies

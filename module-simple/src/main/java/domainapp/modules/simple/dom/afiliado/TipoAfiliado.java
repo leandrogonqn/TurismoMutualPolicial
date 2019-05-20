@@ -1,6 +1,6 @@
 package domainapp.modules.simple.dom.afiliado;
 
-public enum Estado {
+public enum TipoAfiliado {
 	Activo("Activo"), Retirado("Retirado");
 
 	private final String nombre;
@@ -9,7 +9,7 @@ public enum Estado {
 		return nombre;
 	}
 
-	private Estado(String nom) {
+	private TipoAfiliado(String nom) {
 		nombre = nom;
 	}
 

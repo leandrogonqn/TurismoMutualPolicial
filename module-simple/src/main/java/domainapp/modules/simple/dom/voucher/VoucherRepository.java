@@ -1,6 +1,7 @@
 package domainapp.modules.simple.dom.voucher;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -25,12 +26,9 @@ public class VoucherRepository {
 		return repositoryService.allInstances(Voucher.class);
 	}
 
-	public List<Voucher> listarActivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarActivos"));
-	}
-
-	public List<Voucher> listarInactivos() {
-		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarInactivos"));
+	public List<Voucher> listarVoucherPorEstado(EstadoVoucher voucherEstado) {
+		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorEstado", "voucherEstado", 
+				voucherEstado));
 	}
 
 	public Voucher crear(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, 
@@ -92,25 +90,67 @@ public class VoucherRepository {
 		return precioTotal; 
 	}
 	
-	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final boolean voucherActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherActivo", 
-				voucherActivo, "voucherProducto", voucherProducto));
-	}
+//	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final EstadoVoucher voucherEstado) {
+//		return repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherEstado", 
+//				voucherEstado, "voucherProducto", voucherProducto));
+//	}
 	
-	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final boolean voucherActivo, 
-			final Date fechaDesde, final Date fechaHasta) {
-		List<Voucher> lista = repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherActivo", 
-				voucherActivo, "voucherProducto", voucherProducto));
+	public List<Voucher> listarVoucherPorProducto(final Producto voucherProducto, final EstadoVoucher voucherEstado, 
+			final Date fechaEntrada, final Date fechaSalida) {
+		List<Voucher> listaVoucher = new ArrayList<>();
+		List<Voucher> lista = repositoryService.allMatches(new QueryDefault<>(Voucher.class, "listarVoucherPorProducto", "voucherEstado", 
+				voucherEstado, "voucherProducto", voucherProducto));
 		Iterator<Voucher> it = lista.iterator();
 		while (it.hasNext()) {
 			Voucher item = it.next();
-			if (fechaDesde.after(item.getVoucherFechaSalida()))
-				it.remove();
-			if (fechaHasta.before(item.getVoucherFechaEntrada()))
-				it.remove();
+			if (fechaEntrada.before(item.getVoucherFechaSalida())
+					& fechaSalida.after(item.getVoucherFechaEntrada()))
+				listaVoucher.add(item);
 		}
-		Collections.sort(lista);
-		return lista;
+		Collections.sort(listaVoucher);
+		return listaVoucher;
+	}
+	
+	public boolean corroborarDisponibilidadCrear (final Producto voucherProducto, 
+			final Date fechaEntrada, final Date fechaSalida) {
+		boolean a = false;
+		if(voucherProducto.getProductoAlojamientoPropio()==true) {
+			List<Voucher> listaVoucher = new ArrayList<>();
+			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.prereserva, fechaEntrada, fechaSalida);
+			if (!listaVoucher.isEmpty())
+				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
+			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida);
+			if (listaVoucher.isEmpty())
+				a = true;
+		} else {
+			a =true;
+		}
+
+		return a;
+	}
+	
+	public boolean corroborarDisponibilidadActualizar (final Producto voucherProducto, 
+			final Date fechaEntrada, final Date fechaSalida, Voucher voucher) {
+		boolean a = false;
+		if(voucherProducto.getProductoAlojamientoPropio()==true) {
+			List<Voucher> listaVoucher = new ArrayList<>();
+			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.prereserva, fechaEntrada, fechaSalida);
+			if (!listaVoucher.isEmpty())
+				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
+			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida);
+			Iterator<Voucher> it = listaVoucher.iterator();
+			while (it.hasNext()) {
+				Voucher item = it.next();
+				if (item == voucher)
+					it.remove();
+			}
+			if (listaVoucher.isEmpty())
+				a = true;
+		} else {
+			a =true;
+		}
+
+		return a;
 	}
 	
 	@javax.inject.Inject

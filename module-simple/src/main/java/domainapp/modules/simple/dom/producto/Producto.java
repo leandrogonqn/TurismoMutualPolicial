@@ -148,6 +148,19 @@ public class Producto implements Comparable<Producto> {
 		this.productoLocalidad = productoLocalidad;
 	}	
 	
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Necesita Autorizacion?")
+	private boolean productoAutorizacion;
+
+	public boolean getProductoAutorizacion() {
+		return productoAutorizacion;
+	}
+
+	public void setProductoAutorizacion(boolean productoAutorizacion) {
+		this.productoAutorizacion = productoAutorizacion;
+	}	
+	
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Politicas")
@@ -239,6 +252,16 @@ public class Producto implements Comparable<Producto> {
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
 		return localidadRepository.listarActivos();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoAutorizacion")
+	public Producto actualizarAutorizacion(@ParameterLayout(named = "Necesita autorizacion?") final boolean productoAutorizacion) {
+		setProductoAutorizacion(productoAutorizacion);
+		return this;
+	}
+
+	public boolean default0ActualizarAutorizacion() {
+		return getProductoAutorizacion();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoPoliticas")

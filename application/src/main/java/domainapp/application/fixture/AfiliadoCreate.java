@@ -4,20 +4,20 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoMenu;
-import domainapp.modules.simple.dom.afiliado.Estado;
+import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.localidad.Localidad;
 
 public class AfiliadoCreate extends FixtureScript {
 
     //region > name (input)
 	
-    private Estado estado;
+    private TipoAfiliado estado;
     
-    public Estado getEstado(){
+    public TipoAfiliado getEstado(){
     	return estado;
     }
     
-    public AfiliadoCreate setEstado(final Estado estado){
+    public AfiliadoCreate setEstado(final TipoAfiliado estado){
     	this.estado = estado;
     	return this;
     }

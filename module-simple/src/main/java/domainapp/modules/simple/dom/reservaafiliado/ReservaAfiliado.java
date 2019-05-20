@@ -1,6 +1,7 @@
 package domainapp.modules.simple.dom.reservaafiliado;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -29,11 +30,12 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
-import domainapp.modules.simple.dom.afiliado.Estado;
+import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
 import domainapp.modules.simple.dom.reserva.Reserva;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
 import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
@@ -54,9 +56,9 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 	// endregion
 
-	public String cssClass() {
-		return (getReservaActivo() == true) ? "activo" : "inactivo";
-	}
+//	public String cssClass() {
+//		return (getReservaActivo() == true) ? "activo" : "inactivo";
+//	}
 
 	public static final int NAME_LENGTH = 200;
 
@@ -70,7 +72,6 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 		setReservaCanalDePago(reservaCanalDePago);
 		setReservaMemo(reservaMemo);
 		setReservaListaVoucher(reservaListaVoucher);
-		setReservaActivo(true);
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -102,12 +103,12 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	// endregion
 
 	// region > delete (action)
-	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-	public void borrarReserva() {
-		final String title = titleService.titleOf(this);
-		messageService.informUser(String.format("'%s' deleted", title));
-		setReservaActivo(false);
-	}
+//	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+//	public void borrarReserva() {
+//		final String title = titleService.titleOf(this);
+//		messageService.informUser(String.format("'%s' deleted", title));
+//		setReservaActivo(false);
+//	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCodigo")
 	public ReservaAfiliado actualizarReservaCodigo(@ParameterLayout(named = "Codigo") final int reservaCodigo) {
@@ -157,16 +158,6 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 
 	public String default0ActualizarReservaMemo() {
 		return getReservaMemo();
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaActivo")
-	public ReservaAfiliado actualizarActivo(@ParameterLayout(named = "Activo") final boolean reservaActivo) {
-		setReservaActivo(reservaActivo);
-		return this;
-	}
-
-	public boolean default0ActualizarActivo() {
-		return getReservaActivo();
 	}
 
 	// endregion
@@ -222,7 +213,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
 		TipoPrecio t;
-		if(getReservaCliente().getAfiliadoEstado()==Estado.Activo) {
+		if(getReservaCliente().getAfiliadoEstado()==TipoAfiliado.Activo) {
 			t = TipoPrecio.Activo;
 		} else {
 			t = TipoPrecio.Retirado;
@@ -230,6 +221,15 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, t, voucherObservaciones);
 		this.getReservaListaVoucher().add(v);
 		this.setReservaListaVoucher(this.getReservaListaVoucher());
+		v.setVoucherReserva(this);
+		List<Voucher> listaVoucher = new ArrayList<>();
+		for (int i = 0; i < getReservaListaVoucher().size(); i++) {
+			if (getReservaListaVoucher().get(i).getVoucherEstado()==EstadoVoucher.reservado||
+					getReservaListaVoucher().get(i).getVoucherEstado()==EstadoVoucher.prereserva)
+				listaVoucher.add(getReservaListaVoucher().get(i));
+		}
+		if (!listaVoucher.isEmpty())
+			confirmarReserva();
 		return this;
 	}
 	
@@ -239,17 +239,39 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	
 	public String validateCrearVoucher(final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones) {
-			List<Voucher> listaVoucher = voucherRepository.listarVoucherPorProducto(voucherProducto, true);
 			if (voucherFechaEntrada.after(voucherFechaSalida))
 				return "La fecha de salida no puede ser anterior a la de entrada";
-			for(int indice = 0;indice<listaVoucher.size();indice++) {
-				if (voucherFechaEntrada.before(listaVoucher.get(indice).getVoucherFechaSalida())
-						& voucherFechaSalida.after(listaVoucher.get(indice).getVoucherFechaEntrada()))
-					return "El producto ya se encuentra reservado en las fechas seleccionadas"; 
-			}
+			if (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, voucherFechaEntrada, 
+					voucherFechaSalida)==false)
+				return "El producto ya se encuentra reservado en las fechas seleccionadas";
 		return "";
 	}
-
+	
+//	@Action(publishing=Publishing.ENABLED)
+//	@ActionLayout(named="Confirmar Presupuesto")
+//	public void confirmarReserva() {
+//		for (int i = 0; i < getReservaListaVoucher().size(); i++) {
+//			if(getReservaListaVoucher().get(i).getVoucherProducto().getProductoAlojamientoPropio()==true) {
+//				if(voucherRepository.corroborarDisponibilidadCrear(getReservaListaVoucher().get(i).getVoucherProducto(), 
+//						getReservaListaVoucher().get(i).getVoucherFechaEntrada(), getReservaListaVoucher().get(i).getVoucherFechaSalida())==true) {
+//					getReservaListaVoucher().get(i).getVoucherEstado().confirmar(getReservaListaVoucher().get(i));
+//				} else {
+//					messageService.warnUser("NO HAY DISPONIBILIDAD");
+//				}
+//			} else {
+//				getReservaListaVoucher().get(i).getVoucherEstado().confirmar(getReservaListaVoucher().get(i));
+//			}
+//		}
+//	}
+//	
+//	@Action(publishing=Publishing.ENABLED)
+//	@ActionLayout(named="Anular Reserva")
+//	public void anularReserva() {
+//		for (int i = 0; i < getReservaListaVoucher().size(); i++) {
+//			getReservaListaVoucher().get(i).getVoucherEstado().anular(getReservaListaVoucher().get(i));
+//		}
+//	}
+	
 	// region > injected dependencies
 
 	@javax.inject.Inject
@@ -269,5 +291,8 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	
 	@Inject
 	ProductoRepository productoRepository;
+	
+//	@Inject
+//	Reserva reserva;
 
 }

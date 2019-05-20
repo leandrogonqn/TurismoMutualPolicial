@@ -59,7 +59,7 @@ public class Afiliado implements Comparable<Afiliado> {
 	}
 	
 	public String iconName() {
-		return (getAfiliadoEstado() == Estado.Activo) ? "A" : "R";
+		return (getAfiliadoEstado() == TipoAfiliado.Activo) ? "A" : "R";
 	}
 
 	// region > constructor
@@ -70,7 +70,7 @@ public class Afiliado implements Comparable<Afiliado> {
 		setPersonaJuridicaNombre(afiliadoNombre);
 	}
 
-	public Afiliado(Estado afiliadoEstado, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
+	public Afiliado(TipoAfiliado afiliadoEstado, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
 			String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad, Long afiliadoTelefonoFijo, 
 			Long afiliadoTelefonoCelular, String afiliadoMail, String afiliadoCBU) {
 		super();
@@ -97,13 +97,13 @@ public class Afiliado implements Comparable<Afiliado> {
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Estado")
-	private Estado afiliadoEstado;
+	private TipoAfiliado afiliadoEstado;
 
-	public Estado getAfiliadoEstado() {
+	public TipoAfiliado getAfiliadoEstado() {
 		return afiliadoEstado;
 	}
 
-	public void setAfiliadoEstado(Estado afiliadoEstado) {
+	public void setAfiliadoEstado(TipoAfiliado afiliadoEstado) {
 		this.afiliadoEstado = afiliadoEstado;
 	}
 
@@ -273,12 +273,12 @@ public class Afiliado implements Comparable<Afiliado> {
 	// endregion
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoEstado")
-	public Afiliado actualizarEstado(@ParameterLayout(named = "Estado") final Estado afiliadoEstado) {
+	public Afiliado actualizarEstado(@ParameterLayout(named = "Estado") final TipoAfiliado afiliadoEstado) {
 		setAfiliadoEstado(afiliadoEstado);
 		return this;
 	}
 	
-	public Estado default0ActualizarEstado() {
+	public TipoAfiliado default0ActualizarEstado() {
 		return getAfiliadoEstado();
 	}
 

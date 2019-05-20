@@ -12,6 +12,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
 import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
@@ -33,6 +34,7 @@ public class ReservaNoAfiliadoRepository {
 		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones);
 		reservaListaVoucher.add(v);
 		final ReservaNoAfiliado object = new ReservaNoAfiliado(reservaCodigo, reservaFecha, reservaCliente, reservaListaVoucher, reservaMemo);
+		v.setVoucherReserva(object);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

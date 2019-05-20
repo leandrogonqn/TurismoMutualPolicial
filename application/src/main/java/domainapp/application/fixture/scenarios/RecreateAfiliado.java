@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import domainapp.application.fixture.AfiliadoCreate;
 import domainapp.application.fixture.AfiliadoTearDown;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
-import domainapp.modules.simple.dom.afiliado.Estado;
+import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -98,7 +98,7 @@ public class RecreateAfiliado extends FixtureScript {
         
         for (int i = 0; i < number; i++) {
             final AfiliadoCreate fs = new AfiliadoCreate();
-            fs.setEstado(Estado.Activo);
+            fs.setEstado(TipoAfiliado.Activo);
             fs.setLP(LP.get(i));
             fs.setName(NAMES.get(i));
             fs.setApellido(apellidos.get(i));

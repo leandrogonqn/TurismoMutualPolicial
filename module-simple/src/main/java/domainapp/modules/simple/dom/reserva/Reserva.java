@@ -2,11 +2,16 @@ package domainapp.modules.simple.dom.reserva;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.Persistent;
+
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -16,7 +21,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.message.MessageService;
+
+import domainapp.modules.simple.dom.reservaafiliado.ReservaAfiliado;
 import domainapp.modules.simple.dom.voucher.Voucher;
+import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Reserva")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
@@ -56,7 +65,7 @@ public abstract class Reserva {
 		this.reservaFecha = reservaFecha;
 	}
 	
-	@Element(column="reservaId")
+	@Persistent(mappedBy="voucherReserva")
 	@Property(editing = Editing.ENABLED)
 	@CollectionLayout(named = "Vouchers")
 	private List<Voucher> reservaListaVoucher;
@@ -92,16 +101,38 @@ public abstract class Reserva {
 		this.reservaMemo = reservaMemo;
 	}
 	
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Activo", hidden=Where.ALL_TABLES)
-	private boolean reservaActivo;
-
-	public boolean getReservaActivo() {
-		return reservaActivo;
+	@Action(publishing=Publishing.ENABLED)
+	@ActionLayout(named="Confirmar Presupuesto")
+	public Reserva confirmarReserva() {
+		for (int i = 0; i < getReservaListaVoucher().size(); i++) {
+			if(getReservaListaVoucher().get(i).getVoucherProducto().getProductoAlojamientoPropio()==true) {
+				if(voucherRepository.corroborarDisponibilidadActualizar(getReservaListaVoucher().get(i).getVoucherProducto(), 
+						getReservaListaVoucher().get(i).getVoucherFechaEntrada(), getReservaListaVoucher().get(i).getVoucherFechaSalida(),
+						getReservaListaVoucher().get(i))
+						==true) {
+					getReservaListaVoucher().get(i).getVoucherEstado().confirmar(getReservaListaVoucher().get(i));
+				} else {
+					messageService.warnUser("NO HAY DISPONIBILIDAD");
+				}
+			} else {
+				getReservaListaVoucher().get(i).getVoucherEstado().confirmar(getReservaListaVoucher().get(i));
+			}
+		}
+		return this;
 	}
-
-	public void setReservaActivo(boolean reservaActivo) {
-		this.reservaActivo = reservaActivo;
+	
+	@Action(publishing=Publishing.ENABLED)
+	@ActionLayout(named="Anular Reserva")
+	public Reserva anularReserva() {
+		for (int i = 0; i < getReservaListaVoucher().size(); i++) {
+			getReservaListaVoucher().get(i).getVoucherEstado().anular(getReservaListaVoucher().get(i));
+		}
+		return this;
 	}
+	
+	@Inject
+	VoucherRepository voucherRepository;
+	
+	@Inject
+	MessageService messageService;
 }

@@ -54,16 +54,10 @@ public class ReservaEmpresaMenu {
 			final Empresa reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
 			final String reservaMemo) {
-			List<Voucher> listaVoucher = voucherRepository.listarVoucherPorProducto(voucherProducto, true);
 			if (voucherFechaEntrada.after(voucherFechaSalida))
 				return "La fecha de salida no puede ser anterior a la de entrada";
-			if (voucherProducto.getProductoAlojamientoPropio()==true) {
-				for(int indice = 0;indice<listaVoucher.size();indice++) {
-					if (voucherFechaEntrada.before(listaVoucher.get(indice).getVoucherFechaSalida())
-							& voucherFechaSalida.after(listaVoucher.get(indice).getVoucherFechaEntrada()))
-						return "El producto ya se encuentra reservado en las fechas seleccionadas"; 
-				}
-			}
+			if (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, voucherFechaEntrada, voucherFechaSalida)==false)
+				return "El producto ya se encuentra reservado en las fechas seleccionadas";
 		return "";
 	}
 	

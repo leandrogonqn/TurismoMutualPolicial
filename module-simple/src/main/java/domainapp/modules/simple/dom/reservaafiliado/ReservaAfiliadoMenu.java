@@ -16,7 +16,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
-import domainapp.modules.simple.dom.afiliado.Estado;
+import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -41,7 +41,7 @@ public class ReservaAfiliadoMenu {
 			@ParameterLayout(named = "Canal de pago") final CanalDePago reservaCanalDePago,
 			@Nullable @ParameterLayout(named = "Memo de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaMemo) {
 		TipoPrecio t;
-		if(reservaCliente.getAfiliadoEstado()==Estado.Activo) {
+		if(reservaCliente.getAfiliadoEstado()==TipoAfiliado.Activo) {
 			t = TipoPrecio.Activo;
 		} else {
 			t = TipoPrecio.Retirado;
@@ -62,18 +62,13 @@ public class ReservaAfiliadoMenu {
 			final Afiliado reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
 			final CanalDePago reservaCanalDePago, final String reservaMemo) {
-			List<Voucher> listaVoucher = voucherRepository.listarVoucherPorProducto(voucherProducto, true);
 			if (voucherFechaEntrada.after(voucherFechaSalida))
 				return "La fecha de salida no puede ser anterior a la de entrada";
 			if (reservaCanalDePago==CanalDePago.Debito_Automatico && reservaCliente.getAfiliadoCBU()==null) 
 				return "ERROR: CBU no cargado, elija otro canal de pago";
-			if (voucherProducto.getProductoAlojamientoPropio()==true) {
-				for(int indice = 0;indice<listaVoucher.size();indice++) {
-					if (voucherFechaEntrada.before(listaVoucher.get(indice).getVoucherFechaSalida())
-							& voucherFechaSalida.after(listaVoucher.get(indice).getVoucherFechaEntrada()))
-						return "El producto ya se encuentra reservado en las fechas seleccionadas"; 
-				}
-			}
+			if (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, voucherFechaEntrada, 
+					voucherFechaSalida)==false)
+				return "El producto ya se encuentra reservado en las fechas seleccionadas";
 		return "";
 	}
 	

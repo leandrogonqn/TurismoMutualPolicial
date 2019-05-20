@@ -12,6 +12,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
 import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
@@ -22,10 +23,6 @@ public class ReservaAfiliadoRepository {
 		return repositoryService.allInstances(ReservaAfiliado.class);
 	}
 
-	public List<ReservaAfiliado> listarActivos(final boolean reservaActivo) {
-		return repositoryService.allMatches(new QueryDefault<>(ReservaAfiliado.class, "listarActivos", "reservaActivo", reservaActivo));
-	}
-
 	public ReservaAfiliado crear(final int reservaCodigo, final Date reservaFecha, final Afiliado reservaCliente,  final Producto voucherProducto,
 			final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadPasajeros, TipoPrecio precioHistoricoTipoPrecio,
 			final String voucherObservaciones, final CanalDePago reservaCanalDePago, final String reservaMemo) {
@@ -33,6 +30,7 @@ public class ReservaAfiliadoRepository {
 		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones);
 		reservaListaVoucher.add(v);
 		final ReservaAfiliado object = new ReservaAfiliado(reservaCodigo, reservaFecha, reservaCliente, reservaListaVoucher, reservaCanalDePago, reservaMemo);
+		v.setVoucherReserva(object);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

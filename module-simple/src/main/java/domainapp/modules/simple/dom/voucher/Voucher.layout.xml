@@ -32,10 +32,9 @@
                                 <c:property id="voucherProducto" namedEscaped="true">
                                 </c:property>
                                 <c:property id="voucherFechaEntrada" namedEscaped="true">
-                                <c:action id="actualizarFechaEntrada" position="RIGHT"></c:action>
+                                <c:action id="actualizarFecha" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="voucherFechaSalida" namedEscaped="true">
-                                <c:action id="actualizarFechaSalida" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="voucherCantidadNoches" namedEscaped="true">
                                 </c:property>
@@ -48,9 +47,11 @@
                                 <c:property id="voucherObservaciones" namedEscaped="true" multiLine="6">
                                 <c:action id="actualizarObservaciones" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="voucherActivo" namedEscaped="true">
-                                <c:action id="actualizarActivo" position="RIGHT"></c:action>
+                                <c:property id="voucherEstado" namedEscaped="true">
+                                <c:action id="actualizarEstado" position="RIGHT"></c:action>
                                 </c:property>
+                                <c:property id="voucherReserva" namedEscaped="true">
+                                </c:property>                                         
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>
