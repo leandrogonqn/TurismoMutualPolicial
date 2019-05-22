@@ -112,9 +112,7 @@ public class VoucherRepository {
 		if(voucherProducto.getProductoAlojamientoPropio()==true) {
 			List<Voucher> listaVoucher = new ArrayList<>();
 			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.prereserva, fechaEntrada, fechaSalida);
-			if (!listaVoucher.isEmpty())
-				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
-			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida);
+			listaVoucher.addAll(listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida));
 			if (listaVoucher.isEmpty())
 				a = true;
 		} else {
@@ -130,15 +128,8 @@ public class VoucherRepository {
 		if(voucherProducto.getProductoAlojamientoPropio()==true) {
 			List<Voucher> listaVoucher = new ArrayList<>();
 			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.prereserva, fechaEntrada, fechaSalida);
+			listaVoucher.addAll(listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida));
 			Iterator<Voucher> it = listaVoucher.iterator();
-			while (it.hasNext()) {
-				Voucher item = it.next();
-				if (item == voucher)
-					it.remove();
-			}
-			if (!listaVoucher.isEmpty())
-				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
-			listaVoucher = listarVoucherPorProducto(voucherProducto, EstadoVoucher.reservado, fechaEntrada, fechaSalida);
 			while (it.hasNext()) {
 				Voucher item = it.next();
 				if (item == voucher)

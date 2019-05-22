@@ -20,7 +20,6 @@ import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
-import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = ReservaAfiliado.class, objectType="simple.ReservaAfiliadoMenu")

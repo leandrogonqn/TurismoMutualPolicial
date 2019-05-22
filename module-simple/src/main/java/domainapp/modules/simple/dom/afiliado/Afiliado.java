@@ -49,8 +49,9 @@ public class Afiliado implements Comparable<Afiliado> {
 
 	// region > title
 	public TranslatableString title() {
-		return TranslatableString.tr(getAfiliadoEstado().getNombre() + ": {afiliadoNombre}", "afiliadoNombre",
-				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
+		return TranslatableString.tr("Afiliado " + getAfiliadoEstado().getNombre() + 
+				" - LP "+getAfiliadoLP()+ " - "+
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido());
 	}
 	// endregion
 	
@@ -455,7 +456,9 @@ public class Afiliado implements Comparable<Afiliado> {
 
 	@Override
 	public String toString() {
-		String afiliado = getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
+		String afiliado = "Afiliado " + getAfiliadoEstado().getNombre() + 
+				" - LP "+getAfiliadoLP()+ " - "+
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
 		return afiliado;
 	}
 

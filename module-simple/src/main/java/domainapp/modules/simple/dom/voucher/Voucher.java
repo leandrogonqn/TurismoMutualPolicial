@@ -1,16 +1,18 @@
 package domainapp.modules.simple.dom.voucher;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -26,18 +28,24 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.value.Blob;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
-import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
+import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
+import domainapp.modules.simple.dom.reportes.AfiliadoReporte;
+import domainapp.modules.simple.dom.reportes.ReporteRepository;
+import domainapp.modules.simple.dom.reportes.VoucherAfiliadoReporte;
+import domainapp.modules.simple.dom.reportes.VoucherEmpresaReporte;
+import domainapp.modules.simple.dom.reportes.VoucherNoAfiliadoReporte;
 import domainapp.modules.simple.dom.reserva.Reserva;
 import domainapp.modules.simple.dom.reserva.ReservaRepository;
-import domainapp.modules.simple.dom.reservaafiliado.CanalDePago;
 import domainapp.modules.simple.dom.reservaafiliado.ReservaAfiliado;
 import domainapp.modules.simple.dom.reservaempresa.ReservaEmpresa;
 import domainapp.modules.simple.dom.reservanoafiliado.ReservaNoAfiliado;
+import net.sf.jasperreports.engine.JRException;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Voucher")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "voucherId")
@@ -296,7 +304,7 @@ public class Voucher implements Comparable<Voucher> {
 		this.getVoucherEstado().desautorizar(this);
 		return this;
 	}
-
+	
 	// region > injected dependencies
 
 	@javax.inject.Inject
@@ -313,6 +321,9 @@ public class Voucher implements Comparable<Voucher> {
 	
 	@Inject
 	ReservaRepository reservaRepository;
+	
+	@Inject
+	ReporteRepository reporteRepository;
 
 	// endregion
 }

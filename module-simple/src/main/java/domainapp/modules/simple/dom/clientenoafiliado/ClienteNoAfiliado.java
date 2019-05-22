@@ -47,7 +47,7 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 	// region > title
 	public TranslatableString title() {
 		return TranslatableString.tr("Cliente No Afiliado: {personaNombre}", "personaNombre",
-				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido() + " Cuit/Cuil: " + getPersonaCuitCuil());
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido() + " DNI: " + getPersonaJuridicaDni());
 	}
 	// endregion
 	
@@ -373,7 +373,8 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 
 	@Override
 	public String toString() {
-		String clienteNoAfiliado = getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
+		String clienteNoAfiliado = "Cliente No Afiliado: " + getPersonaJuridicaNombre() + " " + 
+					getPersonaJuridicaApellido() + " DNI: " + getPersonaJuridicaDni();
 		return clienteNoAfiliado;
 	}
 

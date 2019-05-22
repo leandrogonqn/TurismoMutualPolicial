@@ -1,31 +1,43 @@
 package domainapp.modules.simple.dom.reserva;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
-import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.Persistent;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.value.Blob;
 
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.reportes.ReporteRepository;
+import domainapp.modules.simple.dom.reportes.VoucherAfiliadoReporte;
+import domainapp.modules.simple.dom.reportes.VoucherEmpresaReporte;
+import domainapp.modules.simple.dom.reportes.VoucherNoAfiliadoReporte;
 import domainapp.modules.simple.dom.reservaafiliado.ReservaAfiliado;
+import domainapp.modules.simple.dom.reservaempresa.ReservaEmpresa;
+import domainapp.modules.simple.dom.reservanoafiliado.ReservaNoAfiliado;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
 import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
+import net.sf.jasperreports.engine.JRException;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Reserva")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
@@ -83,6 +95,8 @@ public abstract class Reserva {
 		Double a = 0.0;
 		for(int indice = 0;indice<getReservaListaVoucher().size();indice++)
 		{
+			if((getReservaListaVoucher().get(indice).getVoucherEstado()==EstadoVoucher.reservado)||
+					(getReservaListaVoucher().get(indice).getVoucherEstado()==EstadoVoucher.prereserva))
 			a = a + getReservaListaVoucher().get(indice).getVoucherPrecioTotal();
 		}
 		return a;
@@ -117,6 +131,8 @@ public abstract class Reserva {
 			} else {
 				getReservaListaVoucher().get(i).getVoucherEstado().confirmar(getReservaListaVoucher().get(i));
 			}
+			if(getReservaListaVoucher().get(i).getVoucherEstado()==EstadoVoucher.prereserva)
+				messageService.warnUser("PRERESERVA PENDIENTE DE AUTORIZACION");
 		}
 		return this;
 	}
@@ -130,9 +146,101 @@ public abstract class Reserva {
 		return this;
 	}
 	
+    @Action(semantics = SemanticsOf.SAFE, publishing=Publishing.ENABLED)
+	public Blob imprimirVoucher(
+            @ParameterLayout(named="Voucher: ") final Voucher voucher) throws JRException, IOException {
+    	
+    	List<Object> objectsReport = new ArrayList<Object>();
+    	
+    	String jrxml = "";
+    	
+    	if(voucher.getVoucherReserva().getClass()==ReservaAfiliado.class) {
+        	ReservaAfiliado r = (ReservaAfiliado) voucher.getVoucherReserva();
+        	
+    		VoucherAfiliadoReporte voucherAfiliadoReporte = new VoucherAfiliadoReporte();
+    			
+    		voucherAfiliadoReporte.setReservaCodigo(voucher.getVoucherReserva().getReservaCodigo());
+    		voucherAfiliadoReporte.setReservaFecha(voucher.getVoucherReserva().getReservaFecha());
+    		voucherAfiliadoReporte.setReservaCliente(r.getReservaCliente());
+    		voucherAfiliadoReporte.setPersonaJuridicaDni(r.getReservaCliente().getPersonaJuridicaDni());
+    		voucherAfiliadoReporte.setPersonaTelefonoFijo(r.getReservaCliente().getPersonaTelefonoFijo());
+    		voucherAfiliadoReporte.setPersonaMail(r.getReservaCliente().getPersonaMail());
+    		voucherAfiliadoReporte.setVoucherProducto(voucher.getVoucherProducto());
+    		voucherAfiliadoReporte.setVoucherFechaEntrada(voucher.getVoucherFechaEntrada());
+    		voucherAfiliadoReporte.setVoucherFechaSalida(voucher.getVoucherFechaSalida());
+    		voucherAfiliadoReporte.setVoucherCantidadNoches(voucher.getVoucherCantidadNoches());
+    		voucherAfiliadoReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
+    		voucherAfiliadoReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
+    		voucherAfiliadoReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		objectsReport.add(voucherAfiliadoReporte);
+    		jrxml = "VoucherAfiliado.jrxml";
+    	}
+    	
+    	if(voucher.getVoucherReserva().getClass()==ReservaNoAfiliado.class) {
+        	ReservaNoAfiliado r = (ReservaNoAfiliado) voucher.getVoucherReserva();
+        	
+    		VoucherNoAfiliadoReporte voucherNoAfiliadoReporte = new VoucherNoAfiliadoReporte();
+    			
+    		voucherNoAfiliadoReporte.setReservaCodigo(voucher.getVoucherReserva().getReservaCodigo());
+    		voucherNoAfiliadoReporte.setReservaFecha(voucher.getVoucherReserva().getReservaFecha());
+    		voucherNoAfiliadoReporte.setReservaCliente(r.getReservaCliente());
+    		voucherNoAfiliadoReporte.setPersonaJuridicaDni(r.getReservaCliente().getPersonaJuridicaDni());
+    		voucherNoAfiliadoReporte.setPersonaTelefonoFijo(r.getReservaCliente().getPersonaTelefonoFijo());
+    		voucherNoAfiliadoReporte.setPersonaMail(r.getReservaCliente().getPersonaMail());
+    		voucherNoAfiliadoReporte.setVoucherProducto(voucher.getVoucherProducto());
+    		voucherNoAfiliadoReporte.setVoucherFechaEntrada(voucher.getVoucherFechaEntrada());
+    		voucherNoAfiliadoReporte.setVoucherFechaSalida(voucher.getVoucherFechaSalida());
+    		voucherNoAfiliadoReporte.setVoucherCantidadNoches(voucher.getVoucherCantidadNoches());
+    		voucherNoAfiliadoReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
+    		voucherNoAfiliadoReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
+    		voucherNoAfiliadoReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		objectsReport.add(voucherNoAfiliadoReporte);
+    		jrxml = "VoucherNoAfiliado.jrxml";
+    	}
+
+    	if(voucher.getVoucherReserva().getClass()==ReservaEmpresa.class) {
+        	ReservaEmpresa r = (ReservaEmpresa) voucher.getVoucherReserva();
+        	
+    		VoucherEmpresaReporte voucherEmpresaReporte = new VoucherEmpresaReporte();
+    			
+    		voucherEmpresaReporte.setReservaCodigo(voucher.getVoucherReserva().getReservaCodigo());
+    		voucherEmpresaReporte.setReservaFecha(voucher.getVoucherReserva().getReservaFecha());
+    		voucherEmpresaReporte.setReservaCliente(r.getReservaCliente());
+    		voucherEmpresaReporte.setPersonaCuitCuil(r.getReservaCliente().getPersonaCuitCuil());
+    		voucherEmpresaReporte.setPersonaTelefonoFijo(r.getReservaCliente().getPersonaTelefonoFijo());
+    		voucherEmpresaReporte.setPersonaMail(r.getReservaCliente().getPersonaMail());
+    		voucherEmpresaReporte.setVoucherProducto(voucher.getVoucherProducto());
+    		voucherEmpresaReporte.setVoucherFechaEntrada(voucher.getVoucherFechaEntrada());
+    		voucherEmpresaReporte.setVoucherFechaSalida(voucher.getVoucherFechaSalida());
+    		voucherEmpresaReporte.setVoucherCantidadNoches(voucher.getVoucherCantidadNoches());
+    		voucherEmpresaReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
+    		voucherEmpresaReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
+    		voucherEmpresaReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		objectsReport.add(voucherEmpresaReporte);
+    		jrxml = "VoucherEmpresa.jrxml";
+    	}
+		
+		//String nombreArchivo = "VoucherAfiliado_"+this.getVoucherReserva().getReservaCodigo()+"_"+new SimpleDateFormat("dd/MM/yyyy").format(this.getVoucherFechaEntrada());
+		String nombreArchivo = "Voucher_"+voucher.getVoucherReserva().getReservaCodigo()+"_"+new SimpleDateFormat("dd/MM/yyyy").format(voucher.getVoucherFechaEntrada());
+		return reporteRepository.imprimirReporteIndividual(objectsReport,jrxml, nombreArchivo);
+    }
+    
+	public String validateImprimirVoucher(Voucher voucher) {
+		if (voucher.getVoucherEstado()!=EstadoVoucher.reservado)
+			return "NO SE PUEDE IMPRIMIR EL VOUCHER PORQUE SU ESTADO NO ES RESERVADO";
+		return "";
+	}
+	
+	public List<Voucher> choices0ImprimirVoucher(){
+		return this.getReservaListaVoucher();
+	}
+	
 	@Inject
 	VoucherRepository voucherRepository;
 	
 	@Inject
 	MessageService messageService;
+	
+	@Inject
+	ReporteRepository reporteRepository;
 }
