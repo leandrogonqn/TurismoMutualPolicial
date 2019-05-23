@@ -18,6 +18,8 @@ import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
+import domainapp.modules.simple.dom.politicas.Politicas;
+import domainapp.modules.simple.dom.politicas.PoliticasRepository;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 
@@ -34,11 +36,7 @@ public class ProductoMenu {
 			@Nullable @ParameterLayout(named = "Proveedor") @Parameter(optionality=Optionality.OPTIONAL) final Proveedor productoProveedor,
 			@ParameterLayout(named = "Categoria") final Categoria productoCategoria,
 			@ParameterLayout(named = "Localidad") final Localidad productoLocalidad) {
-		String productoPoliticas = "";
-		if (productoAlojamientoPropio==true) {
-			productoPoliticas = "Politicas Propias";
-		}
-		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad, productoPoliticas);
+		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad);
 	}
 
 	public List<Proveedor> choices2Crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
@@ -121,5 +119,7 @@ public class ProductoMenu {
 	
 	@Inject
 	LocalidadRepository localidadRepository;
+	@Inject
+	PoliticasRepository politicasRepository;
 
 }

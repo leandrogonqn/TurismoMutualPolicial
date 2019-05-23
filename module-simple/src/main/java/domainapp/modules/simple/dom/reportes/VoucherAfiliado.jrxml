@@ -22,9 +22,6 @@
 	<field name="reservaCliente" class="domainapp.modules.simple.dom.afiliado.Afiliado">
 		<fieldDescription><![CDATA[reservaCliente]]></fieldDescription>
 	</field>
-	<field name="personaJuridicaDni" class="java.lang.Integer">
-		<fieldDescription><![CDATA[personaJuridicaDni]]></fieldDescription>
-	</field>
 	<field name="personaTelefonoFijo" class="java.lang.Long">
 		<fieldDescription><![CDATA[personaTelefonoFijo]]></fieldDescription>
 	</field>
@@ -52,225 +49,226 @@
 	<field name="voucherObservaciones" class="java.lang.String">
 		<fieldDescription><![CDATA[voucherObservaciones]]></fieldDescription>
 	</field>
+	<field name="politicasTexto" class="java.lang.String">
+		<fieldDescription><![CDATA[politicasTexto]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="82" splitType="Stretch">
-			<frame>
-				<reportElement x="-20" y="0" width="595" height="80" uuid="950d24cb-097e-44a8-9da1-deae89225443"/>
-				<frame>
-					<reportElement mode="Opaque" x="0" y="8" width="595" height="54" backcolor="#2FB553" uuid="ebff5431-948c-462d-bbd7-9bff63df0f58"/>
-					<image>
-						<reportElement x="16" y="4" width="170" height="50" uuid="b644b22d-0840-403b-8e57-929292dabede"/>
-						<imageExpression><![CDATA["C:\\Users\\Lean\\eclipse-workspace\\TurismoMutualPolicial\\webapp\\src\\main\\webapp\\about\\images\\logo.png"]]></imageExpression>
-					</image>
-					<staticText>
-						<reportElement x="360" y="14" width="225" height="40" forecolor="#FFFFFF" uuid="6866b424-9a11-4f7b-8d62-302e8b362ac5"/>
-						<textElement>
-							<font fontName="Agency FB" size="20" isBold="true"/>
-						</textElement>
-						<text><![CDATA[Orden de servicio]]></text>
-					</staticText>
-				</frame>
-			</frame>
-		</band>
-	</title>
 	<pageHeader>
-		<band height="41" splitType="Stretch">
-			<staticText>
-				<reportElement x="36" y="8" width="94" height="23" uuid="11559c3c-eea8-46ad-ab58-502d684a0578"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<text><![CDATA[Voucher Nº]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="130" y="8" width="135" height="23" uuid="c2daa8f3-31fe-4599-a125-1fc279f89e39"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{reservaCodigo}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="348" y="8" width="50" height="21" uuid="7ff0b2cb-b969-4028-8391-859941621edc"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<text><![CDATA[Fecha:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="400" y="8" width="133" height="21" uuid="24c82d7e-08f4-4d6f-a880-3ed63f8228fd"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{reservaFecha})]]></textFieldExpression>
-			</textField>
+		<band height="76" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="0" width="595" height="54" backcolor="#2FB553" uuid="d85e5b0c-20b0-4ea6-9b1a-ccfc6cd0c358"/>
+				<image>
+					<reportElement x="16" y="4" width="170" height="50" uuid="f08cd31f-44b1-44c9-9059-b17c7575e0d3"/>
+					<imageExpression><![CDATA["C:\\Users\\Lean\\eclipse-workspace\\TurismoMutualPolicial\\webapp\\src\\main\\webapp\\about\\images\\logo.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="360" y="14" width="225" height="40" forecolor="#FFFFFF" uuid="013012ab-0bba-4140-96f3-1db64736ce47"/>
+					<textElement>
+						<font fontName="Agency FB" size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Orden de servicio]]></text>
+				</staticText>
+			</frame>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="502" splitType="Stretch">
+		<band height="655" splitType="Stretch">
 			<staticText>
-				<reportElement x="19" y="110" width="51" height="20" uuid="076a402f-4962-43b6-95df-c3a8fdec58bb"/>
+				<reportElement x="19" y="184" width="51" height="20" uuid="076a402f-4962-43b6-95df-c3a8fdec58bb"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telefono:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="199" y="110" width="42" height="20" uuid="845ebb48-cf28-4fcb-a558-c7a81a377350"/>
+				<reportElement x="199" y="184" width="42" height="20" uuid="845ebb48-cf28-4fcb-a558-c7a81a377350"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Mail:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="110" width="130" height="20" uuid="9cfcadaa-2713-475e-a1fe-4b5dcb5bd115"/>
+				<reportElement x="70" y="184" width="130" height="20" uuid="9cfcadaa-2713-475e-a1fe-4b5dcb5bd115"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{personaTelefonoFijo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="241" y="110" width="324" height="20" uuid="48204be2-a417-4834-83c1-37222603eab2"/>
+				<reportElement x="241" y="185" width="324" height="20" uuid="48204be2-a417-4834-83c1-37222603eab2"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{personaMail}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="20" y="85" width="545" height="20" uuid="29e0a7ec-315e-4d37-bcbe-26647a9ad47c"/>
+				<reportElement x="20" y="159" width="545" height="20" uuid="29e0a7ec-315e-4d37-bcbe-26647a9ad47c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{reservaCliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="53" width="290" height="23" uuid="b4728344-a60c-4f73-b021-4aefddbcc4f8"/>
+				<reportElement x="20" y="127" width="290" height="23" uuid="b4728344-a60c-4f73-b021-4aefddbcc4f8"/>
 				<textElement>
 					<font size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DATOS DEL CLIENTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="185" width="290" height="23" uuid="d55bd686-1a5f-47f3-b1ba-384651b448dc"/>
+				<reportElement x="20" y="259" width="290" height="23" uuid="d55bd686-1a5f-47f3-b1ba-384651b448dc"/>
 				<textElement>
 					<font size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DATOS DE LA RESERVA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="19" y="245" width="60" height="20" uuid="c9a3a3f0-e123-48ad-b209-6900df71edc1"/>
+				<reportElement x="19" y="319" width="60" height="20" uuid="c9a3a3f0-e123-48ad-b209-6900df71edc1"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Entrada:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="209" y="245" width="50" height="20" uuid="a5632259-74ea-407a-a62a-7d06fbc5253a"/>
+				<reportElement x="209" y="319" width="50" height="20" uuid="a5632259-74ea-407a-a62a-7d06fbc5253a"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Salida:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="245" width="130" height="20" uuid="cac9dbe2-7e0d-4b30-b26b-a85000fde288"/>
+				<reportElement x="79" y="319" width="130" height="20" uuid="cac9dbe2-7e0d-4b30-b26b-a85000fde288"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{voucherFechaEntrada})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="220" width="60" height="21" uuid="f233a557-7047-42ab-9828-1a4fbc837aba"/>
+				<reportElement x="20" y="294" width="60" height="21" uuid="f233a557-7047-42ab-9828-1a4fbc837aba"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Producto:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="79" y="220" width="486" height="21" uuid="41cd9054-7745-45f0-a743-e49f450a140e"/>
+				<reportElement x="79" y="294" width="486" height="21" uuid="41cd9054-7745-45f0-a743-e49f450a140e"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherProducto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="259" y="245" width="150" height="20" uuid="38a4ccf1-80b1-43ab-9a14-6b07d85db42b"/>
+				<reportElement x="259" y="319" width="150" height="20" uuid="38a4ccf1-80b1-43ab-9a14-6b07d85db42b"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{voucherFechaSalida})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="409" y="245" width="60" height="20" uuid="ac3400e8-8cc0-4b6d-960e-ea36199242de"/>
+				<reportElement x="409" y="319" width="60" height="20" uuid="ac3400e8-8cc0-4b6d-960e-ea36199242de"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Noches:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="465" y="245" width="75" height="20" uuid="8d3fbfb2-2fa1-439a-8ac5-0dbcff3f0cec"/>
+				<reportElement x="465" y="319" width="75" height="20" uuid="8d3fbfb2-2fa1-439a-8ac5-0dbcff3f0cec"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherCantidadNoches}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="268" width="140" height="20" uuid="163be47b-abc5-470d-b71f-88a569fb66e6"/>
+				<reportElement x="20" y="342" width="140" height="20" uuid="163be47b-abc5-470d-b71f-88a569fb66e6"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cantidad Pasajeros:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="210" y="268" width="50" height="20" uuid="11aef388-e529-4401-bdce-3e394ebf4afb"/>
+				<reportElement x="210" y="342" width="50" height="20" uuid="11aef388-e529-4401-bdce-3e394ebf4afb"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Precio:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="160" y="268" width="49" height="20" uuid="d614a919-b465-4beb-86bd-62def5a971a8"/>
+				<reportElement x="160" y="342" width="49" height="20" uuid="d614a919-b465-4beb-86bd-62def5a971a8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherCantidadPasajeros}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="259" y="268" width="150" height="20" uuid="1862348c-d8e7-468b-82dd-216d721842b6"/>
+				<reportElement x="259" y="342" width="150" height="20" uuid="1862348c-d8e7-468b-82dd-216d721842b6"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherPrecioTotal}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="20" y="303" width="110" height="20" uuid="c647e263-572d-43ea-ab28-c061182d5ec6"/>
+				<reportElement x="20" y="377" width="110" height="20" uuid="c647e263-572d-43ea-ab28-c061182d5ec6"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Observaciones:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="20" y="323" width="524" height="157" uuid="ada519b7-924b-46c0-9bd8-cfb7ed109962"/>
+				<reportElement x="20" y="397" width="524" height="247" uuid="ada519b7-924b-46c0-9bd8-cfb7ed109962"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherObservaciones}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="20" width="555" height="1" uuid="e3f6e569-2ed3-42d0-bd4f-567f48fe6c1c"/>
+				<reportElement x="0" y="93" width="555" height="1" uuid="e3f6e569-2ed3-42d0-bd4f-567f48fe6c1c"/>
 			</line>
 			<line>
-				<reportElement x="0" y="161" width="555" height="1" uuid="15006a2b-2dd7-4a84-b3e0-d57247daa0d8"/>
+				<reportElement x="0" y="235" width="555" height="1" uuid="15006a2b-2dd7-4a84-b3e0-d57247daa0d8"/>
 			</line>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="16" y="39" width="94" height="23" uuid="11559c3c-eea8-46ad-ab58-502d684a0578"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Voucher Nº]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="465" y="12" width="100" height="30" uuid="5c3238db-5bf5-4d54-8af3-1552fe0fe4aa"/>
-				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<reportElement x="110" y="39" width="135" height="23" uuid="c2daa8f3-31fe-4599-a125-1fc279f89e39"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reservaCodigo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="328" y="39" width="50" height="21" uuid="7ff0b2cb-b969-4028-8391-859941621edc"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="39" width="133" height="21" uuid="24c82d7e-08f4-4d6f-a880-3ed63f8228fd"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{reservaFecha})]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageFooter>
+		<band height="50"/>
+		<band height="726">
+			<textField>
+				<reportElement x="13" y="49" width="524" height="651" uuid="c5fdcadf-23c1-4151-890e-f6e5fec088a6"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{politicasTexto}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="10" width="575" height="1" uuid="437e3598-a0d6-4732-8ca8-a9cca7ae9c59"/>
+			</break>
+		</band>
+	</detail>
 </jasperReport>

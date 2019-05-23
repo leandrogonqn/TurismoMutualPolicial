@@ -1,6 +1,9 @@
 package domainapp.modules.simple.dom.producto;
 
 import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.QueryDefault;
@@ -9,15 +12,18 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 
 import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.localidad.Localidad;
+import domainapp.modules.simple.dom.politicas.Politicas;
+import domainapp.modules.simple.dom.politicas.PoliticasRepository;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Producto.class)
 public class ProductoRepository {
 	
 	public Producto crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
-			final Categoria productoCategoria, final Localidad productoLocalidad, String productoPoliticas) {
+			final Categoria productoCategoria, final Localidad productoLocalidad) {
+		List<Politicas> listaPoliticas = politicasRepository.listar(); 
 		final Producto object = new Producto(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, 
-				productoLocalidad, productoPoliticas);
+				productoLocalidad, listaPoliticas);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;
@@ -59,4 +65,6 @@ public class ProductoRepository {
 	RepositoryService repositoryService;
 	@javax.inject.Inject
 	ServiceRegistry2 serviceRegistry;
+	@Inject
+	PoliticasRepository politicasRepository;
 }

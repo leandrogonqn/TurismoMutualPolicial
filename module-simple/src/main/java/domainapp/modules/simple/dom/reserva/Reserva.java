@@ -172,6 +172,7 @@ public abstract class Reserva {
     		voucherAfiliadoReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
     		voucherAfiliadoReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
     		voucherAfiliadoReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		voucherAfiliadoReporte.setPoliticasTexto(voucher.getVoucherProducto().getProductoPoliticas().getPoliticasTexto());
     		objectsReport.add(voucherAfiliadoReporte);
     		jrxml = "VoucherAfiliado.jrxml";
     	}
@@ -194,6 +195,7 @@ public abstract class Reserva {
     		voucherNoAfiliadoReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
     		voucherNoAfiliadoReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
     		voucherNoAfiliadoReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		voucherNoAfiliadoReporte.setPoliticasTexto(voucher.getVoucherProducto().getProductoPoliticas().getPoliticasTexto());
     		objectsReport.add(voucherNoAfiliadoReporte);
     		jrxml = "VoucherNoAfiliado.jrxml";
     	}
@@ -216,6 +218,7 @@ public abstract class Reserva {
     		voucherEmpresaReporte.setVoucherCantidadPasajeros(voucher.getVoucherCantidadPasajeros());
     		voucherEmpresaReporte.setVoucherPrecioTotal(voucher.getVoucherPrecioTotal());
     		voucherEmpresaReporte.setVoucherObservaciones(voucher.getVoucherObservaciones());
+    		voucherEmpresaReporte.setPoliticasTexto(voucher.getVoucherProducto().getProductoPoliticas().getPoliticasTexto());
     		objectsReport.add(voucherEmpresaReporte);
     		jrxml = "VoucherEmpresa.jrxml";
     	}

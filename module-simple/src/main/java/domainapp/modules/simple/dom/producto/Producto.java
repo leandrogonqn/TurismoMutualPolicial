@@ -30,6 +30,8 @@ import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
+import domainapp.modules.simple.dom.politicas.Politicas;
+import domainapp.modules.simple.dom.politicas.PoliticasRepository;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
@@ -73,13 +75,15 @@ public class Producto implements Comparable<Producto> {
 
 	// Constructor
 	public Producto(int productoCodigo, boolean productoAlojamientoPropio, Proveedor productoProveedor, Categoria productoCategoria,
-			Localidad productoLocalidad, String productoPoliticas) {
+			Localidad productoLocalidad, List<Politicas> listaPoliticas) {
 		setProductoCodigo(productoCodigo);
 		setProductoAlojamientoPropio(productoAlojamientoPropio);
 		setProductoProveedor(productoProveedor);
 		setProductoCategoria(productoCategoria);
 		setProductoLocalidad(productoLocalidad);
-		setProductoPoliticas(productoPoliticas);
+		if (productoAlojamientoPropio==true & !listaPoliticas.isEmpty()) {
+			setProductoPoliticas(listaPoliticas.get(0));
+		}
 		this.productoHabilitado = true;
 	}
 
@@ -164,13 +168,13 @@ public class Producto implements Comparable<Producto> {
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Politicas")
-	private String productoPoliticas;
+	private Politicas productoPoliticas;
 
-	public String getProductoPoliticas() {
+	public Politicas getProductoPoliticas() {
 		return productoPoliticas;
 	}
 
-	public void setProductoPoliticas(String productoPoliticas) {
+	public void setProductoPoliticas(Politicas productoPoliticas) {
 		this.productoPoliticas = productoPoliticas;
 	}	
 	
@@ -265,13 +269,17 @@ public class Producto implements Comparable<Producto> {
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoPoliticas")
-	public Producto actualizarPoliticas(@ParameterLayout(named = "Politicas") final String productoPoliticas) {
+	public Producto actualizarPoliticas(@ParameterLayout(named = "Politicas") final Politicas productoPoliticas) {
 		setProductoPoliticas(productoPoliticas);
 		return this;
 	}
 
-	public String default0ActualizarPoliticas() {
+	public Politicas default0ActualizarPoliticas() {
 		return getProductoPoliticas();
+	}
+	
+	public List<Politicas> choices0ActualizarPoliticas() {
+		return politicasRepository.listar();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoHabilitado")
@@ -400,6 +408,9 @@ public class Producto implements Comparable<Producto> {
 	
 	@Inject
 	PrecioHistoricoRepository precioHistoricoRepository;
+	
+	@Inject
+	PoliticasRepository politicasRepository;
 
 	// endregion
 }

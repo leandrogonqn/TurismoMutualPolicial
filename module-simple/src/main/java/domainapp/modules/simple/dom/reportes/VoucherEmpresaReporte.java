@@ -135,4 +135,14 @@ public class VoucherEmpresaReporte {
 		this.voucherObservaciones=voucherObservaciones;
 	}
 	
+	private String politicasTexto;
+
+	public String getPoliticasTexto() {
+		return politicasTexto;
+	}
+
+	public void setPoliticasTexto(String politicasTexto) {
+		this.politicasTexto = politicasTexto;
+	}
+	
 }
