@@ -57,20 +57,19 @@ public class Empresa implements Comparable<Empresa> {
 	}
 
 	public Empresa(String empresaRazonSocial, String personaCuitCuil, String personaDireccion, 
-			Localidad personaLocalidad,	Long personaTelefonoFijo, Long personaTelefonoCelular, String personaMail) {
+			Localidad personaLocalidad,	String personaTelefono, String personaMail) {
 		setEmpresaRazonSocial(empresaRazonSocial);
 		setPersonaCuitCuil(personaCuitCuil);
 		setPersonaDireccion(personaDireccion);
 		setPersonaLocalidad(personaLocalidad);
-		setPersonaTelefonoFijo(personaTelefonoFijo);
-		setPersonaTelefonoCelular(personaTelefonoCelular);
+		setPersonaTelefono(personaTelefono);
 		setPersonaMail(personaMail);
 		setPersonaHabilitado(true);
 	}
 	// endregion
 
 	// region > name (read-only property)
-	public static final int NAME_LENGTH = 40;
+	public static final int NAME_LENGTH = 30;
 
 	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
 	@Property(editing = Editing.DISABLED)
@@ -127,35 +126,21 @@ public class Empresa implements Comparable<Empresa> {
 		this.personaLocalidad = personaLocalidad;
 	}
 
-   @javax.jdo.annotations.Column(allowsNull = "true")
+   @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
    @Property(
            editing = Editing.DISABLED
    )
-   @PropertyLayout(named="Telefono Fijo")
-   private Long personaTelefonoFijo;
+   @PropertyLayout(named="Telefono")
+   private String personaTelefono;
 
-   public Long getPersonaTelefonoFijo() {
-		return personaTelefonoFijo;
+   public String getPersonaTelefono() {
+		return personaTelefono;
 	}
-	public void setPersonaTelefonoFijo(Long personaTelefonoFijo) {
-		this.personaTelefonoFijo = personaTelefonoFijo;
+	public void setPersonaTelefono(String personaTelefono) {
+		this.personaTelefono = personaTelefono;
 	}	
 	
-   @javax.jdo.annotations.Column(allowsNull = "true")
-   @Property(
-           editing = Editing.DISABLED
-   )
-   @PropertyLayout(named="Telefono Celular")
-   private Long personaTelefonoCelular;
-
-   public Long getPersonaTelefonoCelular() {
-		return personaTelefonoCelular;
-	}
-	public void setPersonaTelefonoCelular(Long personaTelefonoCelular) {
-		this.personaTelefonoCelular = personaTelefonoCelular;
-	}	
-
-   @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+   @javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
    @Property(
            editing = Editing.DISABLED
    )
@@ -228,38 +213,15 @@ public class Empresa implements Comparable<Empresa> {
 	public String default0ActualizarDireccion() {
 		return getPersonaDireccion();
 	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaTelefonoFijo")
-	public Empresa actualizarTelefonos(@Nullable @ParameterLayout(named = "Teléfono Fijo") @Parameter(optionality = Optionality.OPTIONAL, maxLength=10) final Long personaTelefonoFijo,
-			@Nullable @ParameterLayout(named = "Teléfono Celular") @Parameter(optionality = Optionality.OPTIONAL, maxLength=12) final Long personaTelefonoCelular) {
-		setPersonaTelefonoFijo(personaTelefonoFijo);
-		setPersonaTelefonoCelular(personaTelefonoCelular);
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoTelefono")
+	public Empresa actualizarTelefono(@ParameterLayout(named = "Telefono") final String afiliadoTelefono) {
+		setPersonaTelefono(afiliadoTelefono);
 		return this;
 	}
 
-	public Long default0ActualizarTelefonos() {
-		return getPersonaTelefonoFijo();
-	}
-	
-	public Long default1ActualizarTelefonos() {
-		return getPersonaTelefonoCelular();
-	}
-	
-	public String validateActualizarTelefonos(final Long afiliadoTelefonoFijo, final Long afiliadoTelefonoCelular) {
-		if (afiliadoTelefonoFijo == null & afiliadoTelefonoCelular == null) {
-			return "Se tiene que cargar un numero de telefono, no puede quedar telefono fijo y telefono celular vacio";
-		}
-		
-		if(afiliadoTelefonoFijo!=null)
-		if (afiliadoTelefonoFijo.toString().length()<10) {
-			return "Error: para el numero fijo se tiene que ingresar 10 digitos";
-		}
-		
-		if (afiliadoTelefonoCelular!=null)
-		if (afiliadoTelefonoCelular.toString().length()<12) {
-			return "Error: para el numero celular se tiene que ingresar 12 digitos";
-		}
-		return "";
+	public String default0ActualizarTelefono() {
+		return getPersonaTelefono();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoMail")

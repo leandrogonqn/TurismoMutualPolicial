@@ -26,11 +26,9 @@
                                 <c:property id="personaLocalidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaTelefonoFijo" namedEscaped="true">
-                                <c:action id="actualizarTelefonos" position="RIGHT"></c:action>
+                                <c:property id="personaTelefono" namedEscaped="true">
+                                <c:action id="actualizarTelefono" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaTelefonoCelular" namedEscaped="true">
-                                </c:property>                                
 								<c:property id="personaMail" namedEscaped="true">
 								<c:action id="actualizarMail" position="RIGHT"></c:action>
                                 </c:property>

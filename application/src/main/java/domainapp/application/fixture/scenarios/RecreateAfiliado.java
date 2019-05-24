@@ -36,11 +36,8 @@ public class RecreateAfiliado extends FixtureScript {
     public final List<String> direcciones = Collections.unmodifiableList(Arrays.asList(
     		"Salta 123"));
     
-    public final List<String> telefonoFijo = Collections.unmodifiableList(Arrays.asList(
+    public final List<String> telefono = Collections.unmodifiableList(Arrays.asList(
     		"2994471351"));  
-    
-    public final List<String> telefonoCelular = Collections.unmodifiableList(Arrays.asList(
-    		"299154769431"));
     
     public final List<String> emails = Collections.unmodifiableList(Arrays.asList(
     		"juan.perez@ejemplo.com"));
@@ -106,8 +103,7 @@ public class RecreateAfiliado extends FixtureScript {
             fs.setCuitCuil(cuitCuil.get(i));
             fs.setDireccion(direcciones.get(i));
             fs.setLocalidad(localidadesRepository.listarHabilitados().get(0));
-            fs.setTelefonoFijo(Long.parseLong(telefonoFijo.get(i)));
-            fs.setTelefonoCelular(Long.parseLong(telefonoCelular.get(i))); 
+            fs.setTelefono(telefono.get(i));
             fs.setEmail(emails.get(i));
             fs.setCBU(CBU.get(i));
             ec.executeChild(this, fs.getName(), fs);

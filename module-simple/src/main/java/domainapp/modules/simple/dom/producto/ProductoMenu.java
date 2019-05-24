@@ -35,12 +35,15 @@ public class ProductoMenu {
 			@ParameterLayout(named = "Es alojamiento propio?") final boolean productoAlojamientoPropio,
 			@Nullable @ParameterLayout(named = "Proveedor") @Parameter(optionality=Optionality.OPTIONAL) final Proveedor productoProveedor,
 			@ParameterLayout(named = "Categoria") final Categoria productoCategoria,
-			@ParameterLayout(named = "Localidad") final Localidad productoLocalidad) {
-		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoLocalidad);
+			@Nullable @ParameterLayout(named = "Direccion") @Parameter(optionality=Optionality.OPTIONAL) final String productoDireccion,
+			@ParameterLayout(named = "Localidad") final Localidad productoLocalidad,
+			@Nullable @ParameterLayout(named = "Telefono") @Parameter(optionality=Optionality.OPTIONAL) final String productoTelefono) {
+		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoDireccion,
+				productoLocalidad, productoTelefono);
 	}
 
 	public List<Proveedor> choices2Crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
-			final Categoria productoCategoria, final Localidad productoLocalidad) {
+			final Categoria productoCategoria, final String productoDireccion, final Localidad productoLocalidad, final String productoTelefono) {
 		if (productoAlojamientoPropio==true)
 			return null;
 		return proveedorRepository.listarHabilitados();
@@ -50,12 +53,12 @@ public class ProductoMenu {
 		return categoriaRepository.listarHabilitados();
 	}
 	
-	public List<Localidad> choices4Crear(){
+	public List<Localidad> choices5Crear(){
 		return localidadRepository.listarHabilitados();
 	}
 	
 	public String validateCrear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
-			final Categoria productoCategoria, final Localidad productoLocalidad) {
+			final Categoria productoCategoria, final String productoDireccion, final Localidad productoLocalidad, final String productoTelefono) {
 		if(productoAlojamientoPropio==false & productoProveedor == null)
 			return "Si el alojamiento no es propio el proveedor no puede ser nulo";
 		return "";

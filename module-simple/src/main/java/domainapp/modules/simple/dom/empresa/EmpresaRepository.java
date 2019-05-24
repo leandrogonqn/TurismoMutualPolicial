@@ -30,9 +30,9 @@ public class EmpresaRepository {
 	}
 
 	public Empresa crear(String empresaRazonSocial, String personaCuitCuil, String personaDireccion, 
-			Localidad personaLocalidad,	Long personaTelefonoFijo, Long personaTelefonoCelular, String personaMail) {
+			Localidad personaLocalidad,	String personaTelefono, String personaMail) {
 		final Empresa object = new Empresa(empresaRazonSocial, personaCuitCuil, personaDireccion, personaLocalidad,
-				personaTelefonoFijo, personaTelefonoCelular, personaMail);
+				personaTelefono, personaMail);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

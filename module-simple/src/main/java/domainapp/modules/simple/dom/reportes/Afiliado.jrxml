@@ -29,11 +29,8 @@
 	<field name="personaLocalidad" class="domainapp.modules.simple.dom.localidad.Localidad">
 		<fieldDescription><![CDATA[personaLocalidad]]></fieldDescription>
 	</field>
-	<field name="personaTelefonoFijo" class="java.lang.Long">
+	<field name="personaTelefono" class="java.lang.String">
 		<fieldDescription><![CDATA[personaTelefonoFijo]]></fieldDescription>
-	</field>
-	<field name="personaTelefonoCelular" class="java.lang.Long">
-		<fieldDescription><![CDATA[personaTelefonoCelular]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>

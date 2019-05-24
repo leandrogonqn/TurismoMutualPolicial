@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
+import domainapp.modules.simple.dom.empresa.Empresa;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 import domainapp.modules.simple.dom.politicas.Politicas;
@@ -75,12 +76,14 @@ public class Producto implements Comparable<Producto> {
 
 	// Constructor
 	public Producto(int productoCodigo, boolean productoAlojamientoPropio, Proveedor productoProveedor, Categoria productoCategoria,
-			Localidad productoLocalidad, List<Politicas> listaPoliticas) {
+			String productoDireccion, Localidad productoLocalidad, String productoTelefono, List<Politicas> listaPoliticas) {
 		setProductoCodigo(productoCodigo);
 		setProductoAlojamientoPropio(productoAlojamientoPropio);
 		setProductoProveedor(productoProveedor);
 		setProductoCategoria(productoCategoria);
+		setPersonaDireccion(productoTelefono);
 		setProductoLocalidad(productoLocalidad);
+		setPersonaTelefono(productoTelefono);
 		if (productoAlojamientoPropio==true & !listaPoliticas.isEmpty()) {
 			setProductoPoliticas(listaPoliticas.get(0));
 		}
@@ -139,6 +142,19 @@ public class Producto implements Comparable<Producto> {
 		this.productoCategoria = productoCategoria;
 	}	
 	
+	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Direccion", hidden = Where.ALL_TABLES)
+	private String personaDireccion;
+
+	public String getPersonaDireccion() {
+		return personaDireccion;
+	}
+
+	public void setPersonaDireccion(String personaDireccion) {
+		this.personaDireccion = personaDireccion;
+	}
+
 	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Localidad")
@@ -150,8 +166,21 @@ public class Producto implements Comparable<Producto> {
 
 	public void setProductoLocalidad(Localidad productoLocalidad) {
 		this.productoLocalidad = productoLocalidad;
-	}	
-	
+	}
+
+	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Telefono")
+	private String personaTelefono;
+
+	public String getPersonaTelefono() {
+		return personaTelefono;
+	}
+
+	public void setPersonaTelefono(String personaTelefono) {
+		this.personaTelefono = personaTelefono;
+	}
+
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Necesita Autorizacion?")
@@ -256,6 +285,26 @@ public class Producto implements Comparable<Producto> {
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
 		return localidadRepository.listarHabilitados();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoDireccion")
+	public Producto actualizarDireccion(@ParameterLayout(named = "Direccion") final String afiliadoDireccion) {
+		setPersonaDireccion(afiliadoDireccion);
+		return this;
+	}
+
+	public String default0ActualizarDireccion() {
+		return getPersonaDireccion();
+	}
+	
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoTelefono")
+	public Producto actualizarTelefono(@ParameterLayout(named = "Telefono") final String afiliadoTelefono) {
+		setPersonaTelefono(afiliadoTelefono);
+		return this;
+	}
+
+	public String default0ActualizarTelefono() {
+		return getPersonaTelefono();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoAutorizacion")

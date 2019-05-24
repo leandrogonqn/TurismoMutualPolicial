@@ -22,8 +22,8 @@
 	<field name="reservaCliente" class="domainapp.modules.simple.dom.afiliado.Afiliado">
 		<fieldDescription><![CDATA[reservaCliente]]></fieldDescription>
 	</field>
-	<field name="personaTelefonoFijo" class="java.lang.Long">
-		<fieldDescription><![CDATA[personaTelefonoFijo]]></fieldDescription>
+	<field name="personaTelefono" class="java.lang.String">
+		<fieldDescription><![CDATA[personaTelefono]]></fieldDescription>
 	</field>
 	<field name="personaMail" class="java.lang.String">
 		<fieldDescription><![CDATA[personaMail]]></fieldDescription>
@@ -59,10 +59,6 @@
 		<band height="76" splitType="Stretch">
 			<frame>
 				<reportElement mode="Opaque" x="-20" y="0" width="595" height="54" backcolor="#2FB553" uuid="d85e5b0c-20b0-4ea6-9b1a-ccfc6cd0c358"/>
-				<image>
-					<reportElement x="16" y="4" width="170" height="50" uuid="f08cd31f-44b1-44c9-9059-b17c7575e0d3"/>
-					<imageExpression><![CDATA["C:\\Users\\Lean\\eclipse-workspace\\TurismoMutualPolicial\\webapp\\src\\main\\webapp\\about\\images\\logo.png"]]></imageExpression>
-				</image>
 				<staticText>
 					<reportElement x="360" y="14" width="225" height="40" forecolor="#FFFFFF" uuid="013012ab-0bba-4140-96f3-1db64736ce47"/>
 					<textElement>
@@ -70,6 +66,10 @@
 					</textElement>
 					<text><![CDATA[Orden de servicio]]></text>
 				</staticText>
+				<image>
+					<reportElement x="20" y="4" width="170" height="56" uuid="e7578773-7d4c-4a15-9abb-31082e190d83"/>
+					<imageExpression><![CDATA["C:/Users/logo.png"]]></imageExpression>
+				</image>
 			</frame>
 		</band>
 	</pageHeader>
@@ -94,7 +94,7 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{personaTelefonoFijo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{personaTelefono}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="241" y="185" width="324" height="20" uuid="48204be2-a417-4834-83c1-37222603eab2"/>
@@ -257,18 +257,33 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{reservaFecha})]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="50"/>
+		<band height="54">
+			<staticText>
+				<reportElement x="280" y="10" width="257" height="44" uuid="c613e471-fdd6-4581-a5c9-d027b2fc5e75"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Firma _______________________]]></text>
+			</staticText>
+		</band>
 		<band height="726">
 			<textField>
-				<reportElement x="13" y="49" width="524" height="651" uuid="c5fdcadf-23c1-4151-890e-f6e5fec088a6"/>
+				<reportElement x="13" y="49" width="524" height="613" uuid="c5fdcadf-23c1-4151-890e-f6e5fec088a6"/>
 				<textElement>
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{politicasTexto}]]></textFieldExpression>
 			</textField>
 			<break>
 				<reportElement x="0" y="10" width="575" height="1" uuid="437e3598-a0d6-4732-8ca8-a9cca7ae9c59"/>
 			</break>
+			<staticText>
+				<reportElement x="270" y="662" width="257" height="44" uuid="b767c948-6cc8-46be-b1c4-5d1c3f14cfc6"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Firma _______________________]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

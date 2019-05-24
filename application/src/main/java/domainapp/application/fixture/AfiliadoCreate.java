@@ -99,22 +99,13 @@ public class AfiliadoCreate extends FixtureScript {
     	return this;
     }
     
-   	private Long telefonoFijo;
-   	public Long getTelefonoFijo() {
-   		return telefonoFijo;
+   	private String telefono;
+   	public String getTelefono() {
+   		return telefono;
    	}
 
-   	public void setTelefonoFijo(Long telefonoFijo) {
-   		this.telefonoFijo = telefonoFijo;
-   	}
-   	
-   	private Long telefonoCelular;
-   	public Long getTelefonoCelular() {
-   		return telefonoCelular;
-   	}
-
-   	public void setTelefonoCelular(Long telefonoCelular) {
-   		this.telefonoCelular = telefonoCelular;
+   	public void setTelefono(String telefono) {
+   		this.telefono = telefono;
    	}
    	
    	private String email;
@@ -161,7 +152,7 @@ public class AfiliadoCreate extends FixtureScript {
         String apellido = checkParam("apellido", ec, String.class);
         int dni = checkParam("dni", ec, Integer.class);
 
-        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefonoFijo, telefonoCelular, email, CBU);
+        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefono, email, CBU);
 
         // also make available to UI
         ec.addResult(this, simpleObject);

@@ -47,13 +47,13 @@ public class VoucherEmpresaReporte {
 		this.personaCuitCuil = personaCuitCuil;
 	}
 	
-	private Long personaTelefonoFijo;
+	private String personaTelefono;
 
-	public Long getPersonaTelefonoFijo() {
-		return personaTelefonoFijo;
+	public String getPersonaTelefono() {
+		return personaTelefono;
 	}
-	public void setPersonaTelefonoFijo(Long personaTelefonoFijo) {
-		this.personaTelefonoFijo = personaTelefonoFijo;
+	public void setPersonaTelefono(String personaTelefono) {
+		this.personaTelefono = personaTelefono;
 	}	
 		
 	private String personaMail;

@@ -15,9 +15,9 @@ public class ClienteNoAfiliadoRepository {
 
 	public ClienteNoAfiliado crear(final int personaDni, final String personaApellido, final String personaNombre, 
 			final String personaCuitCuil, final String personaDireccion, Localidad personaLocalidad, 
-			 final Long personaTelefonoFijo, final Long personaTelefonoCelular, final String personaMail) {
+			 final String personaTelefono, final String personaMail) {
 		final ClienteNoAfiliado object = new ClienteNoAfiliado(personaDni, personaApellido, personaNombre, 
-				personaCuitCuil, personaDireccion, personaLocalidad, personaTelefonoFijo, personaTelefonoCelular, personaMail);
+				personaCuitCuil, personaDireccion, personaLocalidad, personaTelefono, personaMail);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

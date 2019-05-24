@@ -35,12 +35,11 @@ public class AfiliadoMenu {
 			@Nullable @ParameterLayout(named = "Cuit/Cuil") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoCuitCuil,
 			@Nullable @ParameterLayout(named = "Dirección") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoDireccion,
 			@Nullable @ParameterLayout(named = "Localidad") @Parameter(optionality = Optionality.OPTIONAL) final Localidad afiliadoLocalidad,
-			@Nullable @ParameterLayout(named = "Teléfono Fijo") @Parameter(optionality = Optionality.OPTIONAL, maxLength=10) final Long afiliadoTelefonoFijo,
-			@Nullable @ParameterLayout(named = "Teléfono Celular") @Parameter(optionality = Optionality.OPTIONAL, maxLength=12) final Long afiliadoTelefonoCelular,
+			@ParameterLayout(named = "Teléfono") final String afiliadoTelefono,
 			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoMail,
 			@Nullable @ParameterLayout(named = "CBU") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoCBU) {
 		return afiliadoRepository.crearCompleto(afiliadoEstado, afiliadoLP, afiliadoNombre, afiliadoApellido, afiliadoDni, afiliadoCuitCuil, 
-				 afiliadoDireccion, afiliadoLocalidad, afiliadoTelefonoFijo, afiliadoTelefonoCelular, afiliadoMail, afiliadoCBU);
+				 afiliadoDireccion, afiliadoLocalidad, afiliadoTelefono, afiliadoMail, afiliadoCBU);
 	}
 	
 	public List<Localidad> choices7Crear() {
@@ -50,7 +49,7 @@ public class AfiliadoMenu {
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22
 	public String validateCrear(final TipoAfiliado afiliadoEstado, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
 			final String afiliadoNombre, final String afiliadoCuitCuil,	final String afiliadoDireccion, final Localidad afiliadoLocalidad,  
-			final Long afiliadoTelefonoFijo, final Long afiliadoTelefonoCelular, final String afiliadoMail, final String afiliadoCBU) {
+			final String afiliadoTelefono, final String afiliadoMail, final String afiliadoCBU) {
         if (isNumeric(afiliadoLP) == false) {
             return "Todos los caracteres del LP deben ser numericos";
         }
@@ -61,20 +60,6 @@ public class AfiliadoMenu {
 		
 		if (Integer.toString(afiliadoDni).length()<6)
 			return "Largo del dni incorrecto";
-		
-		if (afiliadoTelefonoFijo == null & afiliadoTelefonoCelular == null) {
-			return "Se tiene que cargar un numero de telefono, no puede quedar telefono fijo y telefono celular vacio";
-		}
-		
-		if(afiliadoTelefonoFijo!=null)
-		if (afiliadoTelefonoFijo.toString().length()<10) {
-			return "Error: para el numero fijo se tiene que ingresar 10 digitos";
-		}
-		
-		if (afiliadoTelefonoCelular!=null)
-		if (afiliadoTelefonoCelular.toString().length()<12) {
-			return "Error: para el numero celular se tiene que ingresar 12 digitos";
-		}
 		
 		if (afiliadoMail != null){
 			// Patrón para validar el email

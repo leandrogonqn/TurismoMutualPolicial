@@ -37,11 +37,10 @@ public class ClienteNoAfiliadoMenu {
 			@Nullable @ParameterLayout(named = "Cuit/Cuil") @Parameter(optionality = Optionality.OPTIONAL) final String personaCuitCuil,
 			@Nullable @ParameterLayout(named = "Domicilio") @Parameter(optionality = Optionality.OPTIONAL) final String personaDireccion,
 			@Nullable @ParameterLayout(named = "Localidad") @Parameter(optionality = Optionality.OPTIONAL) final Localidad personaLocalidad,
-			@Nullable @ParameterLayout(named = "Teléfono Fijo (con caracteristica sin el 0)") @Parameter(optionality=Optionality.OPTIONAL, maxLength=10) final Long personaTelefonoFijo,
-			@Nullable @ParameterLayout(named = "Teléfono Celular (con caracteristica sin el 0)") @Parameter(optionality=Optionality.OPTIONAL, maxLength=12) final Long personaTelefonoCelular,
+			@ParameterLayout(named = "Teléfono") final String personaTelefono,
 			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String personaMail) {
 		return clienteNoAfiliadoRepository.crear(personaDni, personaApellido, personaNombre, personaCuitCuil, personaDireccion, 
-				 personaLocalidad, personaTelefonoFijo, personaTelefonoCelular, personaMail);
+				 personaLocalidad, personaTelefono, personaMail);
 	}
 	
 	public List<Localidad> choices5Crear() {
@@ -50,25 +49,10 @@ public class ClienteNoAfiliadoMenu {
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22
 	public String validateCrear(final int personaDni, final String personaApellido, final String personaNombre, final String personaCuitCuil,
-			final String personaDireccion, final Localidad personaLocalidad,  final Long personaTelefonoFijo, final Long personaTelefonoCelular,
-			final String personaMail) {
+			final String personaDireccion, final Localidad personaLocalidad,  final String personaTelefono, final String personaMail) {
 		
 		if (Integer.toString(personaDni).length()<6)
 			return "Largo del dni incorrecto";
-		
-		if (personaTelefonoFijo == null & personaTelefonoCelular == null) {
-			return "Se tiene que cargar un numero de telefono, no puede quedar telefono fijo y telefono celular vacio";
-		}
-		
-		if(personaTelefonoFijo!=null)
-		if (personaTelefonoFijo.toString().length()<10) {
-			return "Error: para el numero fijo se tiene que ingresar 10 digitos";
-		}
-		
-		if (personaTelefonoCelular!=null)
-		if (personaTelefonoCelular.toString().length()<12) {
-			return "Error: para el numero celular se tiene que ingresar 12 digitos";
-		}
 		
 		if (personaMail != null){
 			// Patrón para validar el email
