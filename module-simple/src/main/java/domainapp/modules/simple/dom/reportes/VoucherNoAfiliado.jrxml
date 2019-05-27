@@ -67,8 +67,8 @@
 					<text><![CDATA[Orden de servicio]]></text>
 				</staticText>
 				<image>
-					<reportElement x="19" y="4" width="170" height="56" uuid="fa1ef0df-2138-4921-99ee-163d2cb6487f"/>
-					<imageExpression><![CDATA["C:/Users/logo.png"]]></imageExpression>
+					<reportElement x="51" y="0" width="99" height="54" uuid="84bfa7a2-8b1a-4f97-88fc-5b8e9f33171d"/>
+					<imageExpression><![CDATA["C:/Users/Lean/Desktop/mutual policial/WhatsApp Image 2019-05-25 at 13.32.19.jpeg"]]></imageExpression>
 				</image>
 			</frame>
 		</band>

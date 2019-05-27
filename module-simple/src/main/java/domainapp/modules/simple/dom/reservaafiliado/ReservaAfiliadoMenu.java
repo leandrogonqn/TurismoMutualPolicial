@@ -1,5 +1,6 @@
 package domainapp.modules.simple.dom.reservaafiliado;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -20,6 +21,8 @@ import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
+import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = ReservaAfiliado.class, objectType="simple.ReservaAfiliadoMenu")
@@ -57,12 +60,22 @@ public class ReservaAfiliadoMenu {
 		return productoRepository.listarHabilitados();
 	}
 	
+//	public List<Date> choices4Crear(){
+//		List<Voucher> voucher = voucherRepository.listarVoucherPorEstado(EstadoVoucher.reservado);
+//		List<Date> d = new ArrayList<>();
+//		for(int i = 0;i<voucher.size();i++) {
+//			d.add(voucher.get(i).getVoucherFechaEntrada());
+//			d.add(voucher.get(i).getVoucherFechaEntrada());
+//		}
+//		return d;
+//	}
+//	
 	public String validateCrear(final int reservaCodigo, final Date reservaFecha,
 			final Afiliado reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
 			final CanalDePago reservaCanalDePago, final String reservaMemo) {
-			if (voucherFechaEntrada.after(voucherFechaSalida))
-				return "La fecha de salida no puede ser anterior a la de entrada";
+			if (voucherFechaEntrada.after(voucherFechaSalida)||voucherFechaEntrada.equals(voucherFechaSalida))
+				return "La fecha de salida no puede ser anterior o igual a la fecha de entrada";
 			if (reservaCanalDePago==CanalDePago.Debito_Automatico && reservaCliente.getAfiliadoCBU()==null) 
 				return "ERROR: CBU no cargado, elija otro canal de pago";
 			if (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, voucherFechaEntrada, 

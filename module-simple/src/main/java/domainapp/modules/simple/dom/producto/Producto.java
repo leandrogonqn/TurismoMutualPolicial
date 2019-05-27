@@ -60,7 +60,7 @@ public class Producto implements Comparable<Producto> {
 	public TranslatableString title() {
 		TranslatableString s;
 		if (getProductoAlojamientoPropio()==true) {
-			s = TranslatableString.tr("Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
+			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
 		}else {
 			s = TranslatableString.tr(getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
 		}
@@ -348,9 +348,9 @@ public class Producto implements Comparable<Producto> {
 	public String toString() {
 		String s;
 		if (getProductoAlojamientoPropio()==true) {
-			s = "Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
+			s = "Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
 		}else {
-			s= getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
+			s= "Codigo: "+getProductoCodigo()+" "+getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
 		}
 		return s;
 	}
