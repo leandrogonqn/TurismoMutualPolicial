@@ -13,8 +13,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.user.UserService;
+import org.isisaddons.module.security.shiro.ShiroUtils;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.localidad.Localidad;
@@ -32,14 +36,21 @@ public class ReservaMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar todas las Reservas")
-	@MemberOrder(sequence = "6")
+	@MemberOrder(sequence = "60")
 	public List<Reserva> listar() {
 		return reservaRepository.listar();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar reserva por codigo")
+	@MemberOrder(sequence = "65")
+	public List<Reserva> buscarPorCodigo(@ParameterLayout(named = "Codigo") final int reservaCodigo) {
+		return reservaRepository.buscarPorCodigo(reservaCodigo);
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Vouchers Por Localidad")
-	@MemberOrder(sequence = "7")
+	@MemberOrder(sequence = "70")
 	public List<Voucher> listarVoucherPorLocalidad(@ParameterLayout(named="Localidad") final Localidad productoLocalidad,
 			@ParameterLayout(named="Desde") final Date fechaDesde,
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
@@ -64,7 +75,7 @@ public class ReservaMenu {
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Vouchers Por Productos")
-	@MemberOrder(sequence = "8")
+	@MemberOrder(sequence = "80")
 	public List<Voucher> listarVoucherPorProducto(@ParameterLayout(named="Producto") final Producto voucherProducto,
 			@ParameterLayout(named="Desde") final Date fechaDesde,
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
@@ -86,8 +97,8 @@ public class ReservaMenu {
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar-check", named = "Listar Disponibilidad Por Productos")
-	@MemberOrder(sequence = "5")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar", named = "Listar Disponibilidad Por Productos")
+	@MemberOrder(sequence = "50")
 	public List<FechasDisponibles> listarDisponibilidadPorProducto(@ParameterLayout(named="Producto") final Producto voucherProducto,
 			@ParameterLayout(named="Desde") final Date fechaDesde,
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
@@ -131,8 +142,8 @@ public class ReservaMenu {
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar-check", named = "Listar Disponibilidad Por Localidad")
-	@MemberOrder(sequence = "4")
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar", named = "Listar Disponibilidad Por Localidad")
+	@MemberOrder(sequence = "40")						
 	public List<FechasDisponibles> listarDisponibilidadPorLocalidad(@ParameterLayout(named="Localidad") final Localidad productoLocalidad,
 			@ParameterLayout(named="Desde") final Date fechaDesde,
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
@@ -187,5 +198,4 @@ public class ReservaMenu {
 	
 	@Inject
 	LocalidadRepository localidadRepository;
-	
 }

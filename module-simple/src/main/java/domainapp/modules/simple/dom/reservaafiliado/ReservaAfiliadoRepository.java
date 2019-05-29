@@ -23,9 +23,9 @@ public class ReservaAfiliadoRepository {
 
 	public ReservaAfiliado crear(final int reservaCodigo, final Date reservaFecha, final Afiliado reservaCliente,  final Producto voucherProducto,
 			final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadPasajeros, TipoPrecio precioHistoricoTipoPrecio,
-			final String voucherObservaciones, final CanalDePago reservaCanalDePago, final String reservaMemo) {
+			final String voucherObservaciones, final CanalDePago reservaCanalDePago, final String reservaMemo, final String voucherUsuario) {
 		List<Voucher> reservaListaVoucher = new ArrayList<>();
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones);
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, precioHistoricoTipoPrecio, voucherObservaciones, voucherUsuario);
 		reservaListaVoucher.add(v);
 		final ReservaAfiliado object = new ReservaAfiliado(reservaCodigo, reservaFecha, reservaCliente, reservaListaVoucher, reservaCanalDePago, reservaMemo);
 		v.setVoucherReserva(object);

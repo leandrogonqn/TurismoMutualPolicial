@@ -49,16 +49,6 @@ public class PrecioHistorico implements Comparable<PrecioHistorico>{
 		sdf.format(getPrecioHistoricoFechaDesde()+ " Hasta: "+sdf.format(getPrecioHistoricoFechaHasta())));
 	}
 	
-	public String cssClass() {
-		String a;
-		if (getPrecioHistoricoHabilitado() == true) {
-			a = getPrecioHistoricoTipoPrecio().getNombre();
-		}else {
-			a = "inhabilitado";
-		}
-		return a;
-	}
-
 	public PrecioHistorico(Producto precioHistoricoProducto, Date precioHistoricoFechaDesde, Date precioHistoricoFechaHasta,
 			TipoPrecio precioHistoricoTipoPrecio, Double precioHistoricoPrecio) {
 		super();

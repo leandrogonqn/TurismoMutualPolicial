@@ -21,6 +21,11 @@ public class ReservaRepository {
 		return repositoryService.allMatches(new QueryDefault<>(Reserva.class, "listarHabilitados", "reservaHabilitado", reservaHabilitado));
 	}
 	
+	public List<Reserva> buscarPorCodigo(final int reservaCodigo) {
+		return repositoryService
+				.allMatches(new QueryDefault<>(Reserva.class, "buscarPorCodigo", "reservaCodigo", reservaCodigo));
+	}
+	
 	@javax.inject.Inject
 	RepositoryService repositoryService;
 	@javax.inject.Inject

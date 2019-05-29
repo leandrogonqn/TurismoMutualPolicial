@@ -15,6 +15,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.user.UserService;
+
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
 import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
@@ -48,8 +50,9 @@ public class ReservaAfiliadoMenu {
 		} else {
 			t = TipoPrecio.Retirado;
 		}
+		String voucherUsuario = obtenerUsuario();
 		return reservaRepository.crear(reservaCodigo, reservaFecha, reservaCliente, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
-				t, voucherObservaciones, reservaCanalDePago, reservaMemo);
+				t, voucherObservaciones, reservaCanalDePago, reservaMemo, voucherUsuario);
 	}
 	
 	public List<Afiliado> choices2Crear() {
@@ -60,16 +63,6 @@ public class ReservaAfiliadoMenu {
 		return productoRepository.listarHabilitados();
 	}
 	
-//	public List<Date> choices4Crear(){
-//		List<Voucher> voucher = voucherRepository.listarVoucherPorEstado(EstadoVoucher.reservado);
-//		List<Date> d = new ArrayList<>();
-//		for(int i = 0;i<voucher.size();i++) {
-//			d.add(voucher.get(i).getVoucherFechaEntrada());
-//			d.add(voucher.get(i).getVoucherFechaEntrada());
-//		}
-//		return d;
-//	}
-//	
 	public String validateCrear(final int reservaCodigo, final Date reservaFecha,
 			final Afiliado reservaCliente, final Producto voucherProducto, final Date voucherFechaEntrada,
 			final Date voucherFechaSalida, final int voucherCantidadPasajeros, final String voucherObservaciones,
@@ -89,6 +82,12 @@ public class ReservaAfiliadoMenu {
 		return hoyDate;
 	}
 	
+    public String obtenerUsuario() {          
+    	String usuario = userService.getUser().getName();
+    	String rol = userService.getUser().getRoles().get(0).getName();
+        return "Usuario: "+usuario+" -- Rol: "+rol;
+    }
+	
 	@javax.inject.Inject
 	ReservaAfiliadoRepository reservaRepository;
 	
@@ -100,5 +99,8 @@ public class ReservaAfiliadoMenu {
 	
 	@Inject
 	ProductoRepository productoRepository;
+	
+	@Inject
+	UserService userService;
 	
 }

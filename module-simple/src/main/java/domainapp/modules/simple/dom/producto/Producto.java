@@ -62,7 +62,7 @@ public class Producto implements Comparable<Producto> {
 		if (getProductoAlojamientoPropio()==true) {
 			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
 		}else {
-			s = TranslatableString.tr(getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
+			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+ " "+ getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
 		}
 		return s;
 	}

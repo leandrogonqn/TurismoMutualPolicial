@@ -23,26 +23,6 @@ import domainapp.modules.simple.dom.producto.ProductoRepository;
 public class PrecioHistoricoMenu {
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial completo")
-	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listar() {
-		return precioHistoricoRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por fecha")
-	@MemberOrder(sequence = "1")
-	public Double mostrarPrecioPorFecha(@ParameterLayout(named = "Producto") final Producto precioHistoricoProducto,
-			@ParameterLayout(named = "fecha") final Date fecha,
-			@ParameterLayout(named = "Tipo Precio") final TipoPrecio precioHistoricoTipoPrecio) {
-		return precioHistoricoRepository.mostrarPrecioPorFecha(precioHistoricoProducto, fecha, precioHistoricoTipoPrecio);
-	}
-	
-	public List<Producto> choices0MostrarPrecioPorFecha() {
-		return productoRepository.listarHabilitados();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por rango de fecha")
 	@MemberOrder(sequence = "1")
 	public List<PrecioHistorico> listarPreciosPorRangoDeFecha(@ParameterLayout(named = "Producto") final Producto precioHistoricoProducto,
@@ -53,27 +33,6 @@ public class PrecioHistoricoMenu {
 	
 	public List<Producto> choices0ListarPreciosPorRangoDeFecha() {
 		return productoRepository.listarHabilitados();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios Afiliados Habilitados")
-	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listarHabilitadoAfiliadoActivos() {
-		return precioHistoricoRepository.listarHabilitadosAfiliados(TipoPrecio.Activo, true);
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios Afiliados Retirados")
-	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listarHabilitadoAfiliadoRetirados() {
-		return precioHistoricoRepository.listarHabilitadosAfiliados(TipoPrecio.Retirado, true);
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar historial de precios No Afiliados")
-	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listarHabilitadoNoAfiliado() {
-		return precioHistoricoRepository.listarHabilitadosAfiliados(TipoPrecio.No_Afiliado, true);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

@@ -27,6 +27,8 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserService;
+
 import domainapp.modules.simple.dom.empresa.Empresa;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
@@ -152,7 +154,8 @@ public class ReservaEmpresa extends Reserva implements Comparable<Reserva>{
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
-		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, TipoPrecio.No_Afiliado, voucherObservaciones);
+		String voucherUsuario = obtenerUsuario();
+		Voucher v = voucherRepository.crear(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros, TipoPrecio.No_Afiliado, voucherObservaciones, voucherUsuario);
 		this.getReservaListaVoucher().add(v);
 		this.setReservaListaVoucher(this.getReservaListaVoucher());
 		v.setVoucherReserva(this);
@@ -180,6 +183,12 @@ public class ReservaEmpresa extends Reserva implements Comparable<Reserva>{
 		return "";
 	}
 	
+    public String obtenerUsuario() {          
+    	String usuario = userService.getUser().getName();
+    	String rol = userService.getUser().getRoles().get(0).getName();
+        return "Usuario: "+usuario+" -- Rol: "+rol;
+    }
+	
 	// region > injected dependencies
 
 	@javax.inject.Inject
@@ -200,7 +209,7 @@ public class ReservaEmpresa extends Reserva implements Comparable<Reserva>{
 	@Inject
 	ProductoRepository productoRepository;
 	
-//	@Inject
-//	Reserva reserva;
+	@Inject
+	UserService userService;
 
 }

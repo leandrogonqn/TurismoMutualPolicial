@@ -42,8 +42,11 @@ import net.sf.jasperreports.engine.JRException;
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Reserva")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "reservaId")
 @javax.jdo.annotations.Queries({
+		@javax.jdo.annotations.Query(name = "buscarPorCodigo", language = "JDOQL", value = "SELECT "
+				+ "FROM domainapp.modules.simple.dom.reserva.Reserva " + "WHERE reservaCodigo == :reservaCodigo"),
 		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.reserva.Reserva " + "WHERE reservaHabilitado == :reservaHabilitado ")})
+				+ "FROM domainapp.modules.simple.dom.reserva.Reserva "
+				+ "WHERE reservaHabilitado == :reservaHabilitado ") })
 @javax.jdo.annotations.Unique(name = "Reserva_reservaCodigo_UNQ", members = { "reservaCodigo" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)

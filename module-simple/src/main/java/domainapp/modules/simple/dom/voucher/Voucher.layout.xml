@@ -51,7 +51,9 @@
                                 <c:action id="actualizarEstado" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="voucherReserva" namedEscaped="true">
-                                </c:property>                                         
+                                </c:property>   
+                                <c:property id="voucherUsuario" namedEscaped="true">
+                                </c:property>                                                                       
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

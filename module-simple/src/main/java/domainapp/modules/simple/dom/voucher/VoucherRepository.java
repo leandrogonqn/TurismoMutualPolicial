@@ -14,6 +14,8 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.applib.services.user.UserService;
+
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
@@ -32,11 +34,12 @@ public class VoucherRepository {
 	}
 
 	public Voucher crear(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, 
-			final int voucherCantidadPasajeros, final TipoPrecio precioHistoricoTipoPrecio, final String voucherObservaciones) {
+			final int voucherCantidadPasajeros, final TipoPrecio precioHistoricoTipoPrecio, final String voucherObservaciones,
+			String voucherUsuario) {
 		int voucherCantidadNoches = calcularCantidadDeNoches(voucherFechaEntrada, voucherFechaSalida);
 		Double voucherPrecioTotal = calcularPrecioTotal(voucherFechaEntrada, voucherFechaSalida, voucherProducto, precioHistoricoTipoPrecio);
 		final Voucher object = new Voucher(voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadNoches, 
-				voucherCantidadPasajeros, voucherPrecioTotal, voucherObservaciones);
+				voucherCantidadPasajeros, voucherPrecioTotal, voucherObservaciones, voucherUsuario);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;
@@ -152,4 +155,5 @@ public class VoucherRepository {
 	PrecioHistoricoRepository precioHistoricoRepository;
 	@Inject
 	MessageService messageService;
+
 }

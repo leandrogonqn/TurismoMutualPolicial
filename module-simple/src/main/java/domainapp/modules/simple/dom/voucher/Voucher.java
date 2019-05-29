@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.value.Blob;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
@@ -68,7 +69,7 @@ public class Voucher implements Comparable<Voucher> {
 
 	// Constructor
 	public Voucher(final Producto voucherProducto, final Date voucherFechaEntrada, final Date voucherFechaSalida, final int voucherCantidadNoches,
-			final int voucherCantidadPasajeros, final Double voucherPrecioTotal, final String voucherObservaciones) {
+			final int voucherCantidadPasajeros, final Double voucherPrecioTotal, final String voucherObservaciones, final String voucherUsuario) {
 		setVoucherProducto(voucherProducto);
 		setVoucherFechaEntrada(voucherFechaEntrada);
 		setVoucherFechaSalida(voucherFechaSalida);
@@ -77,6 +78,7 @@ public class Voucher implements Comparable<Voucher> {
 		setVoucherPrecioTotal(voucherPrecioTotal);
 		setVoucherObservaciones(voucherObservaciones);
 		setVoucherEstado(EstadoVoucher.presupuestado);
+		setVoucherUsuario(voucherUsuario);
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -196,6 +198,19 @@ public class Voucher implements Comparable<Voucher> {
 		this.voucherReserva = voucherReserva;
 	}
 	
+	@Column(allowsNull = "true")
+	@Property(editing=Editing.DISABLED)
+	@PropertyLayout(named="Usuario")
+	private String voucherUsuario;
+	
+	public String getVoucherUsuario() {
+		return voucherUsuario;
+	}
+	
+	public void setVoucherUsuario(String voucherUsuario) {
+		this.voucherUsuario=voucherUsuario;
+	}
+	
 	// endregion
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "voucherFechaEntrada")
@@ -305,6 +320,12 @@ public class Voucher implements Comparable<Voucher> {
 		return this;
 	}
 	
+    public String obtenerUsuario() {          
+    	String usuario = userService.getUser().getName();
+    	String rol = userService.getUser().getRoles().get(0).getName();
+        return "Usuario: "+usuario+" -- Rol: "+rol;
+    }
+	
 	// region > injected dependencies
 
 	@javax.inject.Inject
@@ -324,6 +345,9 @@ public class Voucher implements Comparable<Voucher> {
 	
 	@Inject
 	ReporteRepository reporteRepository;
+	
+	@Inject
+	UserService userService;
 
 	// endregion
 }

@@ -14,6 +14,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.user.UserService;
+
 import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado;
 import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliadoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
@@ -37,8 +39,9 @@ public class ReservaNoAfiliadoMenu {
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones del voucher", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones,
 			@Nullable @ParameterLayout(named = "Memo de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaMemo) {
+		String voucherUsuario = obtenerUsuario();
 		return reservaNoAfiliadoRepository.crear(reservaCodigo, reservaFecha, reservaCliente, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
-				TipoPrecio.No_Afiliado, voucherObservaciones, reservaMemo);
+				TipoPrecio.No_Afiliado, voucherObservaciones, reservaMemo, voucherUsuario);
 	}
 	
 	public List<ClienteNoAfiliado> choices2Crear() {
@@ -65,6 +68,12 @@ public class ReservaNoAfiliadoMenu {
 		return hoyDate;
 	}
 	
+    public String obtenerUsuario() {          
+    	String usuario = userService.getUser().getName();
+    	String rol = userService.getUser().getRoles().get(0).getName();
+        return "Usuario: "+usuario+" -- Rol: "+rol;
+    }
+	
 	@javax.inject.Inject
 	ReservaNoAfiliadoRepository reservaNoAfiliadoRepository;
 	
@@ -76,5 +85,8 @@ public class ReservaNoAfiliadoMenu {
 	
 	@Inject
 	ProductoRepository productoRepository;
+	
+	@Inject
+	UserService userService;
 	
 }
