@@ -1,6 +1,5 @@
 package domainapp.modules.simple.dom.reservaafiliado;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -16,19 +15,16 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.user.UserService;
-
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
 import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
-import domainapp.modules.simple.dom.voucher.EstadoVoucher;
-import domainapp.modules.simple.dom.voucher.Voucher;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = ReservaAfiliado.class, objectType="simple.ReservaAfiliadoMenu")
-@DomainServiceLayout(named = "Reserva", menuOrder = "40")
+@DomainServiceLayout(named = "Reserva", menuOrder = "40.1")
 public class ReservaAfiliadoMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)
@@ -45,7 +41,7 @@ public class ReservaAfiliadoMenu {
 			@ParameterLayout(named = "Canal de pago") final CanalDePago reservaCanalDePago,
 			@Nullable @ParameterLayout(named = "Memo de la reserva", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String reservaMemo) {
 		TipoPrecio t;
-		if(reservaCliente.getAfiliadoEstado()==TipoAfiliado.Activo) {
+		if(reservaCliente.getAfiliadoActivo()==true) {
 			t = TipoPrecio.Activo;
 		} else {
 			t = TipoPrecio.Retirado;
@@ -56,7 +52,7 @@ public class ReservaAfiliadoMenu {
 	}
 	
 	public List<Afiliado> choices2Crear() {
-		return afiliadoRepository.listarHabilitados();
+		return afiliadoRepository.listar();
 	}
 	
 	public List<Producto> choices3Crear(){

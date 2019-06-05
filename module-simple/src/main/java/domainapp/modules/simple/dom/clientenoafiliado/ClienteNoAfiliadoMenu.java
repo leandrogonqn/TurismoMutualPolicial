@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -70,33 +69,6 @@ public class ClienteNoAfiliadoMenu {
 	        }
 		}
         return "";
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Todos los no afiliados")
-	@MemberOrder(sequence = "2")
-	public List<ClienteNoAfiliado> listar() {
-		return clienteNoAfiliadoRepository.listar();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar no afiliado Por DNI")
-	@MemberOrder(sequence = "3")
-	public List<ClienteNoAfiliado> buscarPorDni(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni) {
-		return clienteNoAfiliadoRepository.buscarPorDNI(personaDni);
-	}
-	
-	public String validateBuscarPorDni(final int personaDni) {
-		if (Integer.toString(personaDni).length()<6)
-			return "Largo del dni incorrecto";
-		return "";
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar no afiliado 	Por Nombre")
-	@MemberOrder(sequence = "4")
-	public List<ClienteNoAfiliado> buscarPorNombre(@ParameterLayout(named = "Nombre") final String clienteNombre) {
-		return clienteNoAfiliadoRepository.buscarPorNombre(clienteNombre);
 	}
 	
 	@javax.inject.Inject

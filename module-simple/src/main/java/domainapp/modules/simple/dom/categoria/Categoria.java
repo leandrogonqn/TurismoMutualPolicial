@@ -1,15 +1,12 @@
 package domainapp.modules.simple.dom.categoria;
 
-import java.util.List;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -151,26 +148,6 @@ public class Categoria implements Comparable<Categoria> {
 	// endregion
 
 	// acciones
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todas las Categorias")
-	@MemberOrder(sequence = "2")
-	public List<Categoria> listar() {
-		return categoriaRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Categorias Habilitadas")
-	@MemberOrder(sequence = "3")
-	public List<Categoria> listarHabilitados() {
-		return categoriaRepository.listarHabilitados();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Categorias Inhabilitadas")
-	@MemberOrder(sequence = "4")
-	public List<Categoria> listarInhabilitados() {
-		return categoriaRepository.listarInhabilitados();
-	}
 
 	// region > injected dependencies
 

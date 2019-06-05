@@ -22,6 +22,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
+import domainapp.modules.simple.dom.producto.Producto;
+import domainapp.modules.simple.dom.producto.ProductoRepository;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 import domainapp.modules.simple.dom.provincia.Provincia;
@@ -156,31 +158,17 @@ public class Localidad implements Comparable<Localidad> {
 	// endregion
 
 	// acciones
+	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todas las Localidades")
-	@MemberOrder(sequence = "2")
-	public List<Localidad> listar() {
-		return localidadesRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar las Localidades Habilitadas")
-	@MemberOrder(sequence = "3")
-	public List<Localidad> listarHabilitados() {
-		return localidadesRepository.listarHabilitados();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar las Localidades Inhabilitadas")
-	@MemberOrder(sequence = "4")
-	public List<Localidad> listarInhabilitados() {
-		return localidadesRepository.listarInhabilitados();
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar proveedores en esta Localidad")
+	public List<Proveedor> buscarProvedoresPorLocalidad() {
+		return proveedorRepository.buscarProveedorPorLocalidad(this);
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar prestadores en esta Localidad")
-	public List<Proveedor> buscarPrestadorPorLocalidad() {
-		return proveedorRepository.buscarProveedorPorLocalidad(this);
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar produtos en esta Localidad")
+	public List<Producto> buscarProductoPorLocalidad() {
+		return productoRepository.buscarProductoPorLocalidad(this);
 	}
 	// region > injected dependencies
 
@@ -202,5 +190,8 @@ public class Localidad implements Comparable<Localidad> {
 	@Inject
 	ProveedorRepository proveedorRepository;
 
+	@Inject
+	ProductoRepository productoRepository;
+	
 	// endregion
 }

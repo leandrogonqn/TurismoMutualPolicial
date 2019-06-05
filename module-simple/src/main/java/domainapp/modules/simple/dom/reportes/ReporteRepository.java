@@ -22,7 +22,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 public class ReporteRepository {
-	public static Blob imprimirReporteIndividual(List<Object> objectsReport, String jrxml, String nombreArchivo) throws JRException, IOException{
+	public Blob imprimirReporteIndividual(List<Object> objectsReport, String jrxml, String nombreArchivo) throws JRException, IOException{
 		
 		InputStream input = ReporteRepository.class.getResourceAsStream(jrxml);
 		JasperDesign jd = JRXmlLoader.load(input);

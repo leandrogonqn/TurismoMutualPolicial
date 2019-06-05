@@ -25,14 +25,21 @@
                                 <c:property id="productoCategoria" namedEscaped="true">
                                 <c:action id="actualizarCategoria" position="RIGHT"></c:action>
                                 </c:property>
+                                <c:property id="personaDireccion" namedEscaped="true">
+                                <c:action id="actualizarDireccion" position="RIGHT"></c:action>
+                                </c:property>
                                 <c:property id="productoLocalidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
-                                </c:property>   
+                                </c:property>  
+                                <c:property id="personaTelefono" namedEscaped="true">
+                                <c:action id="actualizarTelefono" position="RIGHT"></c:action>
+                                </c:property> 
                                 <c:property id="productoAutorizacion" namedEscaped="true">
                                 <c:action id="actualizarAutorizacion" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="productoPoliticas" namedEscaped="true">
                                 <c:action id="actualizarPoliticas" position="RIGHT"></c:action>
+                                <c:action id="borrarPoliticas" position="RIGHT"></c:action>
                                 </c:property>                                                                                                                             
                                 <c:property id="productoHabilitado" namedEscaped="true">
                                 <c:action id="actualizarHabilitado" position="RIGHT"></c:action>

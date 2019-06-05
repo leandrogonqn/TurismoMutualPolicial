@@ -13,9 +13,7 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarCliente"></c:action>
-                                <c:property id="afiliadoEstado" namedEscaped="true">
-                              	<c:action id="actualizarEstado" position="RIGHT"></c:action>
+                                <c:property id="estado" namedEscaped="true">
                                 </c:property>
                                 <c:property id="afiliadoLP" namedEscaped="true">
                               	<c:action id="actualizarLP" position="RIGHT"></c:action>
@@ -43,9 +41,6 @@
                                 </c:property>
 								<c:property id="personaMail" namedEscaped="true">
 								<c:action id="actualizarMail" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="personaHabilitado" namedEscaped="true">
-                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                            </c:fieldSet>
                         </bs3:col>

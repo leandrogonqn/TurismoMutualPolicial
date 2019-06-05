@@ -67,8 +67,8 @@
 					<text><![CDATA[Orden de servicio]]></text>
 				</staticText>
 				<image>
-					<reportElement x="50" y="0" width="99" height="54" uuid="14a09c37-cb4e-463a-9100-a984764cc172"/>
-					<imageExpression><![CDATA["C:/Users/Lean/Desktop/mutual policial/WhatsApp Image 2019-05-25 at 13.32.19.jpeg"]]></imageExpression>
+					<reportElement x="51" y="0" width="99" height="54" uuid="14a09c37-cb4e-463a-9100-a984764cc172"/>
+					<imageExpression><![CDATA["C:/Program Files/Apache Software Foundation/Tomcat 8.5/logoVoucher.jpeg"]]></imageExpression>
 				</image>
 			</frame>
 		</band>
@@ -187,26 +187,12 @@
 				</textElement>
 				<text><![CDATA[Cantidad Pasajeros:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="210" y="342" width="50" height="20" uuid="11aef388-e529-4401-bdce-3e394ebf4afb"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Precio:]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="160" y="342" width="49" height="20" uuid="d614a919-b465-4beb-86bd-62def5a971a8"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{voucherCantidadPasajeros}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="259" y="342" width="150" height="20" uuid="1862348c-d8e7-468b-82dd-216d721842b6"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{voucherPrecioTotal}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="20" y="377" width="110" height="20" uuid="c647e263-572d-43ea-ab28-c061182d5ec6"/>

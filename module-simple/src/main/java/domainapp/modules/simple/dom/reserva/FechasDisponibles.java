@@ -12,7 +12,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import domainapp.modules.simple.dom.producto.Producto;
 
 @DomainObject(nature = Nature.VIEW_MODEL, objectType="FechasDisponibles")
-public class FechasDisponibles {
+public class FechasDisponibles implements Comparable<FechasDisponibles> {
 	
 	public TranslatableString title() {
 		return TranslatableString.tr(getProducto().toString()+" Desde " + new SimpleDateFormat("dd/MM/yyyy").format(getFechaDesde())+
@@ -81,6 +81,12 @@ public class FechasDisponibles {
 	public String toString() {
 		return getProducto().toString()+" Desde " + new SimpleDateFormat("dd/MM/yyyy").format(getFechaDesde())+
 				" Hasta " + new SimpleDateFormat("dd/MM/yyyy").format(getFechaHasta());
+	}
+
+	@Override
+	public int compareTo(final FechasDisponibles fechasDisponibles) {
+		// TODO Auto-generated method stub
+		return this.fechaDesde.compareTo(fechasDisponibles.fechaDesde);
 	}
 	
 }

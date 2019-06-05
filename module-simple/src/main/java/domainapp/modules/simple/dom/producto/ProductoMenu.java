@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -18,7 +17,6 @@ import domainapp.modules.simple.dom.categoria.Categoria;
 import domainapp.modules.simple.dom.categoria.CategoriaRepository;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
-import domainapp.modules.simple.dom.politicas.Politicas;
 import domainapp.modules.simple.dom.politicas.PoliticasRepository;
 import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
@@ -46,7 +44,7 @@ public class ProductoMenu {
 			final Categoria productoCategoria, final String productoDireccion, final Localidad productoLocalidad, final String productoTelefono) {
 		if (productoAlojamientoPropio==true)
 			return null;
-		return proveedorRepository.listarHabilitados();
+		return proveedorRepository.listar();
 	}
 	
 	public List<Categoria> choices3Crear(){
@@ -64,53 +62,6 @@ public class ProductoMenu {
 		return "";
 	}
 	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar todos los Productos")
-	@MemberOrder(sequence = "2")
-	public List<Producto> listar() {
-		return productoRepository.listar();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar producto Por codigo")
-	@MemberOrder(sequence = "3")
-	public List<Producto> buscarPorCodigo(@ParameterLayout(named = "Codigo") final int categoriaCodigo) {
-		return productoRepository.buscarPorCodigo(categoriaCodigo);
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar producto por Localidad")
-	@MemberOrder(sequence = "4")
-	public List<Producto> buscarProductoPorLocalidad(@ParameterLayout(named = "Localidad") final Localidad productoLocalidad) {
-		return productoRepository.buscarProductoPorLocalidad(productoLocalidad);
-	}
-	
-	public List<Localidad> choices0BuscarProductoPorLocalidad(){
-		return localidadRepository.listarHabilitados();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar producto por Categoria")
-	@MemberOrder(sequence = "5")
-	public List<Producto> buscarProductoPorCategoria(@ParameterLayout(named = "Categoria") final Categoria productoCategoria) {
-		return productoRepository.buscarProductoPorCategoria(productoCategoria);
-	}
-	
-	public List<Categoria> choices0BuscarProductoPorCategoria(){
-		return categoriaRepository.listarHabilitados();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar producto por Proveedor")
-	@MemberOrder(sequence = "5")
-	public List<Producto> buscarProductoPorProveedor(@ParameterLayout(named = "Proveedor") final Proveedor productoProveedor) {
-		return productoRepository.buscarProductoPorProveedor(productoProveedor);
-	}
-	
-	public List<Proveedor> choices0BuscarProductoPorProveedor(){
-		return proveedorRepository.listarHabilitados();
-	}
-
 	@javax.inject.Inject
 	ProductoRepository productoRepository;
 	

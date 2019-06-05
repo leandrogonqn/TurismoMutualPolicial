@@ -18,6 +18,8 @@
  */
 package domainapp.application.services.homepage;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,6 +32,8 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
+import domainapp.modules.simple.dom.reserva.FechasDisponibles;
+import domainapp.modules.simple.dom.reserva.ReservaRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
@@ -38,15 +42,21 @@ import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
 public class HomePageViewModel {
 
     public String title() {
-        return "Mutual Policial de la Policia del Neuquen";
+        return "Mutual del Personal de la Policia del Neuquen";
     }
     
     @HomePage
-    @CollectionLayout(named="Afiliados")
-    public List<Afiliado> getAfiliados() {
-        return afiliadoRepository.listarHabilitados();
+    @CollectionLayout(named="Disponibilidad")
+    public List<FechasDisponibles> getDisponibilidad() {
+    	Date hoy = new Date();
+    	Date fechaHasta = new Date();
+        Calendar cal = Calendar.getInstance(); 
+        cal.setTime(hoy); 
+        cal.add(Calendar.MONTH, 5);
+        fechaHasta = cal.getTime();
+        return reservaRepository.listarDisponibilidad(hoy, fechaHasta);
     }
 
     @Inject
-    AfiliadoRepository afiliadoRepository;
+    ReservaRepository reservaRepository;
 }

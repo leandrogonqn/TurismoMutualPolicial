@@ -12,7 +12,6 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -27,6 +26,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import domainapp.modules.simple.dom.localidad.Localidad;
 import domainapp.modules.simple.dom.localidad.LocalidadRepository;
+import domainapp.modules.simple.dom.voucher.EstadoVoucher;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Afiliado")
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "afiliadoId")
@@ -36,31 +36,35 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 				+ "WHERE afiliadoLP.toLowerCase().indexOf(:afiliadoLP) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado "
-				+ "WHERE personaNombre.toLowerCase().indexOf(:personaNombre) >= 0 "),
+				+ "WHERE personaJuridicaNombre.toLowerCase().indexOf(:personaJuridicaNombre) >= 0 "),
 		@javax.jdo.annotations.Query(name = "buscarPorDNI", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaDni == :personaDni"),
-		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaHabilitado == true "),
-		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaHabilitado == false ") })
+				+ "FROM domainapp.modules.simple.dom.afiliado.Afiliado " + "WHERE personaJuridicaDni == :personaJuridicaDni")})
 @javax.jdo.annotations.Unique(name = "DNI_Apellido_UNQ1", members = { "personaJuridicaDni", "personaJuridicaApellido" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class Afiliado implements Comparable<Afiliado> {
 
 	// region > title
 	public TranslatableString title() {
-		return TranslatableString.tr("Afiliado " + getAfiliadoEstado().getNombre() + 
+		String activo;
+		if(getAfiliadoActivo()==true) {
+			activo = "Activo";
+		}else {
+			activo = "Retirado";
+		}
+		return TranslatableString.tr("Afiliado " + activo + 
 				" - LP "+getAfiliadoLP()+ " - "+
 				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido());
 	}
 	// endregion
 	
-	public String cssClass() {
-		return (getPersonaHabilitado() == true) ? "habilitado" : "inhabilitado";
-	}
-	
 	public String iconName() {
-		return (getAfiliadoEstado() == TipoAfiliado.Activo) ? "A" : "R";
+		String activo;
+		if(getAfiliadoActivo()==true) {
+			activo = "A";
+		}else {
+			activo = "R";
+		}
+		return activo;
 	}
 
 	// region > constructor
@@ -71,11 +75,11 @@ public class Afiliado implements Comparable<Afiliado> {
 		setPersonaJuridicaNombre(afiliadoNombre);
 	}
 
-	public Afiliado(TipoAfiliado afiliadoEstado, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
+	public Afiliado(boolean afiliadoActivo, String afiliadoLP, int afiliadoDni, String afiliadoApellido, String afiliadoNombre,
 			String afiliadoCuitCuil, String afiliadoDireccion, Localidad afiliadoLocalidad, String afiliadoTelefono, 
 			String afiliadoMail, String afiliadoCBU) {
 		super();
-		setAfiliadoEstado(afiliadoEstado);
+		setAfiliadoActivo(afiliadoActivo);
 		setAfiliadoLP(afiliadoLP);
 		setPersonaJuridicaDni(afiliadoDni);
 		setPersonaJuridicaApellido(afiliadoApellido);
@@ -87,7 +91,6 @@ public class Afiliado implements Comparable<Afiliado> {
 		setPersonaTelefono(afiliadoTelefono);
 		setPersonaMail(afiliadoMail);
 		setAfiliadoCBU(afiliadoCBU);
-		setPersonaHabilitado(true);
 	}
 	// endregion
 
@@ -95,16 +98,27 @@ public class Afiliado implements Comparable<Afiliado> {
 	public static final int NAME_LENGTH = 40;
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Estado")
-	private TipoAfiliado afiliadoEstado;
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
+	@PropertyLayout(named = "Activo")
+	private boolean afiliadoActivo;
 
-	public TipoAfiliado getAfiliadoEstado() {
-		return afiliadoEstado;
+	public boolean getAfiliadoActivo() {
+		return afiliadoActivo;
 	}
 
-	public void setAfiliadoEstado(TipoAfiliado afiliadoEstado) {
-		this.afiliadoEstado = afiliadoEstado;
+	public void setAfiliadoActivo(boolean afiliadoActivo) {
+		this.afiliadoActivo = afiliadoActivo;
+	}
+	
+	@ActionLayout(named="Estado")	 
+	public String getEstado() {
+		String a;
+		if(getAfiliadoActivo()==true) {
+			a = "Activo";
+		}else {
+			a = "Retirado";
+		}
+		return a;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "true")
@@ -242,30 +256,16 @@ public class Afiliado implements Comparable<Afiliado> {
 		this.afiliadoCBU = afiliadoCBU;
 	}
 	
-   @javax.jdo.annotations.Column(allowsNull = "false")
-   @Property(
-           editing = Editing.DISABLED
-   )
-   @PropertyLayout(named="Habilitado", hidden=Where.ALL_TABLES)
-   private boolean personaHabilitado;
-
-   public boolean getPersonaHabilitado() {
-		return personaHabilitado;
-	}
-	public void setPersonaHabilitado(boolean personaHabilitado) {
-		this.personaHabilitado = personaHabilitado;
-	}	
-	
 	// endregion
 	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoEstado")
-	public Afiliado actualizarEstado(@ParameterLayout(named = "Estado") final TipoAfiliado afiliadoEstado) {
-		setAfiliadoEstado(afiliadoEstado);
+	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoActivo")
+	public Afiliado actualizarActivo(@ParameterLayout(named = "Activo") final boolean afiliadoActivo) {
+		setAfiliadoActivo(afiliadoActivo);
 		return this;
 	}
 	
-	public TipoAfiliado default0ActualizarEstado() {
-		return getAfiliadoEstado();
+	public boolean default0ActualizarActivo() {
+		return getAfiliadoActivo();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoLP")
@@ -397,28 +397,15 @@ public class Afiliado implements Comparable<Afiliado> {
 		return "";
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoHabilitado")
-	public Afiliado actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean afiliadoHabilitado) {
-		setPersonaHabilitado(afiliadoHabilitado);
-		return this;
-	}
-
-	public boolean default0ActualizarHabilitado() {
-		return getPersonaHabilitado();
-	}
-
-	// region > delete (action)
-	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-	public void borrarAfiliado() {
-		final String title = titleService.titleOf(this);
-		messageService.informUser(String.format("'%s' deleted", title));
-		setPersonaHabilitado(false);
-	}
-	// endregion
-
 	@Override
 	public String toString() {
-		String afiliado = "Afiliado " + getAfiliadoEstado().getNombre() + 
+		String activo;
+		if(getAfiliadoActivo()==true) {
+			activo = "Activo";
+		}else {
+			activo = "Retirado";
+		}
+		String afiliado = "Afiliado " + activo + 
 				" - LP "+getAfiliadoLP()+ " - "+
 				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido();
 		return afiliado;
@@ -432,27 +419,6 @@ public class Afiliado implements Comparable<Afiliado> {
 	// endregion
 
 	// accion
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todos los afiliados")
-	@MemberOrder(sequence = "2")
-	public List<Afiliado> listarAfiliado() {
-		return afiliadoRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar afiliados habilitados")
-	@MemberOrder(sequence = "2")
-	public List<Afiliado> listarAfiliadoHabilitados() {
-		return afiliadoRepository.listarHabilitados();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar afiliados inhabilitados")
-	@MemberOrder(sequence = "2")
-	public List<Afiliado> listarAfiliadoInhabilitados() {
-		return afiliadoRepository.listarInhabilitados();
-	}
-	
 	@ActionLayout(hidden=Where.EVERYWHERE)
     public static boolean isNumeric(String cadena) {
 

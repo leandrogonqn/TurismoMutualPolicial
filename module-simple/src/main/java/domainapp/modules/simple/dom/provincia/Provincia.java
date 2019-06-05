@@ -1,15 +1,12 @@
 package domainapp.modules.simple.dom.provincia;
 
-import java.util.List;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -27,7 +24,6 @@ import org.apache.isis.applib.services.title.TitleService;
 		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.provincia.Provincia "
 				+ "WHERE provinciasNombre.toLowerCase().indexOf(:provinciasNombre) >= 0 "),
-
 		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaHabilitado == true "),
 		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
@@ -125,26 +121,6 @@ public class Provincia implements Comparable<Provincia> {
 	// endregion
 
 	// acciones
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todas las Provincias")
-	@MemberOrder(sequence = "2")
-	public List<Provincia> listar() {
-		return provinciasRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Provincia Activas")
-	@MemberOrder(sequence = "3")
-	public List<Provincia> listarHabilitados() {
-		return provinciasRepository.listarHabilitados();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar Provincias Inactivas")
-	@MemberOrder(sequence = "4")
-	public List<Provincia> listarInhabilitados() {
-		return provinciasRepository.listarInhabilitados();
-	}
 
 	// region > injected dependencies
 

@@ -15,7 +15,7 @@ import domainapp.modules.simple.dom.provincia.Provincia;
 import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Localidad.class, objectType="simple.LocalidadMenu")
-@DomainServiceLayout(named = "Datos", menuOrder = "60")
+@DomainServiceLayout(named = "Datos", menuOrder = "60.2")
 public class LocalidadMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)

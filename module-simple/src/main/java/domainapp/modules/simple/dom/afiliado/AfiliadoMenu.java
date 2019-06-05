@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -27,7 +26,7 @@ public class AfiliadoMenu {
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Afiliado")
 	@MemberOrder(sequence = "1")
-	public Afiliado crear(@ParameterLayout(named = "Estado") final TipoAfiliado afiliadoEstado,
+	public Afiliado crear(@ParameterLayout(named = "Activo") final boolean afiliadoActivo,
 			@Nullable @ParameterLayout(named = "LP", typicalLength=6) @Parameter(optionality = Optionality.OPTIONAL, maxLength = 6) final String afiliadoLP,
 			@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int afiliadoDni,
 			@ParameterLayout(named = "Apellido") final String afiliadoApellido,
@@ -38,7 +37,7 @@ public class AfiliadoMenu {
 			@ParameterLayout(named = "Teléfono") final String afiliadoTelefono,
 			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoMail,
 			@Nullable @ParameterLayout(named = "CBU") @Parameter(optionality = Optionality.OPTIONAL) final String afiliadoCBU) {
-		return afiliadoRepository.crearCompleto(afiliadoEstado, afiliadoLP, afiliadoNombre, afiliadoApellido, afiliadoDni, afiliadoCuitCuil, 
+		return afiliadoRepository.crearCompleto(afiliadoActivo, afiliadoLP, afiliadoNombre, afiliadoApellido, afiliadoDni, afiliadoCuitCuil, 
 				 afiliadoDireccion, afiliadoLocalidad, afiliadoTelefono, afiliadoMail, afiliadoCBU);
 	}
 	
@@ -47,7 +46,7 @@ public class AfiliadoMenu {
 	}
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22
-	public String validateCrear(final TipoAfiliado afiliadoEstado, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
+	public String validateCrear(final boolean afiliadoActivo, final String afiliadoLP, final int afiliadoDni, final String afiliadoApellido, 
 			final String afiliadoNombre, final String afiliadoCuitCuil,	final String afiliadoDireccion, final Localidad afiliadoLocalidad,  
 			final String afiliadoTelefono, final String afiliadoMail, final String afiliadoCBU) {
         if (isNumeric(afiliadoLP) == false) {
@@ -93,47 +92,6 @@ public class AfiliadoMenu {
         return resultado;
     }
     
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Afiliados Por LP")
-	@MemberOrder(sequence = "3.1")
-	public List<Afiliado> buscarPorLP(@ParameterLayout(named = "LP") @Parameter(maxLength=6) final String afiliadoLP) {
-		return afiliadoRepository.buscarPorLP(afiliadoLP);
-	}
-	
-	public String validateBuscarPorLP(final String afiliadoLP) {
-		if (afiliadoLP.length()<=5) {
-			return "LP debe contener 6 digitos";
-		}
-		return "";
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Todos los afiliados")
-	@MemberOrder(sequence = "2")
-	public List<Afiliado> listar() {
-		return afiliadoRepository.listar();
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar afiliado Por DNI")
-	@MemberOrder(sequence = "3.2")
-	public List<Afiliado> buscarPorDni(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni) {
-		return afiliadoRepository.buscarPorDNI(personaDni);
-	}
-	
-	public String validateBuscarPorDni(final int personaDni) {
-		if (Integer.toString(personaDni).length()<6)
-			return "Largo del dni incorrecto";
-		return "";
-	}
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar afiliado Por Nombre")
-	@MemberOrder(sequence = "4")
-	public List<Afiliado> buscarPorNombre(@ParameterLayout(named = "Nombre") final String clienteNombre) {
-		return afiliadoRepository.buscarPorNombre(clienteNombre);
-	}
-
 	@javax.inject.Inject
 	AfiliadoRepository afiliadoRepository;
 

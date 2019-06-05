@@ -3,18 +3,13 @@ package domainapp.modules.simple.dom.empresa;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optionality;
-import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -50,10 +45,6 @@ public class Empresa implements Comparable<Empresa> {
 
 	// region > constructor
 	public Empresa() {
-	}
-
-	public Empresa(final String empresaRazonSocial) {
-		setEmpresaRazonSocial(empresaRazonSocial);
 	}
 
 	public Empresa(String empresaRazonSocial, String personaCuitCuil, String personaDireccion, 
@@ -140,7 +131,7 @@ public class Empresa implements Comparable<Empresa> {
 		this.personaTelefono = personaTelefono;
 	}	
 	
-   @javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+   @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
    @Property(
            editing = Editing.DISABLED
    )
@@ -284,23 +275,6 @@ public class Empresa implements Comparable<Empresa> {
 	}
 
 	// accion
-	@ActionLayout(named = "Listar todos los empresas")
-	@MemberOrder(sequence = "2")
-	public List<Empresa> listar() {
-		return empresaRepository.listar();
-	}
-
-	@ActionLayout(named = "Listar Clientes Habilitados")
-	@MemberOrder(sequence = "3")
-	public List<Empresa> listarEmpresaHabilitados() {
-		return empresaRepository.listarHabilitados();
-	}
-
-	@ActionLayout(named = "Listar Clientes Inhabilitados")
-	@MemberOrder(sequence = "4")
-	public List<Empresa> listarEmpresaInhabilitados() {
-		return empresaRepository.listarInhabilitados();
-	}
 
 	// region > injected dependencies
 

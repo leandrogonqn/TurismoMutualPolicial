@@ -21,19 +21,7 @@ public class PrecioHistoricoRepository {
 	public List<PrecioHistorico> listar() {
 		return repositoryService.allInstances(PrecioHistorico.class);
 	}
-
-	public List<PrecioHistorico> listarHabilitados() {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarHabilitados"));
-	}
-
-	public List<PrecioHistorico> listarInhabilitados() {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarInhabilitados"));
-	}
 	
-	public List<PrecioHistorico> listarHabilitadosAfiliados(final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoHabilitado) {
-		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarHabilitadosAfiliados", "precioHistoricoTipoPrecio", 
-				precioHistoricoTipoPrecio, "precioHistoricoHabilitado", precioHistoricoHabilitado));
-	}
 	public List<PrecioHistorico> listarPreciosPorProductoPorTipoDeAfiliado(final Producto precioHistoricoProducto, 
 			final TipoPrecio precioHistoricoTipoPrecio, final boolean precioHistoricoHabilitado) {
 		return repositoryService.allMatches(new QueryDefault<>(PrecioHistorico.class, "listarPreciosPorProductoPorTipoDeAfiliado", 

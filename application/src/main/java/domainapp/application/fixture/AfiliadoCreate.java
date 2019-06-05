@@ -11,14 +11,14 @@ public class AfiliadoCreate extends FixtureScript {
 
     //region > name (input)
 	
-    private TipoAfiliado estado;
+    private boolean activo;
     
-    public TipoAfiliado getEstado(){
-    	return estado;
+    public boolean getActivo(){
+    	return activo;
     }
     
-    public AfiliadoCreate setEstado(final TipoAfiliado estado){
-    	this.estado = estado;
+    public AfiliadoCreate setActivo(final boolean activo){
+    	this.activo = activo;
     	return this;
     }
     
@@ -152,7 +152,7 @@ public class AfiliadoCreate extends FixtureScript {
         String apellido = checkParam("apellido", ec, String.class);
         int dni = checkParam("dni", ec, Integer.class);
 
-        this.simpleObject = wrap(simpleObjectMenu).crear(estado, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefono, email, CBU);
+        this.simpleObject = wrap(simpleObjectMenu).crear(activo, LP, dni, apellido, name, cuitCuil, direccion, localidad, telefono, email, CBU);
 
         // also make available to UI
         ec.addResult(this, simpleObject);

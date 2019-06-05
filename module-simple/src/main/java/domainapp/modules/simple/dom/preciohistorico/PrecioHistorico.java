@@ -2,24 +2,20 @@ package domainapp.modules.simple.dom.preciohistorico;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
-
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -33,13 +29,7 @@ import domainapp.modules.simple.dom.producto.Producto;
 		@javax.jdo.annotations.Query(name = "listarPreciosPorProducto", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoProducto == :precioHistoricoProducto &&  precioHistoricoHabilitado == :precioHistoricoHabilitado "),
 		@javax.jdo.annotations.Query(name = "listarPreciosPorProductoPorTipoDeAfiliado", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoProducto == :precioHistoricoProducto && precioHistoricoTipoPrecio == :precioHistoricoTipoPrecio &&  precioHistoricoHabilitado == :precioHistoricoHabilitado "),
-		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoHabilitado == true "),
-		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoHabilitado == false "),
-		@javax.jdo.annotations.Query(name = "listarHabilitadosAfiliados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoHabilitado == :precioHistoricoHabilitado && precioHistoricoTipoPrecio == :precioHistoricoTipoPrecio ")})
+				+ "FROM domainapp.modules.simple.dom.preciohistorico.PrecioHistorico " + "WHERE precioHistoricoProducto == :precioHistoricoProducto && precioHistoricoTipoPrecio == :precioHistoricoTipoPrecio &&  precioHistoricoHabilitado == :precioHistoricoHabilitado ")})
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 public class PrecioHistorico implements Comparable<PrecioHistorico>{
 	
@@ -127,7 +117,7 @@ public class PrecioHistorico implements Comparable<PrecioHistorico>{
 
 	@Column(allowsNull="false")
 	@Property(editing=Editing.DISABLED)
-	@PropertyLayout(named = "Habilitado")
+	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
 	private boolean precioHistoricoHabilitado;
 	
 	public boolean getPrecioHistoricoHabilitado() {
@@ -144,22 +134,6 @@ public class PrecioHistorico implements Comparable<PrecioHistorico>{
 		final String title = titleService.titleOf(this);
 		messageService.informUser(String.format("'%s' deleted", title));
 		setPrecioHistoricoHabilitado(false);
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "precioHistoricoProducto")
-	public PrecioHistorico actualizarPrecioHistoricoProducto(@ParameterLayout(named = "Producto") final Producto precioHistoricoProducto) {
-		setPrecioHistoricoProducto(precioHistoricoProducto);
-		return this;
-	}
-	
-	public Producto default0ActualizarPrecioHistoricoProducto() {
-		return getPrecioHistoricoProducto();
-	}
-	
-	public String validateActualizarPrecioHistoricoProducto(final Producto precioHistoricoProducto) {
-		if (precioHistoricoRepository.verificarActualizarPrecio(this, precioHistoricoProducto, getPrecioHistoricoTipoPrecio(), getPrecioHistoricoFechaDesde(), getPrecioHistoricoFechaHasta())==false)
-			return "ERROR: Superposicion de otra fechas";
-		return "";
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "precioHistoricoFechaDesde")
@@ -246,23 +220,6 @@ public class PrecioHistorico implements Comparable<PrecioHistorico>{
 	// endregion
 	
 	// acciones
-	@ActionLayout(named = "Listar todos los Precios Historicos")
-	@MemberOrder(sequence = "2")
-	public List<PrecioHistorico> listar() {
-		return precioHistoricoRepository.listar();
-	}
-
-	@ActionLayout(named = "Listar Precios Historicos Habilitados")
-	@MemberOrder(sequence = "3")
-	public List<PrecioHistorico> listarHabilitados() {
-		return precioHistoricoRepository.listarHabilitados();
-	}
-
-	@ActionLayout(named = "Listar Precios Historicos Inhabilitados")
-	@MemberOrder(sequence = "4")
-	public List<PrecioHistorico> listarInhabilitados() {
-		return precioHistoricoRepository.listarInhabilitados();
-	}
 
 	@Inject
 	PrecioHistoricoRepository precioHistoricoRepository;

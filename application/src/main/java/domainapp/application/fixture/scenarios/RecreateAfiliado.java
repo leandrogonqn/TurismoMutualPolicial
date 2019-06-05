@@ -95,7 +95,7 @@ public class RecreateAfiliado extends FixtureScript {
         
         for (int i = 0; i < number; i++) {
             final AfiliadoCreate fs = new AfiliadoCreate();
-            fs.setEstado(TipoAfiliado.Activo);
+            fs.setActivo(true);
             fs.setLP(LP.get(i));
             fs.setName(NAMES.get(i));
             fs.setApellido(apellidos.get(i));

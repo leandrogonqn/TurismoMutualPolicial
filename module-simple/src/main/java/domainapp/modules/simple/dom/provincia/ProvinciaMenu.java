@@ -12,7 +12,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Provincia.class, objectType="simple.ProvinciaMenu")
-@DomainServiceLayout(named = "Datos", menuOrder = "60")
+@DomainServiceLayout(named = "Datos", menuOrder = "60.1")
 public class ProvinciaMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)

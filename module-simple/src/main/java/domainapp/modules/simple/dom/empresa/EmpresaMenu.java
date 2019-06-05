@@ -3,11 +3,9 @@ package domainapp.modules.simple.dom.empresa;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -22,20 +20,6 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Empresa.class, objectType="simple.EmpresaMenu")
 @DomainServiceLayout(named = "Clientes", menuOrder = "10.1")
 public class EmpresaMenu {
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Todas las Empresas")
-	@MemberOrder(sequence = "2")
-	public List<Empresa> listar() {
-		return empresaRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Por RazonSocial")
-	@MemberOrder(sequence = "3")
-	public List<Empresa> buscarPorRazonSocial(@ParameterLayout(named = "RazonSocial") final String empresaRazonSocial) {
-		return empresaRepository.buscarPorRazonSocial(empresaRazonSocial);
-	}
 
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(named = "Crear Empresa")

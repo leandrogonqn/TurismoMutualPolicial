@@ -13,7 +13,6 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarProveedor"/>
                                 <c:property id="proveedorCodigo" namedEscaped="true">
                                 <c:action id="actualizarCodigo" position="RIGHT"></c:action>
                                 </c:property>    
@@ -41,9 +40,6 @@
                                 <c:property id="proveedorContacto" namedEscaped="true">
                                 <c:action id="actualizarContacto" position="RIGHT"></c:action>
                                 </c:property>                                                                                                                         
-                                <c:property id="proveedorHabilitado" namedEscaped="true">
-                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
-                                </c:property>
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

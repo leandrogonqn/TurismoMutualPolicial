@@ -1,4 +1,4 @@
-package domainapp.modules.simple.dom.preciohistorico;
+package domainapp.modules.simple.dom.visualizacion;
 
 import java.util.Date;
 import java.util.List;
@@ -15,12 +15,15 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
+import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
+import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
 
-@DomainService(nature = NatureOfService.VIEW_MENU_ONLY, objectType = "simple.PrecioHistoricoMenu", repositoryFor = PrecioHistorico.class)
+@DomainService(nature = NatureOfService.VIEW_MENU_ONLY, objectType = "simple.PrecioHistoricoVisualizacionMenu", repositoryFor = PrecioHistorico.class)
 @DomainServiceLayout(named = "Productos", menuOrder = "30.3")
-public class PrecioHistoricoMenu {
+public class PrecioHistoricoVisualizacionMenu {
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Mostrar precio de producto por rango de fecha")

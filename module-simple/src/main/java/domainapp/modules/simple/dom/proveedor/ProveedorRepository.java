@@ -32,14 +32,6 @@ public class ProveedorRepository {
 				.allMatches(new QueryDefault<>(Proveedor.class, "buscarProveedorPorLocalidad", "proveedorLocalidad", proveedorLocalidad));
 	}
 	
-	public List<Proveedor> listarHabilitados() {
-		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarHabilitados"));
-	}
-
-	public List<Proveedor> listarInhabilitados() {
-		return repositoryService.allMatches(new QueryDefault<>(Proveedor.class, "listarInhabilitados"));
-	}
-
 	public Proveedor crear(final int proveedorCodigo, final String proveedorCuit, final String proveedorRazonSocial, 
 			final String proveedorNombreComercial, final String proveedorDireccion, final Localidad proveedorLocalidad, 
 			final String proveedorTelefono, final String proveedorMail, String proveedorWeb, final String proveedorContacto) {

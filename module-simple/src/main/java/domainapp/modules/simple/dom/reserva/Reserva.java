@@ -25,8 +25,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Blob;
-
-import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.reportes.ReporteRepository;
 import domainapp.modules.simple.dom.reportes.VoucherAfiliadoReporte;
 import domainapp.modules.simple.dom.reportes.VoucherEmpresaReporte;
@@ -94,7 +92,7 @@ public abstract class Reserva {
 	}
 	
 	@ActionLayout(named="Precio Total", hidden=Where.ALL_TABLES)	 
-	public Double getReservaPrecioTotal() {
+	public Double getPrecioTotal() {
 		Double a = 0.0;
 		for(int indice = 0;indice<getReservaListaVoucher().size();indice++)
 		{

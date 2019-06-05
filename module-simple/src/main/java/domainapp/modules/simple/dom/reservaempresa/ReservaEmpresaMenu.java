@@ -24,7 +24,7 @@ import domainapp.modules.simple.dom.producto.ProductoRepository;
 import domainapp.modules.simple.dom.voucher.VoucherRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = ReservaEmpresa.class, objectType="simple.ReservaEmpresaMenu")
-@DomainServiceLayout(named = "Reserva", menuOrder = "40")
+@DomainServiceLayout(named = "Reserva", menuOrder = "40.3")
 public class ReservaEmpresaMenu {
 
 	@Action(semantics = SemanticsOf.SAFE)

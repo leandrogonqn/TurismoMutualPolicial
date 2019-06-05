@@ -56,9 +56,14 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	// endregion
 	
 	public String iconName() {
-		return (getReservaCliente().getAfiliadoEstado() == TipoAfiliado.Activo) ? "A" : "R";
+		String activo;
+		if(getReservaCliente().getAfiliadoActivo()==true) {
+			activo = "A";
+		}else {
+			activo = "R";
+		}
+		return activo;
 	}
-
 
 	public static final int NAME_LENGTH = 200;
 
@@ -185,7 +190,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
 		TipoPrecio t;
-		if(getReservaCliente().getAfiliadoEstado()==TipoAfiliado.Activo) {
+		if(getReservaCliente().getAfiliadoActivo()==true) {
 			t = TipoPrecio.Activo;
 		} else {
 			t = TipoPrecio.Retirado;

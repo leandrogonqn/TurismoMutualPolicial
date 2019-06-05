@@ -14,8 +14,6 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.user.UserService;
-
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistorico;
 import domainapp.modules.simple.dom.preciohistorico.PrecioHistoricoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
@@ -67,7 +65,7 @@ public class VoucherRepository {
 		return precioTotal;
 	}
 	
-	public static Date sumarUnDiaAFecha(Date fecha){
+	public Date sumarUnDiaAFecha(Date fecha){
 	      Calendar calendar = Calendar.getInstance();
 	      calendar.setTime(fecha); 
 	      calendar.add(Calendar.DAY_OF_YEAR, 1);  

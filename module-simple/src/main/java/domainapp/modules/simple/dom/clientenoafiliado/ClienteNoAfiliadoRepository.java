@@ -35,14 +35,14 @@ public class ClienteNoAfiliadoRepository {
 		return repositoryService.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "listarInhabilitados"));
 	}
 
-	public List<ClienteNoAfiliado> buscarPorNombre(final String personaNombre) {
+	public List<ClienteNoAfiliado> buscarPorNombre(final String personaJuridicaNombre) {
 		return repositoryService.allMatches(
-				new QueryDefault<>(ClienteNoAfiliado.class, "buscarPorNombre", "personaNombre", personaNombre.toLowerCase()));
+				new QueryDefault<>(ClienteNoAfiliado.class, "buscarPorNombre", "personaJuridicaNombre", personaJuridicaNombre.toLowerCase()));
 	}
 	
-	public List<ClienteNoAfiliado> buscarPorDNI(final int personaDni) {
+	public List<ClienteNoAfiliado> buscarPorDNI(final int personaJuridicaDni) {
 		return repositoryService
-				.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "buscarPorDNI", "personaDni", personaDni));
+				.allMatches(new QueryDefault<>(ClienteNoAfiliado.class, "buscarPorDNI", "personaJuridicaDni", personaJuridicaDni));
 	}
 
 

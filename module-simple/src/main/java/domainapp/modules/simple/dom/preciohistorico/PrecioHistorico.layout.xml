@@ -15,7 +15,6 @@
                             <c:fieldSet name="Nombre">
                             	<c:action id="borrarPrecioHistorico"/>
                                 <c:property id="precioHistoricoProducto" namedEscaped="true">
-                                <c:action id="actualizarPrecioHistoricoProducto" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="precioHistoricoFechaDesde" namedEscaped="true">
                                 <c:action id="actualizarPrecioHistoricoFecha" position="RIGHT"></c:action>

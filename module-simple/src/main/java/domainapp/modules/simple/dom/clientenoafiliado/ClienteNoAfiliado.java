@@ -3,7 +3,6 @@ package domainapp.modules.simple.dom.clientenoafiliado;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
@@ -12,8 +11,6 @@ import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
@@ -31,9 +28,9 @@ import domainapp.modules.simple.dom.localidad.LocalidadRepository;
 @javax.jdo.annotations.Queries({
 	@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado "
-			+ "WHERE personaNombre.toLowerCase().indexOf(:personaNombre) >= 0 "),
+			+ "WHERE personaJuridicaNombre.toLowerCase().indexOf(:personaJuridicaNombre) >= 0 "),
 	@javax.jdo.annotations.Query(name = "buscarPorDNI", language = "JDOQL", value = "SELECT "
-			+ "FROM domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado " + "WHERE personaDni == :personaDni"),
+			+ "FROM domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado " + "WHERE personaJuridicaDni == :personaJuridicaDni"),
 	@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
 			+ "FROM domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliado " + "WHERE personaHabilitado == true "),
 	@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
@@ -176,7 +173,7 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 		this.personaTelefono = personaTelefono;
 	}	
 	
-  @javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+  @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
   @Property(
           editing = Editing.DISABLED
   )
@@ -350,27 +347,6 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 	// endregion
 
 	// accion
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar todos los clientes no afiliados")
-	@MemberOrder(sequence = "2")
-	public List<ClienteNoAfiliado> listarClienteNoAfiliado() {
-		return clienteNoAfiliadoRepository.listar();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar clientes no socios habilitados")
-	@MemberOrder(sequence = "2")
-	public List<ClienteNoAfiliado> listarClienteHabilitados() {
-		return clienteNoAfiliadoRepository.listarHabilitados();
-	}
-
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Listar clientes no afiliados inhabilitados")
-	@MemberOrder(sequence = "2")
-	public List<ClienteNoAfiliado> listarClienteNoAfiliadoInhabilitados() {
-		return clienteNoAfiliadoRepository.listarInhabilitados();
-	}
-	
 	@ActionLayout(hidden=Where.EVERYWHERE)
     public static boolean isNumeric(String cadena) {
 
@@ -404,9 +380,6 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 	@Inject
 	ClienteNoAfiliadoRepository clienteNoAfiliadoRepository;
 	
-//	@Inject
-//	PersonaRepository personaRepository;
-
 	// endregion
 
 }
