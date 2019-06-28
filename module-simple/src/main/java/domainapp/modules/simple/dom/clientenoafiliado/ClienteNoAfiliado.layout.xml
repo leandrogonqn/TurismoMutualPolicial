@@ -29,7 +29,7 @@
 								<c:property id="personaDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaLocalidad" namedEscaped="true">
+                                <c:property id="localidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="personaTelefono" namedEscaped="true">

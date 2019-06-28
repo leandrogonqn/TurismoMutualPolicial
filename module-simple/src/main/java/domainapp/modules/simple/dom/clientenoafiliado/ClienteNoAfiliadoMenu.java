@@ -35,15 +35,15 @@ public class ClienteNoAfiliadoMenu {
 			@ParameterLayout(named = "Nombre") final String personaNombre,
 			@Nullable @ParameterLayout(named = "Cuit/Cuil") @Parameter(optionality = Optionality.OPTIONAL) final String personaCuitCuil,
 			@Nullable @ParameterLayout(named = "Domicilio") @Parameter(optionality = Optionality.OPTIONAL) final String personaDireccion,
-			@Nullable @ParameterLayout(named = "Localidad") @Parameter(optionality = Optionality.OPTIONAL) final Localidad personaLocalidad,
+			@ParameterLayout(named = "Localidad") final Localidad personaLocalidad,
 			@ParameterLayout(named = "Teléfono") final String personaTelefono,
 			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String personaMail) {
 		return clienteNoAfiliadoRepository.crear(personaDni, personaApellido, personaNombre, personaCuitCuil, personaDireccion, 
-				 personaLocalidad, personaTelefono, personaMail);
+				personaLocalidad.getLocalidadId(), personaTelefono, personaMail);
 	}
 	
 	public List<Localidad> choices5Crear() {
-		return localidadesRepository.listarHabilitados();
+		return localidadesRepository.listar();
 	}
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22

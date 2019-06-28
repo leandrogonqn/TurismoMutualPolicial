@@ -22,7 +22,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
-import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.reportes.ReporteRepository;
@@ -201,7 +200,7 @@ public class Voucher implements Comparable<Voucher> {
 			@ParameterLayout(named = "Fecha de Salida") final Date voucherFechaSalida) {
 		setVoucherFechaEntrada(voucherFechaEntrada);
 		setVoucherFechaSalida(voucherFechaSalida);
-		TipoPrecio p;
+		TipoPrecio p = TipoPrecio.Activo;
 		if (getVoucherReserva().getClass()==ReservaAfiliado.class) {
 			ReservaAfiliado ra = (ReservaAfiliado) getVoucherReserva();
 			if (ra.getReservaCliente().getAfiliadoActivo()==true) {

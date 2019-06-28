@@ -13,16 +13,12 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarLocalidad"/>
+	                                <c:property id="localidadId" namedEscaped="true">
+                                	</c:property>                            	
 									<c:property id="localidadesNombre" namedEscaped="true">
-	                                <c:action id="actualizarNombre" position="RIGHT"></c:action>
                                 	</c:property>
-	                                <c:property id="localidadProvincia" namedEscaped="true">
-	                                <c:action id="actualizarProvincia" position="RIGHT"></c:action>
+	                                <c:property id="provincia" namedEscaped="true">
                                 	</c:property>                                
-	                                <c:property id="localidadHabilitado" namedEscaped="true">
-	                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
-                                	</c:property>
                             </c:fieldSet>
                         </bs3:col>
                     </bs3:row>

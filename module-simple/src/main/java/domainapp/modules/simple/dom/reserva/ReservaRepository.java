@@ -1,5 +1,6 @@
 package domainapp.modules.simple.dom.reserva;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,10 +43,14 @@ public class ReservaRepository {
 						fechaDisponible.setProducto(listaProducto.get(i));
 						fechaDisponible.setFechaDesde(f);
 						while (voucherRepository.corroborarDisponibilidadCrear(listaProducto.get(i), f, f) == true) {
-							fechaDisponible.setFechaHasta(f);
 							f = voucherRepository.sumarUnDiaAFecha(f);
-							if (f.after(fechaHasta))
+							if (f.after(fechaHasta)) {
+								fechaDisponible.setMemo("");
 								break;
+							}
+							fechaDisponible.setFechaHasta(f);
+							SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+							fechaDisponible.setMemo("Disponibilidad hasta las 10:00 a.m.  del día "+sdf.format(f));
 						}
 						listaFechasDisponibles.add(fechaDisponible);
 					}

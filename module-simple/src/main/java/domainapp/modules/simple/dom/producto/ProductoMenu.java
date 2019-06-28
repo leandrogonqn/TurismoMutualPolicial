@@ -36,8 +36,11 @@ public class ProductoMenu {
 			@Nullable @ParameterLayout(named = "Direccion") @Parameter(optionality=Optionality.OPTIONAL) final String productoDireccion,
 			@ParameterLayout(named = "Localidad") final Localidad productoLocalidad,
 			@Nullable @ParameterLayout(named = "Telefono") @Parameter(optionality=Optionality.OPTIONAL) final String productoTelefono) {
-		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, productoDireccion,
-				productoLocalidad, productoTelefono);
+		Integer proveedorId = null;
+		if(productoProveedor!=null) 
+			proveedorId = productoProveedor.getProveedorId();
+		return productoRepository.crear(productoCodigo, productoAlojamientoPropio, proveedorId, productoCategoria, productoDireccion,
+				productoLocalidad.getLocalidadId(), productoTelefono);
 	}
 
 	public List<Proveedor> choices2Crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
@@ -52,7 +55,7 @@ public class ProductoMenu {
 	}
 	
 	public List<Localidad> choices5Crear(){
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 	
 	public String validateCrear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,

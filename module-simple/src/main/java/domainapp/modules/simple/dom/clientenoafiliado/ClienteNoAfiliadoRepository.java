@@ -8,16 +8,14 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.registry.ServiceRegistry2;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
-import domainapp.modules.simple.dom.localidad.Localidad;
-
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = ClienteNoAfiliado.class)
 public class ClienteNoAfiliadoRepository {
 
 	public ClienteNoAfiliado crear(final int personaDni, final String personaApellido, final String personaNombre, 
-			final String personaCuitCuil, final String personaDireccion, Localidad personaLocalidad, 
+			final String personaCuitCuil, final String personaDireccion, int personaLocalidadId, 
 			 final String personaTelefono, final String personaMail) {
 		final ClienteNoAfiliado object = new ClienteNoAfiliado(personaDni, personaApellido, personaNombre, 
-				personaCuitCuil, personaDireccion, personaLocalidad, personaTelefono, personaMail);
+				personaCuitCuil, personaDireccion, personaLocalidadId, personaTelefono, personaMail);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;

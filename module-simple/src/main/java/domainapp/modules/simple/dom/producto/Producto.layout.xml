@@ -20,18 +20,18 @@
                                 <c:property id="productoAlojamientoPropio" namedEscaped="true">
                                 <c:action id="actualizarProveedor" position="RIGHT"></c:action>
                                 </c:property>
-								<c:property id="productoProveedor" namedEscaped="true">
+								<c:property id="proveedor" namedEscaped="true">
                                 </c:property>
                                 <c:property id="productoCategoria" namedEscaped="true">
                                 <c:action id="actualizarCategoria" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="personaDireccion" namedEscaped="true">
+                                <c:property id="productoDireccion" namedEscaped="true">
                                 <c:action id="actualizarDireccion" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="productoLocalidad" namedEscaped="true">
+                                <c:property id="localidad" namedEscaped="true">
                                 <c:action id="actualizarLocalidad" position="RIGHT"></c:action>
                                 </c:property>  
-                                <c:property id="personaTelefono" namedEscaped="true">
+                                <c:property id="productoTelefono" namedEscaped="true">
                                 <c:action id="actualizarTelefono" position="RIGHT"></c:action>
                                 </c:property> 
                                 <c:property id="productoAutorizacion" namedEscaped="true">

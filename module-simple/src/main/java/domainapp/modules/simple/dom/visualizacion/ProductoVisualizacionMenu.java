@@ -47,7 +47,7 @@ public class ProductoVisualizacionMenu {
 	}
 	
 	public List<Localidad> choices0BuscarProductoPorLocalidad(){
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)

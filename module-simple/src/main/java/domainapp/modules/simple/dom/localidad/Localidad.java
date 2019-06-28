@@ -2,19 +2,14 @@ package domainapp.modules.simple.dom.localidad;
 
 import java.util.List;
 import javax.inject.Inject;
-import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -24,42 +19,42 @@ import org.apache.isis.applib.services.title.TitleService;
 
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
-import domainapp.modules.simple.dom.proveedor.Proveedor;
 import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 import domainapp.modules.simple.dom.provincia.Provincia;
 import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Localidades")
-@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "localidadId")
-@javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.localidad.Localidad "
-				+ "WHERE localidadesNombre.toLowerCase().indexOf(:localidadesNombre) >= 0 "),
-		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadHabilitado == true "),
-		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.localidad.Localidad " + "WHERE localidadHabilitado == false ") })
-@javax.jdo.annotations.Unique(name = "Localidades_localidadesNombre_UNQ", members = { "localidadesNombre" })
-@DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
+@DomainObject(nature = Nature.VIEW_MODEL, objectType="Localidad")
 public class Localidad implements Comparable<Localidad> {
 	// region > title
 	public TranslatableString title() {
 		return TranslatableString.tr("{name}", "name",
-				getLocalidadesNombre() + " - " + this.getLocalidadProvincia().getProvinciasNombre());
+				getLocalidadesNombre() + " - " + this.getProvincia().getProvinciasNombre());
 	}
 	// endregion
-
-	public String cssClass() {
-		return (getLocalidadHabilitado() == true) ? "habilitado" : "inhabilitado";
-	}
 
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public Localidad(String localidadNombre, Provincia localidadProvincia) {
+	public Localidad() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Localidad(int localidadId, String localidadNombre, int localidadProvinciaId) {
+		setLocalidadId(localidadId);
 		setLocalidadesNombre(localidadNombre);
-		setLocalidadProvincia(localidadProvincia);
-		this.localidadHabilitado = true;
+		setLocalidadProvinciaId(localidadProvinciaId);
+	}
+	
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
+	@PropertyLayout(named = "Id")
+	private int localidadId;
+
+	public int getLocalidadId() {
+		return localidadId;
+	}
+
+	public void setLocalidadId(int localidadId) {
+		this.localidadId = localidadId;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
@@ -76,72 +71,24 @@ public class Localidad implements Comparable<Localidad> {
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "false", name = "provinciaId")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Provincia")
-	private Provincia localidadProvincia;
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
+	@PropertyLayout(named = "Provincia Id")
+	private int localidadProvinciaId;
 
-	public Provincia getLocalidadProvincia() {
-		return localidadProvincia;
+	public int getLocalidadProvinciaId() {
+		return localidadProvinciaId;
 	}
 
-	public void setLocalidadProvincia(Provincia localidadProvincia) {
-		this.localidadProvincia = localidadProvincia;
+	public void setLocalidadProvinciaId(int localidadProvinciaId) {
+		this.localidadProvinciaId = localidadProvinciaId;
 	}
-
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
-	private boolean localidadHabilitado;
-
-	public boolean getLocalidadHabilitado() {
-		return localidadHabilitado;
-	}
-
-	public void setLocalidadHabilitado(boolean localidadHabilitado) {
-		this.localidadHabilitado = localidadHabilitado;
+	
+	@ActionLayout(named="Provincia")
+	public Provincia getProvincia() {
+		return provinciaRepository.buscarPorId(this.localidadProvinciaId);
 	}
 
 	// region > delete (action)
-	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-	public void borrarLocalidad() {
-		final String title = titleService.titleOf(this);
-		messageService.informUser(String.format("'%s' deleted", title));
-		setLocalidadHabilitado(false);
-	}
-	
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadNombre")
-	public Localidad actualizarNombre(@ParameterLayout(named = "Nombre") final String localidadNombre) {
-		setLocalidadesNombre(localidadNombre);
-		return this;
-	}
-
-	public String default0ActualizarNombre() {
-		return getLocalidadesNombre();
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "LocalidadProvincia")
-	public Localidad actualizarProvincia(@ParameterLayout(named = "Provincia") final Provincia LocalidadProvincia) {
-		setLocalidadProvincia(LocalidadProvincia);
-		return this;
-	}
-
-	public List<Provincia> choices0ActualizarProvincia() {
-		return provinciaRepository.listarHabilitados();
-	}
-
-	public Provincia default0ActualizarProvincia() {
-		return getLocalidadProvincia();
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "localidadHabilitado")
-	public Localidad actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean localidadHabilitado) {
-		setLocalidadHabilitado(localidadHabilitado);
-		return this;
-	}
-
-	public boolean default0ActualizarHabilitado() {
-		return getLocalidadHabilitado();
-	}
 
 	// endregion
 
@@ -158,12 +105,6 @@ public class Localidad implements Comparable<Localidad> {
 	// endregion
 
 	// acciones
-	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar proveedores en esta Localidad")
-	public List<Proveedor> buscarProvedoresPorLocalidad() {
-		return proveedorRepository.buscarProveedorPorLocalidad(this);
-	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Buscar produtos en esta Localidad")

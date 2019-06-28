@@ -64,6 +64,11 @@ public class ReporteRepository {
 		
 	}
 	
+	public Blob imprimirReporteIndividual() {
+		byte[] result = new String("prueba").getBytes();
+		return new Blob("error.txt", "text/plain", result);
+	}
+	
 	public static Blob imprimirReporteLista(JasperPrint jasperPrint, String jrxml, String nombreArchivo) throws JRException, IOException{
 		
 		File pdf = File.createTempFile("output.", ".pdf");

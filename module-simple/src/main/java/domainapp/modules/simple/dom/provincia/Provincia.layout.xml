@@ -13,12 +13,9 @@
                     <bs3:row>
                         <bs3:col span="6">
                             <c:fieldSet name="Nombre">
-                                <c:action id="borrarProvincia"/>
+                                <c:property id="provinciasId" namedEscaped="true">
+                                </c:property>                                
                                 <c:property id="provinciasNombre" namedEscaped="true">
-                                <c:action id="actualizarNombre" position="RIGHT"></c:action>
-                                </c:property>
-                                <c:property id="provinciaHabilitado" namedEscaped="true">
-                                <c:action id="actualizarHabilitado" position="RIGHT"></c:action>
                                 </c:property>
                             </c:fieldSet>
                         </bs3:col>

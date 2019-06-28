@@ -29,12 +29,12 @@ public class ProvinciaMenu {
 		return provinciasRepository.buscarPorNombre(provinciaNombre);
 
 	}
-
+	
 	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(named = "Crear Provincia")
-	@MemberOrder(sequence = "1.2")
-	public Provincia crear(@ParameterLayout(named = "Nombre") final String provinciaNombre) {
-		return provinciasRepository.crear(provinciaNombre);
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Provincias Por Id")
+	@MemberOrder(sequence = "3.1")
+	public Provincia buscarPorID(@ParameterLayout(named = "Id") final int provinciaId) {
+		return provinciasRepository.buscarPorId(provinciaId);
 	}
 
 	@javax.inject.Inject

@@ -11,7 +11,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import domainapp.modules.simple.dom.provincia.Provincia;
 import domainapp.modules.simple.dom.provincia.ProvinciaRepository;
 
 @DomainService(nature = NatureOfService.VIEW_MENU_ONLY, repositoryFor = Localidad.class, objectType="simple.LocalidadMenu")
@@ -33,16 +32,11 @@ public class LocalidadMenu {
 
 	}
 
-	public List<Provincia> choices1Crear() {
-		return provinciasRepository.listarHabilitados();
-	}
-
 	@Action(semantics = SemanticsOf.SAFE)
-	@MemberOrder(sequence = "1.2")
-	@ActionLayout(named = "Crear Localidad")
-	public Localidad crear(@ParameterLayout(named = "Nombre") final String localidadNombre,
-			@ParameterLayout(named = "Provincia") final Provincia localidadProvincia) {
-		return localidadesRepository.crear(localidadNombre, localidadProvincia);
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Afiliados Por Id")
+	@MemberOrder(sequence = "3.1")
+	public Localidad buscarPorID(@ParameterLayout(named = "Id") final int localidadId) {
+		return localidadesRepository.buscarPorId(localidadId);
 	}
 
 	@javax.inject.Inject

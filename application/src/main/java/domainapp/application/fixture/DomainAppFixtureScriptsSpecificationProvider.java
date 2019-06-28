@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
-import domainapp.application.fixture.scenarios.RecreateProvincia;
 
 /**
  * Specifies where to find fixtures, and other settings.
@@ -34,9 +33,9 @@ public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScri
         return FixtureScriptsSpecification
                 .builder(DomainAppFixtureScriptsSpecificationProvider.class)
                 .with(FixtureScripts.MultipleExecutionStrategy.EXECUTE)
-                .withRunScriptDefault(RecreateProvincia.class)
+//                .withRunScriptDefault(RecreateProvincia.class)
                 .withRunScriptDropDown(FixtureScriptsSpecification.DropDownPolicy.CHOICES)
-                .withRecreate(RecreateProvincia.class)
+//                .withRecreate(RecreateProvincia.class)
                 .build();
     }
 }

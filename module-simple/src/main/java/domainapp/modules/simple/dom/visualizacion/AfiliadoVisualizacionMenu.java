@@ -46,6 +46,13 @@ public class AfiliadoVisualizacionMenu {
 	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
+	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Afiliados Por Id")
+	@MemberOrder(sequence = "3.1")
+	public Afiliado buscarPorID(@ParameterLayout(named = "Id") final int afiliadoId) {
+		return afiliadoRepository.buscarPorId(afiliadoId);
+	}
+	
+	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar afiliado Por DNI")
 	@MemberOrder(sequence = "3.2")
 	public List<Afiliado> buscarPorDni(@ParameterLayout(named = "DNI") @Parameter(maxLength=8) final int personaDni) {

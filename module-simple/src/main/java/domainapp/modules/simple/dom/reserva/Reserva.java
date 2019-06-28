@@ -25,6 +25,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.value.Blob;
+
+import domainapp.modules.simple.dom.afiliado.Afiliado;
+import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
+import domainapp.modules.simple.dom.clientenoafiliado.ClienteNoAfiliadoRepository;
+import domainapp.modules.simple.dom.empresa.EmpresaRepository;
 import domainapp.modules.simple.dom.reportes.ReporteRepository;
 import domainapp.modules.simple.dom.reportes.VoucherAfiliadoReporte;
 import domainapp.modules.simple.dom.reportes.VoucherEmpresaReporte;
@@ -157,15 +162,15 @@ public abstract class Reserva {
     	
     	if(voucher.getVoucherReserva().getClass()==ReservaAfiliado.class) {
         	ReservaAfiliado r = (ReservaAfiliado) voucher.getVoucherReserva();
-        	
+        	Afiliado a = afiliadoRepository.buscarPorId(r.getReservaClienteId());
     		VoucherAfiliadoReporte voucherAfiliadoReporte = new VoucherAfiliadoReporte();
     			
     		voucherAfiliadoReporte.setReservaCodigo(voucher.getVoucherReserva().getReservaCodigo());
     		voucherAfiliadoReporte.setReservaFecha(voucher.getVoucherReserva().getReservaFecha());
-    		voucherAfiliadoReporte.setReservaCliente(r.getReservaCliente());
-    		voucherAfiliadoReporte.setPersonaJuridicaDni(r.getReservaCliente().getPersonaJuridicaDni());
-    		voucherAfiliadoReporte.setPersonaTelefono(r.getReservaCliente().getPersonaTelefono());
-    		voucherAfiliadoReporte.setPersonaMail(r.getReservaCliente().getPersonaMail());
+    		voucherAfiliadoReporte.setReservaCliente(a);
+    		voucherAfiliadoReporte.setPersonaJuridicaDni(a.getPersonaJuridicaDni());
+    		voucherAfiliadoReporte.setPersonaTelefono(a.getPersonaTelefono());
+    		voucherAfiliadoReporte.setPersonaMail(a.getPersonaMail());
     		voucherAfiliadoReporte.setVoucherProducto(voucher.getVoucherProducto());
     		voucherAfiliadoReporte.setVoucherFechaEntrada(voucher.getVoucherFechaEntrada());
     		voucherAfiliadoReporte.setVoucherFechaSalida(voucher.getVoucherFechaSalida());
@@ -184,8 +189,8 @@ public abstract class Reserva {
     	
     	if(voucher.getVoucherReserva().getClass()==ReservaNoAfiliado.class) {
         	ReservaNoAfiliado r = (ReservaNoAfiliado) voucher.getVoucherReserva();
-        	
-    		VoucherNoAfiliadoReporte voucherNoAfiliadoReporte = new VoucherNoAfiliadoReporte();
+
+        	VoucherNoAfiliadoReporte voucherNoAfiliadoReporte = new VoucherNoAfiliadoReporte();
     			
     		voucherNoAfiliadoReporte.setReservaCodigo(voucher.getVoucherReserva().getReservaCodigo());
     		voucherNoAfiliadoReporte.setReservaFecha(voucher.getVoucherReserva().getReservaFecha());
@@ -238,7 +243,8 @@ public abstract class Reserva {
 		
 		//String nombreArchivo = "VoucherAfiliado_"+this.getVoucherReserva().getReservaCodigo()+"_"+new SimpleDateFormat("dd/MM/yyyy").format(this.getVoucherFechaEntrada());
 		String nombreArchivo = "Voucher_"+voucher.getVoucherReserva().getReservaCodigo()+"_"+new SimpleDateFormat("dd/MM/yyyy").format(voucher.getVoucherFechaEntrada());
-		return reporteRepository.imprimirReporteIndividual(objectsReport,jrxml, nombreArchivo);
+		ReporteRepository r = new ReporteRepository();
+		return r.imprimirReporteIndividual(objectsReport, jrxml, nombreArchivo);
     }
     
 	public String validateImprimirVoucher(Voucher voucher) {
@@ -259,4 +265,13 @@ public abstract class Reserva {
 	
 	@Inject
 	ReporteRepository reporteRepository;
+	
+	@Inject
+	AfiliadoRepository afiliadoRepository;
+	
+	@Inject
+	ClienteNoAfiliadoRepository clienteNoAfiliadoRepository;
+	
+	@Inject
+	EmpresaRepository empresaRepository;
 }

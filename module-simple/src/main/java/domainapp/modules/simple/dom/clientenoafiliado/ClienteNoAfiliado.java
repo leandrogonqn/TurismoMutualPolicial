@@ -61,14 +61,14 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 	}
 
 	public ClienteNoAfiliado(int personaDni, String personaApellido, String personaNombre, String personaCuitCuil, 
-			String personaDireccion, Localidad personaLocalidad,  String personaTelefono,
+			String personaDireccion, int personaLocalidadId,  String personaTelefono,
 			String personaMail) {
 		setPersonaJuridicaDni(personaDni);
 		setPersonaJuridicaApellido(personaApellido);
 		setPersonaJuridicaNombre(personaNombre);
 		setPersonaCuitCuil(personaCuitCuil);
 		setPersonaDireccion(personaDireccion);
-		setPersonaLocalidad(personaLocalidad);
+		setPersonaLocalidadId(personaLocalidadId);
 		setPersonaTelefono(personaTelefono);
 		setPersonaMail(personaMail);
 		setPersonaHabilitado(true);
@@ -143,23 +143,25 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 	public void setPersonaDireccion(String personaDireccion) {
 		this.personaDireccion = personaDireccion;
 	}
-	
-	@javax.jdo.annotations.Column(allowsNull = "true", name="localidadId")
-  @Property(
-          editing = Editing.DISABLED
-  )
-  @PropertyLayout(named="Localidad", hidden=Where.ALL_TABLES)
-  private Localidad personaLocalidad;
 
-	public Localidad getPersonaLocalidad() {
-		return personaLocalidad;
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "LocalidadId", hidden = Where.EVERYWHERE)
+	private int personaLocalidadId;
+
+	public int getPersonaLocalidadId() {
+		return personaLocalidadId;
 	}
 
-	public void setPersonaLocalidad(Localidad personaLocalidad) {
-		this.personaLocalidad = personaLocalidad;
+	public void setPersonaLocalidadId(int personaLocalidadId) {
+		this.personaLocalidadId = personaLocalidadId;
 	}
 
-  @javax.jdo.annotations.Column(allowsNull = "true")
+	public Localidad getLocalidad() {
+		return localidadRepository.buscarPorId(this.personaLocalidadId);
+	}
+
+	@javax.jdo.annotations.Column(allowsNull = "true")
   @Property(
           editing = Editing.DISABLED
   )
@@ -259,16 +261,16 @@ public class ClienteNoAfiliado implements Comparable<ClienteNoAfiliado> {
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "personaLocalidad")
 	public ClienteNoAfiliado actualizarLocalidad(@ParameterLayout(named = "Localidades") final Localidad personaLocalidad) {
-		setPersonaLocalidad(personaLocalidad);
+		setPersonaLocalidadId(personaLocalidad.getLocalidadId());
 		return this;
 	}
 
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 
 	public Localidad default0ActualizarLocalidad() {
-		return getPersonaLocalidad();
+		return getLocalidad();
 	}
 
 

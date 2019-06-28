@@ -1,35 +1,17 @@
 package domainapp.modules.simple.dom.provincia;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.IdentityType;
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
-@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "simple", table = "Provincias")
-@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column = "provinciaId")
-@javax.jdo.annotations.Queries({
-		@javax.jdo.annotations.Query(name = "buscarPorNombre", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.provincia.Provincia "
-				+ "WHERE provinciasNombre.toLowerCase().indexOf(:provinciasNombre) >= 0 "),
-		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaHabilitado == true "),
-		@javax.jdo.annotations.Query(name = "listarInhabilitados", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.provincia.Provincia " + "WHERE provinciaHabilitado == false ") })
-@javax.jdo.annotations.Unique(name = "Provincias_provinciasNombre_UNQ", members = { "provinciasNombre" })
-@DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
+@DomainObject(nature = Nature.VIEW_MODEL, objectType="Provincia")
 public class Provincia implements Comparable<Provincia> {
 	// region > title
 	public TranslatableString title() {
@@ -37,19 +19,30 @@ public class Provincia implements Comparable<Provincia> {
 	}
 	// endregion
 
-	public String cssClass() {
-		return (getProvinciaHabilitado() == true) ? "habilitado" : "inhabilitado";
-	}
-
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public Provincia(String provinciaNombre) {
+	public Provincia() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Provincia(int provinciasId, String provinciaNombre) {
+		setProvinciasId(provinciasId);
 		setProvinciasNombre(provinciaNombre);
-		this.provinciaHabilitado = true;
 	}
 
-	@javax.jdo.annotations.Column(allowsNull = "false", length = NAME_LENGTH)
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "Id")
+	private int provinciasId;
+
+	public int getProvinciasId() {
+		return provinciasId;
+	}
+
+	public void setProvinciasId(int provinciasId) {
+		this.provinciasId = provinciasId;
+	}
+	
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Nombre")
 	private String provinciasNombre;
@@ -62,48 +55,9 @@ public class Provincia implements Comparable<Provincia> {
 		this.provinciasNombre = provinciasNombre;
 	}
 
-	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Habilitado", hidden=Where.ALL_TABLES)
-	private boolean provinciaHabilitado;
-
-	public boolean getProvinciaHabilitado() {
-		return provinciaHabilitado;
-	}
-
-	public void setProvinciaHabilitado(boolean provinciaHabilitado) {
-		this.provinciaHabilitado = provinciaHabilitado;
-	}
-
 	// endregion
 
 	// region > delete (action)
-	@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
-	public void borrarProvincia() {
-		final String title = titleService.titleOf(this);
-		messageService.informUser(String.format("'%s' deleted", title));
-		setProvinciaHabilitado(false);
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaNombre")
-	public Provincia actualizarNombre(@ParameterLayout(named = "Nombre") final String provinciaNombre) {
-		setProvinciasNombre(provinciaNombre);
-		return this;
-	}
-
-	public String default0ActualizarNombre() {
-		return getProvinciasNombre();
-	}
-
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "provinciaHabilitado")
-	public Provincia actualizarHabilitado(@ParameterLayout(named = "Habilitado") final boolean provinciaHabilitado) {
-		setProvinciaHabilitado(provinciaHabilitado);
-		return this;
-	}
-
-	public boolean default0ActualizarHabilitado() {
-		return getProvinciaHabilitado();
-	}
 
 	// endregion
 

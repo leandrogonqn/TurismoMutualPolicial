@@ -43,7 +43,7 @@ import domainapp.modules.simple.dom.proveedor.ProveedorRepository;
 		@javax.jdo.annotations.Query(name = "buscarPorCodigo", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoCodigo == :productoCodigo"),
 		@javax.jdo.annotations.Query(name = "buscarProductoPorLocalidad", language = "JDOQL", value = "SELECT "
-				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoLocalidad == :productoLocalidad"),
+				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoLocalidadId == :productoLocalidadId"),
 		@javax.jdo.annotations.Query(name = "buscarProductoPorCategoria", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.producto.Producto " + "WHERE productoCategoria == :productoCategoria"),
 		@javax.jdo.annotations.Query(name = "buscarProductoPorProveedor", language = "JDOQL", value = "SELECT "
@@ -58,9 +58,9 @@ public class Producto implements Comparable<Producto> {
 	public TranslatableString title() {
 		TranslatableString s;
 		if (getProductoAlojamientoPropio()==true) {
-			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
+			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getLocalidad().toString());
 		}else {
-			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+ " "+ getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString());
+			s = TranslatableString.tr("Codigo: "+getProductoCodigo()+ " "+ getProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getLocalidad().toString());
 		}
 		return s;
 	}
@@ -73,15 +73,15 @@ public class Producto implements Comparable<Producto> {
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public Producto(int productoCodigo, boolean productoAlojamientoPropio, Proveedor productoProveedor, Categoria productoCategoria,
-			String productoDireccion, Localidad productoLocalidad, String productoTelefono, List<Politicas> listaPoliticas) {
+	public Producto(int productoCodigo, boolean productoAlojamientoPropio, Integer productoProveedorId, Categoria productoCategoria,
+			String productoDireccion, int productoLocalidadId, String productoTelefono, List<Politicas> listaPoliticas) {
 		setProductoCodigo(productoCodigo);
 		setProductoAlojamientoPropio(productoAlojamientoPropio);
-		setProductoProveedor(productoProveedor);
+		setProductoProveedorId(productoProveedorId);
 		setProductoCategoria(productoCategoria);
-		setPersonaDireccion(productoTelefono);
-		setProductoLocalidad(productoLocalidad);
-		setPersonaTelefono(productoTelefono);
+		setProductoDireccion(productoTelefono);
+		setProductoLocalidadId(productoLocalidadId);
+		setProductoTelefono(productoTelefono);
 		if (productoAlojamientoPropio==true & !listaPoliticas.isEmpty()) {
 			setProductoPoliticas(listaPoliticas.get(0));
 		}
@@ -115,17 +115,26 @@ public class Producto implements Comparable<Producto> {
 	}	
 
 	@javax.jdo.annotations.Column(allowsNull = "true")
-	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Proveedor")
-	private Proveedor productoProveedor;
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
+	@PropertyLayout(named = "Proveedor Id")
+	private Integer productoProveedorId;
 
-	public Proveedor getProductoProveedor() {
-		return productoProveedor;
+	public Integer getProductoProveedorId() {
+		return productoProveedorId;
 	}
 
-	public void setProductoProveedor(Proveedor productoProveedor) {
-		this.productoProveedor = productoProveedor;
+	public void setProductoProveedorId(Integer productoProveedorId) {
+		this.productoProveedorId = productoProveedorId;
 	}	
+	
+	public Proveedor getProveedor() {
+		if (this.productoProveedorId!=null) {
+			return proveedorRepository.buscarPorId(this.productoProveedorId);
+		}else {
+			return null;
+		}
+		
+	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
 	@Property(editing = Editing.DISABLED)
@@ -143,40 +152,43 @@ public class Producto implements Comparable<Producto> {
 	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Direccion", hidden = Where.ALL_TABLES)
-	private String personaDireccion;
+	private String productoDireccion;
 
-	public String getPersonaDireccion() {
-		return personaDireccion;
+	public String getProductoDireccion() {
+		return productoDireccion;
 	}
 
-	public void setPersonaDireccion(String personaDireccion) {
-		this.personaDireccion = personaDireccion;
+	public void setProductoDireccion(String productoDireccion) {
+		this.productoDireccion = productoDireccion;
 	}
 
-	@javax.jdo.annotations.Column(allowsNull = "true")
 	@Property(editing = Editing.DISABLED)
-	@PropertyLayout(named = "Localidad")
-	private Localidad productoLocalidad;
+	@PropertyLayout(named = "LocalidadId", hidden=Where.EVERYWHERE)
+	private int productoLocalidadId;
 
-	public Localidad getProductoLocalidad() {
-		return productoLocalidad;
+	public int getProductoLocalidadId() {
+		return productoLocalidadId;
 	}
 
-	public void setProductoLocalidad(Localidad productoLocalidad) {
-		this.productoLocalidad = productoLocalidad;
+	public void setProductoLocalidadId(int productoLocalidadId) {
+		this.productoLocalidadId = productoLocalidadId;
+	}
+
+	public Localidad getLocalidad() {
+		return localidadRepository.buscarPorId(this.productoLocalidadId);
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
 	@Property(editing = Editing.DISABLED)
 	@PropertyLayout(named = "Telefono")
-	private String personaTelefono;
+	private String productoTelefono;
 
-	public String getPersonaTelefono() {
-		return personaTelefono;
+	public String getProductoTelefono() {
+		return productoTelefono;
 	}
 
-	public void setPersonaTelefono(String personaTelefono) {
-		this.personaTelefono = personaTelefono;
+	public void setProductoTelefono(String productoTelefono) {
+		this.productoTelefono = productoTelefono;
 	}
 
 	@javax.jdo.annotations.Column(allowsNull = "false")
@@ -241,7 +253,12 @@ public class Producto implements Comparable<Producto> {
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoAlojamientoPropio")
 	public Producto actualizarProveedor(@ParameterLayout(named = "AlojamientoPropio") final boolean productoAlojamientoPropio,
 			@Nullable @ParameterLayout(named = "Proveedor") @Parameter(optionality=Optionality.OPTIONAL) final Proveedor productoProveedor) {
-		setProductoProveedor(productoProveedor);
+		if(productoProveedor!=null){
+			setProductoProveedorId(productoProveedor.getProveedorId());
+		} else {
+			setProductoProveedorId(null);
+		}
+		setProductoAlojamientoPropio(productoAlojamientoPropio);
 		return this;
 	}
 	
@@ -254,6 +271,8 @@ public class Producto implements Comparable<Producto> {
 	public String validateActualizarProveedor(final boolean productoAlojamientoPropio, final Proveedor productoProveedor) {
 		if(productoAlojamientoPropio==false & productoProveedor == null)
 			return "Si el alojamiento no es propio el proveedor no puede ser nulo";
+		if(productoAlojamientoPropio==true & productoProveedor != null)
+			return "Si el alojamiento es propio el proveedor tiene que ser nulo";
 		return "";
 	}
 
@@ -273,36 +292,36 @@ public class Producto implements Comparable<Producto> {
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoLocalidad")
 	public Producto actualizarLocalidad(@ParameterLayout(named = "Localidad") final Localidad productoLocalidad) {
-		setProductoLocalidad(productoLocalidad);
+		setProductoLocalidadId(productoLocalidad.getLocalidadId());
 		return this;
 	}
 
 	public Localidad default0ActualizarLocalidad() {
-		return getProductoLocalidad();
+		return getLocalidad();
 	}
 	
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoDireccion")
 	public Producto actualizarDireccion(@ParameterLayout(named = "Direccion") final String afiliadoDireccion) {
-		setPersonaDireccion(afiliadoDireccion);
+		setProductoDireccion(afiliadoDireccion);
 		return this;
 	}
 
 	public String default0ActualizarDireccion() {
-		return getPersonaDireccion();
+		return getProductoDireccion();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoTelefono")
 	public Producto actualizarTelefono(@ParameterLayout(named = "Telefono") final String afiliadoTelefono) {
-		setPersonaTelefono(afiliadoTelefono);
+		setProductoTelefono(afiliadoTelefono);
 		return this;
 	}
 
 	public String default0ActualizarTelefono() {
-		return getPersonaTelefono();
+		return getProductoTelefono();
 	}
 	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "productoAutorizacion")
@@ -351,9 +370,9 @@ public class Producto implements Comparable<Producto> {
 	public String toString() {
 		String s;
 		if (getProductoAlojamientoPropio()==true) {
-			s = "Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
+			s = "Codigo: "+getProductoCodigo()+" Alojamiento propio - "+getProductoCategoria().toString()+" - "+getLocalidad().toString();
 		}else {
-			s= "Codigo: "+getProductoCodigo()+" "+getProductoProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getProductoLocalidad().toString();
+			s= "Codigo: "+getProductoCodigo()+" "+getProveedor().toString()+" - "+getProductoCategoria().toString()+" - "+getLocalidad().toString();
 		}
 		return s;
 	}

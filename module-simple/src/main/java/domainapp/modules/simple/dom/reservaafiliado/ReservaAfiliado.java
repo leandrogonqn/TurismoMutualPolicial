@@ -32,7 +32,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 
 import domainapp.modules.simple.dom.afiliado.Afiliado;
-import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
+import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -68,11 +68,11 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	public static final int NAME_LENGTH = 200;
 
 	// Constructor
-	public ReservaAfiliado(int reservaCodigo, Date reservaFecha, Afiliado reservaCliente, final List<Voucher> reservaListaVoucher,
+	public ReservaAfiliado(int reservaCodigo, Date reservaFecha, int reservaClienteId, final List<Voucher> reservaListaVoucher,
 			CanalDePago reservaCanalDePago, String reservaMemo) {
 		setReservaCodigo(reservaCodigo);
 		setReservaFecha(reservaFecha);
-		setReservaCliente(reservaCliente);
+		setReservaClienteId(reservaClienteId);
 		setReservaListaVoucher(reservaListaVoucher);
 		setReservaCanalDePago(reservaCanalDePago);
 		setReservaMemo(reservaMemo);
@@ -80,16 +80,22 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	}
 	
 	@javax.jdo.annotations.Column(allowsNull = "false")
-	@Property(editing = Editing.DISABLED)
+	@Property(editing = Editing.DISABLED, hidden=Where.EVERYWHERE)
 	@PropertyLayout(named = "Cliente")
-	private Afiliado reservaCliente;
+	private int reservaClienteId;
 
-	public Afiliado getReservaCliente() {
-		return reservaCliente;
+	public int getReservaClienteId() {
+		return reservaClienteId;
 	}
 
-	public void setReservaCliente(Afiliado reservaCliente) {
-		this.reservaCliente = reservaCliente;
+	public void setReservaClienteId(int reservaClienteId) {
+		this.reservaClienteId = reservaClienteId;
+	}
+	
+	@ActionLayout(named="Cliente")
+	public Afiliado getReservaCliente() {
+		Afiliado reservaCliente = afiliadoRepository.buscarPorId(this.reservaClienteId);
+		return reservaCliente;
 	}
 	
 	@Column(allowsNull = "true")
@@ -127,16 +133,6 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 		return getReservaFecha();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCliente")
-	public ReservaAfiliado actualizarReservaCliente(@ParameterLayout(named = "Cliente") final Afiliado reservaCliente) {
-		setReservaCliente(reservaCliente);
-		return this;
-	}
-
-	public Afiliado default0ActualizarReservaCliente() {
-		return getReservaCliente();
-	}
-	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCanalDePago")
 	public ReservaAfiliado actualizarReservaCanalDePago(@ParameterLayout(named = "Canal De Pago") final CanalDePago reservaCanalDePago) {
 		setReservaCanalDePago(reservaCanalDePago);
@@ -189,7 +185,7 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 			@ParameterLayout(named = "Fecha de salida") final Date voucherFechaSalida,
 			@ParameterLayout(named = "Cantidad de pasajeros") final int voucherCantidadPasajeros,
 			@Nullable @ParameterLayout(named = "Observaciones", multiLine=6) @Parameter(optionality=Optionality.OPTIONAL) final String voucherObservaciones) {
-		TipoPrecio t;
+		TipoPrecio t = TipoPrecio.Activo;
 		if(getReservaCliente().getAfiliadoActivo()==true) {
 			t = TipoPrecio.Activo;
 		} else {
@@ -253,5 +249,8 @@ public class ReservaAfiliado extends Reserva implements Comparable<Reserva>{
 	
 	@Inject
 	UserService userService;
+	
+	@Inject
+	AfiliadoRepository afiliadoRepository;
 
 }

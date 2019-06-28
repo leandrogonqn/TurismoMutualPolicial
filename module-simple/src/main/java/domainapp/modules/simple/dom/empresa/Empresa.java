@@ -48,11 +48,11 @@ public class Empresa implements Comparable<Empresa> {
 	}
 
 	public Empresa(String empresaRazonSocial, String personaCuitCuil, String personaDireccion, 
-			Localidad personaLocalidad,	String personaTelefono, String personaMail) {
+			int personaLocalidadId,	String personaTelefono, String personaMail) {
 		setEmpresaRazonSocial(empresaRazonSocial);
 		setPersonaCuitCuil(personaCuitCuil);
 		setPersonaDireccion(personaDireccion);
-		setPersonaLocalidad(personaLocalidad);
+		setPersonaLocalidadId(personaLocalidadId);
 		setPersonaTelefono(personaTelefono);
 		setPersonaMail(personaMail);
 		setPersonaHabilitado(true);
@@ -101,22 +101,23 @@ public class Empresa implements Comparable<Empresa> {
 	public void setPersonaDireccion(String personaDireccion) {
 		this.personaDireccion = personaDireccion;
 	}
-	
-	@javax.jdo.annotations.Column(allowsNull = "true", name="localidadId")
-   @Property(
-           editing = Editing.DISABLED
-   )
-   @PropertyLayout(named="Localidad", hidden=Where.ALL_TABLES)
-   private Localidad personaLocalidad;
 
-	public Localidad getPersonaLocalidad() {
-		return personaLocalidad;
+	@Property(editing = Editing.DISABLED)
+	@PropertyLayout(named = "LocalidadId", hidden = Where.EVERYWHERE)
+	private int personaLocalidadId;
+
+	public int getPersonaLocalidadId() {
+		return personaLocalidadId;
 	}
 
-	public void setPersonaLocalidad(Localidad personaLocalidad) {
-		this.personaLocalidad = personaLocalidad;
+	public void setPersonaLocalidadId(int personaLocalidadId) {
+		this.personaLocalidadId = personaLocalidadId;
 	}
 
+	public Localidad getLocalidad() {
+		return localidadRepository.buscarPorId(this.personaLocalidadId);
+	}
+		
    @javax.jdo.annotations.Column(allowsNull = "true", length = NAME_LENGTH)
    @Property(
            editing = Editing.DISABLED
@@ -163,16 +164,16 @@ public class Empresa implements Comparable<Empresa> {
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "afiliadoLocalidad")
 	public Empresa actualizarLocalidad(@ParameterLayout(named = "Localidades") final Localidad afiliadoLocalidad) {
-		setPersonaLocalidad(afiliadoLocalidad);
+		setPersonaLocalidadId(afiliadoLocalidad.getLocalidadId());
 		return this;
 	}
 
 	public List<Localidad> choices0ActualizarLocalidad() {
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 
 	public Localidad default0ActualizarLocalidad() {
-		return getPersonaLocalidad();
+		return getLocalidad();
 	}
 
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "empresaRazonSocial")

@@ -102,16 +102,6 @@ public class ReservaEmpresa extends Reserva implements Comparable<Reserva>{
 		return getReservaFecha();
 	}
 
-	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaCliente")
-	public ReservaEmpresa actualizarReservaCliente(@ParameterLayout(named = "Cliente") final Empresa reservaCliente) {
-		setReservaCliente(reservaCliente);
-		return this;
-	}
-
-	public Empresa default0ActualizarReservaCliente() {
-		return getReservaCliente();
-	}
-	
 	@Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "reservaMemo")
 	public ReservaEmpresa actualizarReservaMemo(@ParameterLayout(named = "Memo") final String reservaMemo) {
 		setReservaMemo(reservaMemo);

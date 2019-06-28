@@ -27,7 +27,7 @@ public class EmpresaMenu {
 	public Empresa crear(@ParameterLayout(named = "RazonSocial") final String empresaRazonSocial,
 			@Nullable @ParameterLayout(named = "Cuit") @Parameter(optionality = Optionality.OPTIONAL) final String personaCuitCuil,
 			@Nullable @ParameterLayout(named = "Dirección") @Parameter(optionality = Optionality.OPTIONAL) final String personaDireccion,
-			@Nullable @ParameterLayout(named = "Localidad") @Parameter(optionality = Optionality.OPTIONAL) final Localidad personaLocalidad,
+			@ParameterLayout(named = "Localidad") final Localidad personaLocalidad,
 			@Nullable @ParameterLayout(named = "Teléfono") final String personaTelefono,
 			@Nullable @ParameterLayout(named = "E-Mail") @Parameter(optionality = Optionality.OPTIONAL) final String personaMail) {
 		return empresaRepository.crear(empresaRazonSocial, personaCuitCuil, personaDireccion, personaLocalidad,
@@ -35,7 +35,7 @@ public class EmpresaMenu {
 	}
 	
 	public List<Localidad> choices3Crear() {
-		return localidadesRepository.listarHabilitados();
+		return localidadesRepository.listar();
 	}
 	
 	//este es el validador para que lp no tenga menos de 6, cbu no tenga menos de 22

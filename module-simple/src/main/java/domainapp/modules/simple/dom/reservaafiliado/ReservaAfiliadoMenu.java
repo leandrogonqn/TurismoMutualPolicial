@@ -17,7 +17,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.user.UserService;
 import domainapp.modules.simple.dom.afiliado.Afiliado;
 import domainapp.modules.simple.dom.afiliado.AfiliadoRepository;
-import domainapp.modules.simple.dom.afiliado.TipoAfiliado;
 import domainapp.modules.simple.dom.preciohistorico.TipoPrecio;
 import domainapp.modules.simple.dom.producto.Producto;
 import domainapp.modules.simple.dom.producto.ProductoRepository;
@@ -46,8 +45,9 @@ public class ReservaAfiliadoMenu {
 		} else {
 			t = TipoPrecio.Retirado;
 		}
+		int reservaClienteId = reservaCliente.getAfiliadoId();
 		String voucherUsuario = obtenerUsuario();
-		return reservaRepository.crear(reservaCodigo, reservaFecha, reservaCliente, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
+		return reservaRepository.crear(reservaCodigo, reservaFecha, reservaClienteId, voucherProducto, voucherFechaEntrada, voucherFechaSalida, voucherCantidadPasajeros,
 				t, voucherObservaciones, reservaCanalDePago, reservaMemo, voucherUsuario);
 	}
 	

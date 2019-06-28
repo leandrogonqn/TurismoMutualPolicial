@@ -21,7 +21,6 @@
                                 <c:action id="actualizarReservaFecha" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="reservaCliente" namedEscaped="true">
-                                <c:action id="actualizarReservaCliente" position="RIGHT"></c:action>
                                 </c:property>
                                 <c:property id="precioTotal" namedEscaped="true">
                                 </c:property>

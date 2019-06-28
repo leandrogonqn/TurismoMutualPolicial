@@ -23,7 +23,7 @@
                                 <c:property id="reservaCliente" namedEscaped="true">
                                 <c:action id="actualizarReservaCliente" position="RIGHT"></c:action>
                                 </c:property>
-                                <c:property id="reservaPrecioTotal" namedEscaped="true">
+                                <c:property id="precioTotal" namedEscaped="true">
                                 </c:property>
                                 <c:property id="reservaMemo" namedEscaped="true">
                                 <c:action id="actualizarReservaMemo" position="RIGHT"></c:action>

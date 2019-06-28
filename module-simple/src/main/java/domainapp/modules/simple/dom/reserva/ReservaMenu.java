@@ -1,5 +1,6 @@
 package domainapp.modules.simple.dom.reserva;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,11 +56,11 @@ public class ReservaMenu {
 	}
 	
 	public List<Localidad> choices0ListarVoucherPorLocalidad(){
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 	
 	public String validateListarVoucherPorLocalidad(final Localidad productoLocalidad, final Date fechaDesde, final Date fechaHasta) {
-			if (fechaDesde.after(fechaHasta)||fechaDesde.equals(fechaHasta))
+			if (fechaDesde.after(fechaHasta)/*||fechaDesde.equals(fechaHasta)*/)
 				return "La fecha desde no puede ser anterior o igual a la fecha hasta";
 		return "";
 	}
@@ -82,11 +83,12 @@ public class ReservaMenu {
 	
 	public String validateListarVoucherPorProducto(final Producto voucherProducto, final Date fechaDesde,
 			final Date fechaHasta) {
-		if (fechaDesde.after(fechaHasta)||fechaDesde.equals(fechaHasta))
+		if (fechaDesde.after(fechaHasta)/*||fechaDesde.equals(fechaHasta)*/)
 			return "La fecha desde no puede ser anterior o igual a la fecha hasta";
 		return "";
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar", named = "Listar Disponibilidad Por Productos")
 	@MemberOrder(sequence = "50")
@@ -95,6 +97,8 @@ public class ReservaMenu {
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
 		List<FechasDisponibles> listaFechasDisponibles = new ArrayList<>();
 		if(voucherProducto.getProductoAlojamientoPropio()==true) {
+			fechaDesde.setHours(12);
+			fechaHasta.setHours(12);
 			Date f = fechaDesde;
 			while (f.before(fechaHasta)) {
 				if (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, f, f) == true) {
@@ -102,10 +106,14 @@ public class ReservaMenu {
 					fechaDisponible.setProducto(voucherProducto);
 					fechaDisponible.setFechaDesde(f);
 					while (voucherRepository.corroborarDisponibilidadCrear(voucherProducto, f, f) == true) {
-						fechaDisponible.setFechaHasta(f);
 						f = voucherRepository.sumarUnDiaAFecha(f);
-						if (f.after(fechaHasta))
+						if (f.after(fechaHasta)) {
+							fechaDisponible.setMemo("");
 							break;
+						}
+						fechaDisponible.setFechaHasta(f);
+						SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+						fechaDisponible.setMemo("Disponibilidad hasta las 10:00 a.m.  del día "+sdf.format(f));
 					}
 					listaFechasDisponibles.add(fechaDisponible);
 				}
@@ -132,12 +140,15 @@ public class ReservaMenu {
 		return "";
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-calendar", named = "Listar Disponibilidad Por Localidad")
 	@MemberOrder(sequence = "40")						
 	public List<FechasDisponibles> listarDisponibilidadPorLocalidad(@ParameterLayout(named="Localidad") final Localidad productoLocalidad,
 			@ParameterLayout(named="Desde") final Date fechaDesde,
 			@ParameterLayout(named="Hasta") final Date fechaHasta){
+		fechaDesde.setHours(12);
+		fechaHasta.setHours(12);
 		List<Producto> listaProducto = productoRepository.buscarProductoPorLocalidad(productoLocalidad);
 		List<FechasDisponibles> listaFechasDisponibles = new ArrayList<>();
 		for (int i = 0; listaProducto.size()>i; i++) {
@@ -149,10 +160,14 @@ public class ReservaMenu {
 						fechaDisponible.setProducto(listaProducto.get(i));
 						fechaDisponible.setFechaDesde(f);
 						while(voucherRepository.corroborarDisponibilidadCrear(listaProducto.get(i), f, f)==true) {
-							fechaDisponible.setFechaHasta(f);
 							f = voucherRepository.sumarUnDiaAFecha(f);
-							if(f.after(fechaHasta))
+							if (f.after(fechaHasta)) {
+								fechaDisponible.setMemo("");
 								break;
+							}
+							fechaDisponible.setFechaHasta(f);
+							SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+							fechaDisponible.setMemo("Disponibilidad hasta las 10:00 a.m.  del día "+sdf.format(f));
 						}
 						listaFechasDisponibles.add(fechaDisponible);
 					}
@@ -169,7 +184,7 @@ public class ReservaMenu {
 	}
 	
 	public List<Localidad> choices0ListarDisponibilidadPorLocalidad(){
-		return localidadRepository.listarHabilitados();
+		return localidadRepository.listar();
 	}
 	
 	public String validateListarDisponibilidadPorLocalidad(final Localidad productoLocalidad, final Date fechaDesde, final Date fechaHasta) {

@@ -19,12 +19,12 @@ import domainapp.modules.simple.dom.proveedor.Proveedor;
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Producto.class)
 public class ProductoRepository {
 	
-	public Producto crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Proveedor productoProveedor,
-			final Categoria productoCategoria, final String productoDireccion, final Localidad productoLocalidad, 
+	public Producto crear(final int productoCodigo, final boolean productoAlojamientoPropio, final Integer productoProveedorId,
+			final Categoria productoCategoria, final String productoDireccion, final int productoLocalidadId, 
 			final String productoTelefono) {
 		List<Politicas> listaPoliticas = politicasRepository.listar(); 
-		final Producto object = new Producto(productoCodigo, productoAlojamientoPropio, productoProveedor, productoCategoria, 
-				productoDireccion, productoLocalidad, productoTelefono, listaPoliticas);
+		final Producto object = new Producto(productoCodigo, productoAlojamientoPropio, productoProveedorId, productoCategoria, 
+				productoDireccion, productoLocalidadId, productoTelefono, listaPoliticas);
 		serviceRegistry.injectServicesInto(object);
 		repositoryService.persist(object);
 		return object;
@@ -36,8 +36,9 @@ public class ProductoRepository {
 	}
 	
 	public List<Producto> buscarProductoPorLocalidad(final Localidad productoLocalidad) {
+		int productoLocalidadId = productoLocalidad.getLocalidadId();
 		return repositoryService
-				.allMatches(new QueryDefault<>(Producto.class, "buscarProductoPorLocalidad", "productoLocalidad", productoLocalidad));
+				.allMatches(new QueryDefault<>(Producto.class, "buscarProductoPorLocalidad", "productoLocalidadId", productoLocalidadId));
 	}
 	
 	public List<Producto> buscarProductoPorCategoria(final Categoria productoCategoria) {
