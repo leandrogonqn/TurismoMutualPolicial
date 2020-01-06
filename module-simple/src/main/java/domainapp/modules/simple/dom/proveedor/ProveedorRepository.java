@@ -19,9 +19,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Proveedor.class)
 public class ProveedorRepository {
 	private Connection conexion = null;
-	private String url = "jdbc:mysql://localhost:3306/afiliacion";
-	private String user = "root";
-	private String password = "Lean3366";
+	private String url = "jdbc:mysql://192.168.0.6:3306/afiliacion";
+	private String user = "turismo";
+	private String password = "pass";
 
 	public List<Proveedor> listar() {
 		try {

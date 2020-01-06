@@ -28,7 +28,8 @@ public class Afiliado implements Comparable<Afiliado> {
 		}
 		return TranslatableString.tr("Afiliado " + activo + 
 				" - LP "+getAfiliadoLP()+ " - "+
-				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido());
+				getPersonaJuridicaNombre() + " " + getPersonaJuridicaApellido()
+				+ " - DNI "+ getPersonaJuridicaDni());
 	}
 	// endregion
 	

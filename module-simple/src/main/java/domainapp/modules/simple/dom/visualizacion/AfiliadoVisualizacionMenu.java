@@ -38,12 +38,12 @@ public class AfiliadoVisualizacionMenu {
 		return "";
 	}
 	
-	@Action(semantics = SemanticsOf.SAFE)
-	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Todos los afiliados")
-	@MemberOrder(sequence = "2")
-	public List<Afiliado> listar() {
-		return afiliadoRepository.listar();
-	}
+//	@Action(semantics = SemanticsOf.SAFE)
+//	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, named = "Listar Todos los afiliados")
+//	@MemberOrder(sequence = "2")
+//	public List<Afiliado> listar() {
+//		return afiliadoRepository.listar();
+//	}
 	
 	@Action(semantics = SemanticsOf.SAFE)
 	@ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-search", named = "Buscar Afiliados Por Id")

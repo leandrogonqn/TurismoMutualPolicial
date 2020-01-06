@@ -50,7 +50,6 @@ import net.sf.jasperreports.engine.JRException;
 		@javax.jdo.annotations.Query(name = "listarHabilitados", language = "JDOQL", value = "SELECT "
 				+ "FROM domainapp.modules.simple.dom.reserva.Reserva "
 				+ "WHERE reservaHabilitado == :reservaHabilitado ") })
-@javax.jdo.annotations.Unique(name = "Reserva_reservaCodigo_UNQ", members = { "reservaCodigo" })
 @DomainObject(publishing = Publishing.ENABLED, auditing = Auditing.ENABLED)
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public abstract class Reserva {

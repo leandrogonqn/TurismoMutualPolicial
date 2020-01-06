@@ -322,12 +322,12 @@ public class Voucher implements Comparable<Voucher> {
 	@Inject
 	VoucherRepository voucherRepository;
 	
-	@Inject
-	ReservaRepository reservaRepository;
-	
-	@Inject
-	ReporteRepository reporteRepository;
-	
+//	@Inject
+//	ReservaRepository reservaRepository;
+//	
+//	@Inject
+//	ReporteRepository reporteRepository;
+//	
 	@Inject
 	UserService userService;
 

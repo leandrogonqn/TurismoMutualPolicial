@@ -19,9 +19,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Localidad.class)
 public class LocalidadRepository {
 	private Connection conexion = null;
-	private String url = "jdbc:mysql://localhost:3306/afiliacion";
-	private String user = "root";
-	private String password = "Lean3366";
+	private String url = "jdbc:mysql://192.168.0.6:3306/afiliacion";
+	private String user = "turismo";
+	private String password = "pass";
 
 	public List<Localidad> listar() {
 		try {
@@ -42,8 +42,8 @@ public class LocalidadRepository {
 				while(rs.next()){
 					Localidad localidad = new Localidad();
 					localidad.setLocalidadId(rs.getInt(1));
-					localidad.setLocalidadProvinciaId(rs.getInt(2));
-					localidad.setLocalidadesNombre(rs.getString(3));
+					localidad.setLocalidadProvinciaId(rs.getInt(4));
+					localidad.setLocalidadesNombre(rs.getString(2));
 					localidades.add(localidad);
 				}
 			}
@@ -81,8 +81,8 @@ public class LocalidadRepository {
 				while(rs.next()){
 					Localidad localidad = new Localidad();
 					localidad.setLocalidadId(rs.getInt(1));
-					localidad.setLocalidadProvinciaId(rs.getInt(2));
-					localidad.setLocalidadesNombre(rs.getString(3));
+					localidad.setLocalidadProvinciaId(rs.getInt(4));
+					localidad.setLocalidadesNombre(rs.getString(2));
 					localidades.add(localidad);
 				}
 			}
@@ -119,8 +119,8 @@ public class LocalidadRepository {
 				
 				if(rs.next()) {
 					localidad.setLocalidadId(rs.getInt(1));
-					localidad.setLocalidadProvinciaId(rs.getInt(2));
-					localidad.setLocalidadesNombre(rs.getString(3));
+					localidad.setLocalidadProvinciaId(rs.getInt(4));
+					localidad.setLocalidadesNombre(rs.getString(2));
 				}
 
 			}

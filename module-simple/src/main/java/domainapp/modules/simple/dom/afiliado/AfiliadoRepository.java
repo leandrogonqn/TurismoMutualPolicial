@@ -17,9 +17,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 @DomainService(nature = NatureOfService.DOMAIN, repositoryFor = Afiliado.class)
 public class AfiliadoRepository {
 	private Connection conexion = null;
-	private String url = "jdbc:mysql://localhost:3306/afiliacion";
-	private String user = "root";
-	private String password = "Lean3366";
+	private String url = "jdbc:mysql://192.168.0.6:3306/afiliacion";
+	private String user = "turismo";
+	private String password = "pass";
 	
 	public List<Afiliado> listar() {
 		try {
@@ -39,16 +39,16 @@ public class AfiliadoRepository {
 
 				while(rs.next()){
 					Afiliado afiliado = new Afiliado();
-					afiliado.setAfiliadoId(rs.getInt(1));
-					afiliado.setAfiliadoActivo(rs.getBoolean(2));
-					afiliado.setAfiliadoCBU(rs.getString(3));
-					afiliado.setAfiliadoLP(rs.getString(4));
-					afiliado.setPersonaCuitCuil(rs.getString(5));
-					afiliado.setPersonaDireccion(rs.getString(6));
-					afiliado.setPersonaJuridicaApellido(rs.getString(7));
-					afiliado.setPersonaJuridicaDni(rs.getInt(8));
-					afiliado.setPersonaJuridicaNombre(rs.getString(9));
-					afiliado.setPersonaLocalidadId(rs.getInt(10));
+					afiliado.setAfiliadoId(rs.getInt(2));
+					afiliado.setAfiliadoActivo(rs.getBoolean(1));
+					afiliado.setAfiliadoCBU(rs.getString(8));
+					afiliado.setAfiliadoLP(rs.getString(6));
+					afiliado.setPersonaCuitCuil(rs.getString(7));
+					afiliado.setPersonaDireccion(rs.getString(10));
+					afiliado.setPersonaJuridicaApellido(rs.getString(4));
+					afiliado.setPersonaJuridicaDni(rs.getInt(3));
+					afiliado.setPersonaJuridicaNombre(rs.getString(5));
+					afiliado.setPersonaLocalidadId(rs.getInt(9));
 					afiliado.setPersonaMail(rs.getString(11));
 					afiliado.setPersonaTelefono(rs.getString(12));	
 					afiliados.add(afiliado);
@@ -86,18 +86,18 @@ public class AfiliadoRepository {
 				ResultSet rs = stmt.executeQuery(); 
 				
 				if(rs.next()) {
-					afiliado.setAfiliadoId(rs.getInt(1));
-					afiliado.setAfiliadoActivo(rs.getBoolean(2));
-					afiliado.setAfiliadoCBU(rs.getString(3));
-					afiliado.setAfiliadoLP(rs.getString(4));
-					afiliado.setPersonaCuitCuil(rs.getString(5));
-					afiliado.setPersonaDireccion(rs.getString(6));
-					afiliado.setPersonaJuridicaApellido(rs.getString(7));
-					afiliado.setPersonaJuridicaDni(rs.getInt(8));
-					afiliado.setPersonaJuridicaNombre(rs.getString(9));
-					afiliado.setPersonaLocalidadId(rs.getInt(10));
+					afiliado.setAfiliadoId(rs.getInt(2));
+					afiliado.setAfiliadoActivo(rs.getBoolean(1));
+					afiliado.setAfiliadoCBU(rs.getString(8));
+					afiliado.setAfiliadoLP(rs.getString(6));
+					afiliado.setPersonaCuitCuil(rs.getString(7));
+					afiliado.setPersonaDireccion(rs.getString(10));
+					afiliado.setPersonaJuridicaApellido(rs.getString(4));
+					afiliado.setPersonaJuridicaDni(rs.getInt(3));
+					afiliado.setPersonaJuridicaNombre(rs.getString(5));
+					afiliado.setPersonaLocalidadId(rs.getInt(9));
 					afiliado.setPersonaMail(rs.getString(11));
-					afiliado.setPersonaTelefono(rs.getString(12));
+					afiliado.setPersonaTelefono(rs.getString(12));	
 				}
 
 			}
@@ -127,24 +127,25 @@ public class AfiliadoRepository {
 		try {
 			conexion = DriverManager.getConnection(url, user, password);
 			if(!conexion.isClosed()) {
-				String consulta = "SELECT * FROM afiliacion.titulares_turismo WHERE lower(nombre) LIKE '%"+personaJuridicaNombre.toLowerCase()+"%'";
-
+				String consulta = "SELECT * FROM afiliacion.titulares_turismo WHERE concat(lower(nombre),' ',lower(apellido),' ',numero_documento) LIKE '%"+personaJuridicaNombre.toLowerCase()+"%'";
+				//String consulta = "SELECT * FROM afiliacion.titulares_turismo WHERE lower(apellido) LIKE '%"+personaJuridicaNombre.toLowerCase()+"%'";
+				
 				PreparedStatement stmt = conexion.prepareStatement(consulta);
 				
 				ResultSet rs = stmt.executeQuery(); 
 
 				while(rs.next()){
 					Afiliado afiliado = new Afiliado();
-					afiliado.setAfiliadoId(rs.getInt(1));
-					afiliado.setAfiliadoActivo(rs.getBoolean(2));
-					afiliado.setAfiliadoCBU(rs.getString(3));
-					afiliado.setAfiliadoLP(rs.getString(4));
-					afiliado.setPersonaCuitCuil(rs.getString(5));
-					afiliado.setPersonaDireccion(rs.getString(6));
-					afiliado.setPersonaJuridicaApellido(rs.getString(7));
-					afiliado.setPersonaJuridicaDni(rs.getInt(8));
-					afiliado.setPersonaJuridicaNombre(rs.getString(9));
-					afiliado.setPersonaLocalidadId(rs.getInt(10));
+					afiliado.setAfiliadoId(rs.getInt(2));
+					afiliado.setAfiliadoActivo(rs.getBoolean(1));
+					afiliado.setAfiliadoCBU(rs.getString(8));
+					afiliado.setAfiliadoLP(rs.getString(6));
+					afiliado.setPersonaCuitCuil(rs.getString(7));
+					afiliado.setPersonaDireccion(rs.getString(10));
+					afiliado.setPersonaJuridicaApellido(rs.getString(4));
+					afiliado.setPersonaJuridicaDni(rs.getInt(3));
+					afiliado.setPersonaJuridicaNombre(rs.getString(5));
+					afiliado.setPersonaLocalidadId(rs.getInt(9));
 					afiliado.setPersonaMail(rs.getString(11));
 					afiliado.setPersonaTelefono(rs.getString(12));
 					afiliados.add(afiliado);
@@ -184,18 +185,18 @@ public class AfiliadoRepository {
 
 				while(rs.next()){
 					Afiliado afiliado = new Afiliado();
-					afiliado.setAfiliadoId(rs.getInt(1));
-					afiliado.setAfiliadoActivo(rs.getBoolean(2));
-					afiliado.setAfiliadoCBU(rs.getString(3));
-					afiliado.setAfiliadoLP(rs.getString(4));
-					afiliado.setPersonaCuitCuil(rs.getString(5));
-					afiliado.setPersonaDireccion(rs.getString(6));
-					afiliado.setPersonaJuridicaApellido(rs.getString(7));
-					afiliado.setPersonaJuridicaDni(rs.getInt(8));
-					afiliado.setPersonaJuridicaNombre(rs.getString(9));
-					afiliado.setPersonaLocalidadId(rs.getInt(10));
+					afiliado.setAfiliadoId(rs.getInt(2));
+					afiliado.setAfiliadoActivo(rs.getBoolean(1));
+					afiliado.setAfiliadoCBU(rs.getString(8));
+					afiliado.setAfiliadoLP(rs.getString(6));
+					afiliado.setPersonaCuitCuil(rs.getString(7));
+					afiliado.setPersonaDireccion(rs.getString(10));
+					afiliado.setPersonaJuridicaApellido(rs.getString(4));
+					afiliado.setPersonaJuridicaDni(rs.getInt(3));
+					afiliado.setPersonaJuridicaNombre(rs.getString(5));
+					afiliado.setPersonaLocalidadId(rs.getInt(9));
 					afiliado.setPersonaMail(rs.getString(11));
-					afiliado.setPersonaTelefono(rs.getString(12));
+					afiliado.setPersonaTelefono(rs.getString(12));	
 					afiliados.add(afiliado);
 				}
 			}
@@ -232,18 +233,18 @@ public class AfiliadoRepository {
 
 				while(rs.next()){
 					Afiliado afiliado = new Afiliado();
-					afiliado.setAfiliadoId(rs.getInt(1));
-					afiliado.setAfiliadoActivo(rs.getBoolean(2));
-					afiliado.setAfiliadoCBU(rs.getString(3));
-					afiliado.setAfiliadoLP(rs.getString(4));
-					afiliado.setPersonaCuitCuil(rs.getString(5));
-					afiliado.setPersonaDireccion(rs.getString(6));
-					afiliado.setPersonaJuridicaApellido(rs.getString(7));
-					afiliado.setPersonaJuridicaDni(rs.getInt(8));
-					afiliado.setPersonaJuridicaNombre(rs.getString(9));
-					afiliado.setPersonaLocalidadId(rs.getInt(10));
+					afiliado.setAfiliadoId(rs.getInt(2));
+					afiliado.setAfiliadoActivo(rs.getBoolean(1));
+					afiliado.setAfiliadoCBU(rs.getString(8));
+					afiliado.setAfiliadoLP(rs.getString(6));
+					afiliado.setPersonaCuitCuil(rs.getString(7));
+					afiliado.setPersonaDireccion(rs.getString(10));
+					afiliado.setPersonaJuridicaApellido(rs.getString(4));
+					afiliado.setPersonaJuridicaDni(rs.getInt(3));
+					afiliado.setPersonaJuridicaNombre(rs.getString(5));
+					afiliado.setPersonaLocalidadId(rs.getInt(9));
 					afiliado.setPersonaMail(rs.getString(11));
-					afiliado.setPersonaTelefono(rs.getString(12));
+					afiliado.setPersonaTelefono(rs.getString(12));	
 					afiliados.add(afiliado);
 				}
 			}

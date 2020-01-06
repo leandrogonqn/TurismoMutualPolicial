@@ -9,6 +9,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -51,8 +52,10 @@ public class ReservaAfiliadoMenu {
 				t, voucherObservaciones, reservaCanalDePago, reservaMemo, voucherUsuario);
 	}
 	
-	public List<Afiliado> choices2Crear() {
-		return afiliadoRepository.listar();
+	public List<Afiliado> autoComplete2Crear(
+			@MinLength(3) String search
+			) {
+		return afiliadoRepository.buscarPorNombre(search);
 	}
 	
 	public List<Producto> choices3Crear(){
